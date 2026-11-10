@@ -1,6 +1,7 @@
 [versions]
 agp = "8.11.1"
 kotlin = "2.2.0"
+ksp = "2.2.0-2.0.2"
 coreKtx = "1.16.0"
 lifecycleRuntimeKtx = "2.9.2"
 activityCompose = "1.10.1"
@@ -8,6 +9,11 @@ composeBom = "2024.09.00"
 rive = "11.15.0"
 lottie = "6.7.1"
 startup = "1.2.0"
+kotlinxSerializationJson = "1.9.0"
+workRuntime = "2.10.0"
+room = "2.7.1"
+litertlm = "0.10.0"
+voskAndroid = "0.3.47"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -18,6 +24,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-startup-runtime = { group = "androidx.startup", name = "startup-runtime", version.ref = "startup" }
+androidx-work-runtime = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntime" }
 
 # Compose BOM & UI Toolkit
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -28,10 +35,23 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 
 # Animation Frameworks
 rive-android = { group = "app.rive", name = "rive-android", version.ref = "rive" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+
+# AI Edge Engine & Offline Voice
+litertlm = { group = "com.google.ai.edge.litertlm", name = "litertlm-android", version.ref = "litertlm" }
+vosk-android = { module = "com.alphacephei:vosk-android", version.ref = "voskAndroid" }
+
+# Room Local Persistence
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+# Serialization
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -42,3 +62,5 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

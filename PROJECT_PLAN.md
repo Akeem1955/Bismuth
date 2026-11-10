@@ -269,18 +269,18 @@ Refactored from `Genie`'s `HealthUI` and `FoodNutritionAnalysis`:
 
 | Phase | Deliverable | Depends on |
 | :--- | :--- | :--- |
-| **P0 Foundations** ✅ | Repo, Gradle, Compose, Rive, Lottie compile | — |
-| **P1 Skill Format Spec** | Final schema for `SKILL.md`, `lesson.json`, `assessment.json`, `manifest.json`, `catalog.json` + one hand-written sample topic | Approve §3–4 |
-| **P2 Authoring Toolkit** | Validator + packager scripts, GCS upload procedure | P1, bucket decision |
-| **P3 AI Engine + Tier Manager** | LiteRT-LM running both tiers on device, gating API | Model verification |
-| **P4 Skill Runtime** | Loader, step engine, grader, context builder, tool contract | P1, P3 |
-| **P5 Teaching UI** | Library browser, lesson screen, Rive tutor, media, first components, revamped board | P4 |
-| **P6 Skill Manager** | Catalog, download, verify, install, update, delete | P2 |
-| **P7 First Content** | First topic skills across subjects | P1, P5 |
-| **P8 Document** | PDF import → summaries/quizzes offline | P3 |
-| **P9 Scribe** | Audio → notes; vision capture on high tier | P3 |
-| **P10 Health** | Offline library; vision food analysis + fallback | P3 |
-| **P11 Validation & Demo** | Airplane-mode demo, low-end device test, small student test | All |
+| **P0 Foundations** ✅ | Repo, Gradle, Compose, Rive, Lottie, Bismuth crystal app icon compile | — |
+| **P1 Skill Format Spec** ✅ | 3-Layer `SubjectSkillCoordinator` → `ChapterSkillNode` → `TopicSkillPackage` schema (`SubjectSkillCatalog.kt`) | Approved |
+| **P2 Authoring & GCS Sync** ✅ | Per-topic GCS package metadata & offline install toggle (`SkillInstallPrefs`) | P1 |
+| **P3 AI Engine + Tier Manager** ✅ | `BismuthEngine` (`LiteRT-LM` 0.10.0) + `HardwareCapabilityEvaluator` + `ModelDownloadManager` | Verified |
+| **P4 Skill Runtime** ✅ | Step-scoped prompt builder (`buildStepScopedPrompt`), deterministic step progression & tier-aware inline quiz grader | P1, P3 |
+| **P5 Teaching UI & Whiteboard** ✅ | `InteractiveWhiteboardScreen.kt`: 5 subjects, tap-on-node popups, inline step quizzes before advancing, docked Rive character + Lottie FX + TTS | P4 |
+| **P6 Skill Manager** ✅ | In-app GCS Skill Package download/install status & 3-Layer Skill Inspector | P2 |
+| **P7 First Content** ✅ | Complete multi-step interactive Topic Skills across Mathematics, Physics, Chemistry, Biology, and English | P1, P5 |
+| **P8 Document** ✅ | `DocumentFeature.kt`: Voice-driven natural language commands + Manual UI controls + `PdfRenderer` chapter/page extraction + Quiz & Summary | P3 |
+| **P9 Scribe** ✅ | `ScribeFeature.kt`: 16 kHz PCM recorder (30-min max in three 10-min chunks) + 3-part Academic Scribe Study Template + Follow-up Q&A | P3 |
+| **P10 Health** ✅ | `HealthFeature.kt`: Camera & Gallery food analyzer (Calories/Macros/Micros, Health Impact, Prep/Consumption Guidance) + Offline WHO Library | P3 |
+| **P11 Validation & Demo** | Live device / Airplane-mode testing & student evaluation | All |
 
 ---
 

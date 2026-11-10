@@ -105,10 +105,12 @@ Bismuth inherits and revamps four core subsystems inspired by the `Genie` protot
 * [x] **Reference Cloned & Isolated:** Cloned `Genie` into local workspace for feature revamping, ignored in `.gitignore`.
 * [x] **Gradle Build System Established:** Configured version catalogs (`libs.versions.toml`), root, and app build scripts.
 * [x] **Animation Tooling Verified:** Integrated and compiled `RiveCharacterView` and `LottieEffectView` composables without build errors.
-* [x] **Interactive Demo Shell Built:** Created `MainActivity.kt` with dynamic character state switching and micro-FX triggers.
-* [ ] **Visualizer Board Architecture:** Designing the touch-interactive, animated canvas engine.
-* [ ] **Tier Manager & Engine Bridge:** Implementing hardware detection and model capability gating.
-* [ ] **Document & Teaching Logic Migration:** Revamping Genie's `Teaching` and `Document` profiles into Bismuth's modern architecture.
+* [x] **Hardware-Aware Model Selection & Engine Bridge (`com.bismuth.app.engine`):** Implemented `BismuthModelConfig`, `HardwareCapabilityEvaluator` (RAM inspection, model recommendation, incompatible model disabling), `ModelDownloadManager`, `ModelDownloadWorker`, and `BismuthEngine` (`LiteRT-LM` text/vision/audio inference).
+* [x] **Five-Subject Hierarchical Skills Ecosystem (`com.bismuth.app.skills`):** Implemented `SubjectSkillCatalog` covering **English, Mathematics, Chemistry, Physics, and Biology** (Subject Coordinator $\rightarrow$ Chapter Skill $\rightarrow$ Topic Skill with 3-layer separation and step-scoped prompting).
+* [x] **Revamped Interactive Teaching Whiteboard (`com.bismuth.app.teaching`):** Implemented zoomable/pannable whiteboard canvas with tap-on-node pop-up explanations, inline step quizzes gated before advancing (adapted to model tier), and a docked Rive tutor character with offline Android TTS narration.
+* [x] **Document Analysis & Quiz Studio (`com.bismuth.app.document`):** Implemented natural language voice command bar + manual UI controls (PDF upload, chapter range / page count, question count, difficulty level) + `PdfRenderer` text extraction and interactive Quiz & Summary studio.
+* [x] **Lecture Transcription & Academic Scribe (`com.bismuth.app.scribe`):** Implemented 16 kHz mono PCM recording with 30-minute max / three 10-minute chunk slots, LiteRT-LM WAV chunk transcription, 3-part Academic Scribe Study Template, and grounded follow-up Q&A.
+* [x] **Health & Nutrition Tracker (`com.bismuth.app.health`):** Implemented camera capture & gallery upload, Calorie + Macro/Micronutrient breakdown, Health impact analysis, Preparation & consumption guidance, and offline WHO Health Library (`R.raw.local_health_library`).
 
 ---
 
@@ -205,17 +207,18 @@ Consequence: **skill quality = teaching quality.** Authoring and validating skil
 * **FR-3.2** Equivalent UI controls: upload/select document (e.g., PDF), specify chapter range or page count, choose number of questions and difficulty.
 
 ### FR-4. Interactive Teaching Whiteboard
-* **FR-4.1** Functional, interactive whiteboard supporting live visual instruction, diagramming, and collaborative learning — revamping `Genie`'s `VisualizerCanvasActivity`, `VisualizerBoardRenderer`, and `VisualizerSceneStore` (`TeachingBoard`, `BoardObject`, `VisualNode`, `VisualEdge`) with interactive student controls, Rive character accompaniment, and Lottie micro-FX.
+* **FR-4.1** Functional, interactive whiteboard supporting live visual instruction, diagramming, and collaborative learning — revamping `Genie`'s `VisualizerCanvasActivity`, `VisualizerBoardRenderer`, and `VisualizerSceneStore` (`TeachingBoard`, `BoardObject`, `VisualNode`, `VisualEdge`) with:
+  1. **Tap-on-node / object pop-up explanations:** Tapping any diagram node or board object hit-tests its canvas bounds and opens a rich explanation pop-up card.
+  2. **Inline step quizzes before advancing (model-tier aware):** Before advancing to the next board step, an inline comprehension check is presented (tailored/gated by the active model type); answering correctly triggers Lottie celebration FX and unlocks the next step.
+  3. **Rive character docked on screen:** Persistent interactive Rive tutor companion docked alongside the whiteboard, emoting in real time (*Idle*, *Explaining*, *Thinking*, *Celebrating*, *Encouraging*) as steps progress and quizzes are answered.
 
 ---
 
-## 8. Confirmed Decisions & Remaining Open Items
+## 8. Confirmed Decisions & Build Status
 
 ### Confirmed (2026-11-10)
 * **Hardware & Model Selector:** App inspects phone hardware (RAM/SoC), **recommends** the optimal model variant (`Gemma 4 E4B`, `Gemma 4 E2B`, `Gemma 3n` / lighter variant), and **disables** models that cannot run on the device. Features (`Scribe`, `Health` vision/audio) are dynamically gated by the selected `ModelConfig` capabilities (`supportsAudio`, `supportsImage`).
 * **Scribe Recording & Template:** 30-minute max recording split into 10-minute chunks; academic study template only (Medical SOAP mode removed).
 * **Document Pipeline:** Reuses and extends `Genie`'s `PdfRenderer` + `QuizActivity` architecture with added manual UI controls alongside voice commands.
-
-### Remaining Open Items
-1. **Visualizer Board Revamp Details:** Specific interactive student controls to add on top of `Genie`'s `VisualizerCanvasActivity` (e.g., freehand student drawing, tap-on-node quizzes, step scrubbing).
-2. **GCS Bucket & Skill Packaging:** Bucket name/URL and final approval of the skill folder structure (`SKILL.md` + `lesson.json` + `assessment.json` + `manifest.json`).
+* **Interactive Whiteboard Revamp:** Confirmed: (1) tapping diagram nodes for pop-up explanations, (2) inline step quizzes before advancing (based on model type), and (3) Rive character docked on screen.
+* **Build Phase Active:** Transitioned from planning to active implementation.

@@ -17,6 +17,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 fun LottieEffectView(
     modifier: Modifier = Modifier,
     @RawRes resId: Int? = null,
+    assetName: String? = null,
     url: String? = null,
     isPlaying: Boolean = true,
     iterations: Int = LottieConstants.IterateForever,
@@ -24,6 +25,7 @@ fun LottieEffectView(
 ) {
     val spec = when {
         resId != null -> LottieCompositionSpec.RawRes(resId)
+        assetName != null -> LottieCompositionSpec.Asset(assetName)
         url != null -> LottieCompositionSpec.Url(url)
         else -> null
     }
