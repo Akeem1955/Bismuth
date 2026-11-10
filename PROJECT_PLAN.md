@@ -3,6 +3,8 @@
 > Companion to [PROJECT_UNDERSTANDING.md](PROJECT_UNDERSTANDING.md).  
 > **Status legend:** ✅ Agreed · 🟡 Proposed (awaiting approval) · ❓ Open decision  
 > Last updated: 2026-11-10
+>
+> ⚠️ **Functional Requirements Specification received (2026-11-10)** — see PROJECT_UNDERSTANDING.md §7A. Sections 8–10 below will be revised once the FRS clarifications are answered.
 
 ---
 

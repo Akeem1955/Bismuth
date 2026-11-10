@@ -178,8 +178,37 @@ Consequence: **skill quality = teaching quality.** Authoring and validating skil
 
 ---
 
+## 7A. Functional Requirements Specification (user-provided, 2026-11-10)
+
+> Authoritative. Where earlier sections (§3) differ, this section wins; conflicts are listed in §8.
+
+### FR-1. Lecture Transcription & Study Aid (Scribe)
+* **FR-1.1** Record in-person lectures in-app and generate an automated transcription.
+* **FR-1.2** Structured summarization (Medical/Academic Scribe method) — not raw text — into a study template:
+  * Key takeaways and high-level summary
+  * In-depth details and concept breakdowns
+  * Essential study notes
+* **FR-1.3** Follow-up interaction: student asks the AI questions grounded in the transcribed lecture.
+
+### FR-2. Health & Nutrition Tracking
+* **FR-2.1** Take a food photo or select one from the gallery.
+* **FR-2.2** Identify the food and provide:
+  * Calories and macro/micronutrient breakdown
+  * Health impact (benefits, drawbacks, dietary considerations)
+  * Preparation & consumption guidance (cooking methods, serving suggestions, dietary tips)
+
+### FR-3. Document Analysis & Quiz Generation
+* **FR-3.1** Voice-driven actions in natural language (e.g., "Open the chemistry PDF and generate a quiz based on Chapters 1 through 4", "Create a quiz using five selected pages").
+* **FR-3.2** Equivalent UI controls: upload/select document (e.g., PDF), specify chapter range or page count, choose number of questions and difficulty.
+
+### FR-4. Interactive Teaching Whiteboard
+* **FR-4.1** Functional, interactive whiteboard supporting live visual instruction, diagramming, and collaborative learning.
+
+---
+
 ## 8. Open Alignment Decisions (Planning Mode)
 
 1. **Hardware Tier Detection:** Automatic (RAM/SoC benchmark) vs user-selectable.
 2. **Visualizer Board Touch Interactivity:** Gesture specs (pan/zoom, tap-to-solve, step scrubbers).
 3. **Skills Ecosystem — pending clarification (see Deficit Log, 2026-11-10):** skill file format / orchestration structure, download granularity, GCS access model, interactive component strategy (native registry vs WebView bundles), media budgets, content authoring/licensing, LLM↔component tool contract, assessment grading, hackathon demo scope.
+4. **FRS conflicts/gaps (2026-11-10):** Scribe transcription engine & tiering; whether Scribe vision (board photo) and Health topics library are dropped; Health accuracy grounding; "collaborative" whiteboard meaning under zero-bandwidth; whiteboard ↔ subject skills relationship; PDF chapter detection; quiz formats.
