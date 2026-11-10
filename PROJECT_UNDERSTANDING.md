@@ -110,8 +110,47 @@ Bismuth inherits and revamps four core subsystems inspired by the `Genie` protot
 
 ---
 
-## 7. Open Alignment Decisions (Planning Mode)
+## 7. Teaching Skills Ecosystem (Agreed Direction — 2026-11-10)
 
-1. **Hardware Tier Detection:** Confirming whether device tiering should be automatic (RAM/SoC benchmark) or user-selectable via Settings.
-2. **Visualizer Board Touch Interactivity:** Confirming specific gesture specs (pan/zoom, tap-to-solve, step scrubbers).
-3. **Curriculum Starter Pack:** Deciding which subjects/levels to bundle as initial offline demo content (e.g., WAEC Senior Secondary Physics / Mathematics).
+> **Principle:** We are not building five educational chatbots. We are building **one general-purpose AI tutor** with **five extensible subject ecosystems**, delivered as downloadable, hierarchical Agent Skills.
+
+### 7.1. Initial Subjects
+English · Mathematics · Chemistry · Physics · Biology
+
+### 7.2. Skill Hierarchy
+```
+Subject Skill   (coordinator: teaching philosophy, curriculum index, chapter directory)
+ └── Chapter Skill   (organizes topics, chapter objectives, prerequisites)
+      └── Topic Skill   (the actual lesson: instructions + resources + activities + assessment)
+```
+Example: `Mathematics` → `Algebra` → `Linear Equations`.
+
+### 7.3. Three-Layer Package Separation (must be preserved)
+| Layer | Responsibility |
+| :--- | :--- |
+| **Skill instructions** | Tell the LLM *how* to teach (objectives, explanation sequence, misconceptions, difficulty progression) |
+| **Learning resources** | Verified, curated content: text, images, diagrams, short offline videos |
+| **Interactive components** | App-rendered activities: label-the-diagram, simulations, knowledge checks, manipulable diagrams |
+
+The LLM is the **tutor/coordinator**; it does not generate the video, diagrams or simulations — it orchestrates them.
+
+### 7.4. Hierarchical On-Demand Loading (anti context-overload)
+1. Student picks subject → load only the subject's lightweight curriculum index.
+2. Student picks chapter → load chapter skill.
+3. Student picks topic → load only that topic's instructions + resource manifest.
+4. Lesson ends → topic context unloaded.
+
+### 7.5. Distribution
+* **Authoring PC (Google Cloud SDK installed)** → prepare, curate, validate, package skills.
+* **Google Cloud Storage** → hosts subject / chapter / topic packages.
+* **Bismuth Skill Manager (on device)** → browse, download, install, update, remove.
+* **Local Android storage** → all instructions, media, interactive assets.
+* **Gemma + Skills** → teaching, reasoning, assessment — **fully offline** after download. GCS is only touched for download/update.
+
+---
+
+## 8. Open Alignment Decisions (Planning Mode)
+
+1. **Hardware Tier Detection:** Automatic (RAM/SoC benchmark) vs user-selectable.
+2. **Visualizer Board Touch Interactivity:** Gesture specs (pan/zoom, tap-to-solve, step scrubbers).
+3. **Skills Ecosystem — pending clarification (see Deficit Log, 2026-11-10):** curriculum standard & level, skill file format, download granularity, GCS access model, interactive component strategy (native registry vs WebView bundles), media budgets, content authoring/licensing, LLM↔component tool contract, assessment grading, hackathon demo scope.
