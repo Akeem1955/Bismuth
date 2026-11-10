@@ -1,6 +1,8 @@
 # Bismuth — Project Understanding & Architecture Blueprint
 
 > **Live Document**: This file serves as the single source of truth for project vision, architectural decisions, feature specifications, and progress milestones for **Bismuth**. It is updated continuously throughout development.
+>
+> **Detailed execution plan:** see [PROJECT_PLAN.md](PROJECT_PLAN.md).
 
 ---
 
