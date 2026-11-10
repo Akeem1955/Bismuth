@@ -146,6 +146,21 @@ The LLM is the **tutor**; it does not generate the video, diagrams or simulation
 
 Consequence: **skill quality = teaching quality.** Authoring and validating skills is the core product work.
 
+### 7.3.2. Orchestration Style — Recommended: Hybrid "Guided Steps" (pending user approval)
+**Decision proposed 2026-11-10:** Topic skills define a **lesson as an ordered set of steps with branches** (fixed key moments), and the model talks freely *inside* each step.
+
+* **Skill (authored)** defines each step: goal, what to show/launch (resource or interactive component), the check-for-understanding, the correct answer, known misconceptions → which remedial step to branch to.
+* **App runtime (deterministic code)** tracks which step the student is on, moves between steps, grades answers from the skill's answer key, and gives the model **only the current step's instructions** (not the whole lesson).
+* **Model (Gemma)** explains in natural language, answers side questions, gives hints, and explains *why* an answer was wrong — but cannot skip, reorder or invent the lesson structure.
+
+**Rationale (research, 2026-11-10):**
+1. Recent LLM-tutoring work reports that free-form tutors drift, over-explain and give away answers; stronger designs pair a structured/state-driven lesson flow with the LLM handling phrasing and hints.
+2. Small on-device models (~1–4B) lose track of long, multi-rule prompts; reliable patterns inject only step-specific instructions and keep control flow in code.
+3. Agent Skills spec (agentskills.io) uses progressive disclosure (metadata → `SKILL.md` body → referenced files on demand), which maps directly to subject → chapter → topic → current step.
+4. Answer-key grading limits misleading AI output (track criterion: accuracy).
+
+*Caveat:* findings were gathered via web search summaries; primary papers were not individually read.
+
 ### 7.4. Hierarchical On-Demand Loading (anti context-overload)
 1. Student picks subject → load only the subject's lightweight curriculum index.
 2. Student picks chapter → load chapter skill.
