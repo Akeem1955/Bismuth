@@ -10,7 +10,7 @@
 * **Track:** AI for “Zero-Bandwidth” & Localized Learning
 * **Theme:** *AI for the Next Generation: Reimagining How Students Learn, Work & Grow*
 * **Core Problem Statement:**  
-  Most educational AI tools assume perpetual high-speed internet, high-end smartphones, and English-centric instruction. When data is exhausted or connectivity drops, conventional cloud-based tutors fail completely. Students in bandwidth-constrained regions (e.g., secondary/university students in Sub-Saharan Africa preparing for exams like WAEC/JAMB) face expensive data tariffs, intermittent blackouts, low-spec devices, and difficult STEM abstractions taught via dense, rote textbooks.
+  Most educational AI tools assume perpetual high-speed internet, high-end smartphones, and English-centric instruction. When data is exhausted or connectivity drops, conventional cloud-based tutors fail completely. Students in bandwidth-constrained regions (secondary school through university) face expensive data tariffs, intermittent blackouts, low-spec devices, and difficult abstractions taught via dense, rote textbooks.
 * **The Bismuth Solution:**  
   An **Offline-First, Zero-Bandwidth Interactive AI Micro-Tutor** running quantized Small Language Models (SLMs) directly on the edge. Bismuth combines voice perception, an interactive animated Rive tutor, and curriculum-grounded Socratic lessons—operating in complete **Airplane Mode** with zero ongoing data consumption.
 
@@ -57,7 +57,7 @@ Bismuth inherits and revamps four core subsystems inspired by the `Genie` protot
   * Points to board items and celebrates correct student interactions with Lottie micro-FX.
 
 ### 3.2. Document Engine *(Base Tier — Default)*
-* **Offline PDF Extraction:** Local text extraction from curriculum textbooks, syllabi, and past exam question papers stored on device.
+* **Offline PDF Extraction:** Local text extraction from textbooks, lecture notes, and question papers stored on device.
 * **Study Distillation:** Quantized on-device LLM summarizes dense textbook pages into simplified bullet points, real-world analogies, and self-test quizzes without calling external APIs.
 
 ### 3.3. Scribe Engine *(Tier-Gated)*
@@ -117,6 +117,10 @@ Bismuth inherits and revamps four core subsystems inspired by the `Genie` protot
 ### 7.1. Initial Subjects
 English · Mathematics · Chemistry · Physics · Biology
 
+**Not tied to any exam board or class level.** No WAEC/JAMB/SS1–SS3 framing. *Physics is Physics.* A secondary school student and a university student use the same subject library and simply pick the chapter/topic they need.
+
+> **Rejected (2026-11-10):** exam-board or grade-level curricula (WAEC, NECO, JAMB, SS1–SS3). This was an earlier assistant assumption, not a user requirement.
+
 ### 7.2. Skill Hierarchy
 ```
 Subject Skill   (coordinator: teaching philosophy, curriculum index, chapter directory)
@@ -132,7 +136,12 @@ Example: `Mathematics` → `Algebra` → `Linear Equations`.
 | **Learning resources** | Verified, curated content: text, images, diagrams, short offline videos |
 | **Interactive components** | App-rendered activities: label-the-diagram, simulations, knowledge checks, manipulable diagrams |
 
-The LLM is the **tutor/coordinator**; it does not generate the video, diagrams or simulations — it orchestrates them.
+The LLM is the **tutor**; it does not generate the video, diagrams or simulations.
+
+### 7.3.1. Skills Are the Orchestrators (core principle)
+**The skills drive the tutor.** A skill is not passive content the LLM reads — it is a **high-quality orchestrator** that defines the lesson flow: what to explain, in what order, when to show a resource, when to launch an interactive component, when to check understanding, and how to respond to mistakes. The small on-device model follows the skill's orchestration rather than improvising pedagogy on its own.
+
+Consequence: **skill quality = teaching quality.** Authoring and validating skills is the core product work.
 
 ### 7.4. Hierarchical On-Demand Loading (anti context-overload)
 1. Student picks subject → load only the subject's lightweight curriculum index.
@@ -153,4 +162,4 @@ The LLM is the **tutor/coordinator**; it does not generate the video, diagrams o
 
 1. **Hardware Tier Detection:** Automatic (RAM/SoC benchmark) vs user-selectable.
 2. **Visualizer Board Touch Interactivity:** Gesture specs (pan/zoom, tap-to-solve, step scrubbers).
-3. **Skills Ecosystem — pending clarification (see Deficit Log, 2026-11-10):** curriculum standard & level, skill file format, download granularity, GCS access model, interactive component strategy (native registry vs WebView bundles), media budgets, content authoring/licensing, LLM↔component tool contract, assessment grading, hackathon demo scope.
+3. **Skills Ecosystem — pending clarification (see Deficit Log, 2026-11-10):** skill file format / orchestration structure, download granularity, GCS access model, interactive component strategy (native registry vs WebView bundles), media budgets, content authoring/licensing, LLM↔component tool contract, assessment grading, hackathon demo scope.
