@@ -183,32 +183,39 @@ Consequence: **skill quality = teaching quality.** Authoring and validating skil
 > Authoritative. Where earlier sections (§3) differ, this section wins; conflicts are listed in §8.
 
 ### FR-1. Lecture Transcription & Study Aid (Scribe)
-* **FR-1.1** Record in-person lectures in-app and generate an automated transcription.
-* **FR-1.2** Structured summarization (Medical/Academic Scribe method) — not raw text — into a study template:
+* **FR-1.1** Record in-person lectures in-app and generate an automated transcription:
+  * **Engine:** Uses the user's downloaded multimodal Gemma model via `LiteRT-LM` (`audioBytes` WAV input, as implemented in `GenieEngine` / `GenieAccessibilityService.transcribeAudio`). Feature availability is gated by `modelConfig.supportsAudio`.
+  * **Chunking:** Supports up to **30-minute lectures**, segmented into **10-minute logical chunks** (with internal <=30-second WAV windows fed sequentially to the LiteRT-LM audio encoder and aggregated).
+* **FR-1.2** Structured summarization (Academic Scribe method) — not raw text — into a study template:
   * Key takeaways and high-level summary
   * In-depth details and concept breakdowns
   * Essential study notes
+  * *(Note: Genie's medical `DOCTOR_SCRIBE` / SOAP note mode is explicitly excluded).*
 * **FR-1.3** Follow-up interaction: student asks the AI questions grounded in the transcribed lecture.
 
 ### FR-2. Health & Nutrition Tracking
-* **FR-2.1** Take a food photo or select one from the gallery.
+* **FR-2.1** Take a food photo or select one from the gallery (gated by `modelConfig.supportsImage`, following `Genie`'s `HealthUI` / `FoodNutritionAnalysis` pattern).
 * **FR-2.2** Identify the food and provide:
   * Calories and macro/micronutrient breakdown
   * Health impact (benefits, drawbacks, dietary considerations)
   * Preparation & consumption guidance (cooking methods, serving suggestions, dietary tips)
 
 ### FR-3. Document Analysis & Quiz Generation
-* **FR-3.1** Voice-driven actions in natural language (e.g., "Open the chemistry PDF and generate a quiz based on Chapters 1 through 4", "Create a quiz using five selected pages").
+* **FR-3.1** Voice-driven actions in natural language (e.g., "Open the chemistry PDF and generate a quiz based on Chapters 1 through 4", "Create a quiz using five selected pages") — built on `Genie`'s `AgentOrchestrator` document pipeline (`listDevicePdfs`, `askModelToPickPdfPath`, `readPdfPageRange` via `PdfRenderer` + `page.textContents`, `detectOpenPdf` screenshot vision fallback, `generateQuizFromContent`, `QuizActivity`).
 * **FR-3.2** Equivalent UI controls: upload/select document (e.g., PDF), specify chapter range or page count, choose number of questions and difficulty.
 
 ### FR-4. Interactive Teaching Whiteboard
-* **FR-4.1** Functional, interactive whiteboard supporting live visual instruction, diagramming, and collaborative learning.
+* **FR-4.1** Functional, interactive whiteboard supporting live visual instruction, diagramming, and collaborative learning — revamping `Genie`'s `VisualizerCanvasActivity`, `VisualizerBoardRenderer`, and `VisualizerSceneStore` (`TeachingBoard`, `BoardObject`, `VisualNode`, `VisualEdge`) with interactive student controls, Rive character accompaniment, and Lottie micro-FX.
 
 ---
 
-## 8. Open Alignment Decisions (Planning Mode)
+## 8. Confirmed Decisions & Remaining Open Items
 
-1. **Hardware Tier Detection:** Automatic (RAM/SoC benchmark) vs user-selectable.
-2. **Visualizer Board Touch Interactivity:** Gesture specs (pan/zoom, tap-to-solve, step scrubbers).
-3. **Skills Ecosystem — pending clarification (see Deficit Log, 2026-11-10):** skill file format / orchestration structure, download granularity, GCS access model, interactive component strategy (native registry vs WebView bundles), media budgets, content authoring/licensing, LLM↔component tool contract, assessment grading, hackathon demo scope.
-4. **FRS conflicts/gaps (2026-11-10):** Scribe transcription engine & tiering; whether Scribe vision (board photo) and Health topics library are dropped; Health accuracy grounding; "collaborative" whiteboard meaning under zero-bandwidth; whiteboard ↔ subject skills relationship; PDF chapter detection; quiz formats.
+### Confirmed (2026-11-10)
+* **Hardware & Model Selector:** App inspects phone hardware (RAM/SoC), **recommends** the optimal model variant (`Gemma 4 E4B`, `Gemma 4 E2B`, `Gemma 3n` / lighter variant), and **disables** models that cannot run on the device. Features (`Scribe`, `Health` vision/audio) are dynamically gated by the selected `ModelConfig` capabilities (`supportsAudio`, `supportsImage`).
+* **Scribe Recording & Template:** 30-minute max recording split into 10-minute chunks; academic study template only (Medical SOAP mode removed).
+* **Document Pipeline:** Reuses and extends `Genie`'s `PdfRenderer` + `QuizActivity` architecture with added manual UI controls alongside voice commands.
+
+### Remaining Open Items
+1. **Visualizer Board Revamp Details:** Specific interactive student controls to add on top of `Genie`'s `VisualizerCanvasActivity` (e.g., freehand student drawing, tap-on-node quizzes, step scrubbing).
+2. **GCS Bucket & Skill Packaging:** Bucket name/URL and final approval of the skill folder structure (`SKILL.md` + `lesson.json` + `assessment.json` + `manifest.json`).

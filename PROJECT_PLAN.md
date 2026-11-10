@@ -4,7 +4,7 @@
 > **Status legend:** ✅ Agreed · 🟡 Proposed (awaiting approval) · ❓ Open decision  
 > Last updated: 2026-11-10
 >
-> ⚠️ **Functional Requirements Specification received (2026-11-10)** — see PROJECT_UNDERSTANDING.md §7A. Sections 8–10 below will be revised once the FRS clarifications are answered.
+> ✅ **Aligned with Functional Requirements Specification (FR-1 through FR-4)** and verified against `Genie` reference implementations.
 
 ---
 
@@ -207,50 +207,50 @@ The model **cannot** advance, skip, or grade — the runtime does.
 
 ---
 
-## 7. AI Engine & Tier Manager
+## 7. AI Engine & Hardware-Aware Model Selector ✅
 
-| Task | Notes |
+| Task | Implementation Details |
 | :--- | :--- |
-| Port LiteRT-LM engine from Genie | Refactor `GenieEngine` + download worker into `engine/` |
-| Model catalog | Gemma 4 (high tier), Gemma 3n or lighter (low tier) — **exact model files, sizes and LiteRT-LM support to be verified before implementation** |
-| Tier detection | Automatic benchmark vs user choice (❓) |
-| Feature gating API | `tier.can(Feature.VISION)` used by Scribe/Health UI |
-| Model hosting | Same GCS bucket or official source (❓) |
+| **Port LiteRT-LM Engine** | Refactor `GenieEngine`, `GenieModelConfig`, and `ModelDownloadManager` into `com.bismuth.app.engine` |
+| **Hardware Assessment** | Inspect device RAM (`ActivityManager.MemoryInfo.totalMem`) and chipset to **recommend** the best model and **disable** models that exceed device capacity |
+| **Model Variants** | `Gemma 4 E4B` (3.4 GB, audio + image), `Gemma 4 E2B` (2.4 GB, audio + image), plus `Gemma 3n` / lightweight text variant for low-RAM phones |
+| **Capability Gating** | `selectedConfig.supportsAudio` and `selectedConfig.supportsImage` directly gate Scribe audio transcription and Health photo analysis |
 
 ---
 
-## 8. Document Feature (base, all devices)
+## 8. Document Feature (FR-3 — Base, All Devices) ✅
 
-| Task | Notes |
+Built on `Genie`'s proven document pipeline (`AgentOrchestrator` + `QuizActivity` + `PdfRenderer`):
+
+| Task | Implementation Details |
 | :--- | :--- |
-| Import PDF from device storage | Storage Access Framework |
-| Offline text extraction | Library choice to verify (Genie flow as reference) |
-| Chunking + local index | Room + FTS for retrieval |
-| Summaries, key notes, quizzes | Model works on retrieved chunks only (small context) |
-| Link to skills | ❓ e.g., "teach me this section" using matching topic skill |
+| **Voice-Driven Actions (FR-3.1)** | Natural-language commands (e.g., *"Open the chemistry PDF and generate a quiz based on Chapters 1 through 4"*, *"Create a quiz using five selected pages"*) using `listDevicePdfs` + `askModelToPickPdfPath` + `readPdfPageRange` |
+| **Manual UI Controls (FR-3.2)** | Full Compose screen to pick/upload a PDF, select chapter/page ranges, choose question count, and pick difficulty level |
+| **Extraction & Quiz Engine** | `PdfRenderer` + `page.textContents` (API 35+) with page-render vision fallback on capable models; interactive `QuizActivity` enhanced with Lottie celebration FX |
 
 ---
 
-## 9. Scribe Feature (tier-gated parts)
+## 9. Scribe Feature (FR-1 — Capability-Gated by `supportsAudio`) ✅
 
-| Capability | Low tier | High tier |
-| :--- | :--- | :--- |
-| Record audio | ✅ | ✅ |
-| Offline transcription | ✅ (Vosk) | ✅ |
-| Structured study notes from transcript | ✅ | ✅ |
-| Photo of board/slide merged with notes | ❌ | ✅ (vision) |
+Refactored from `Genie`'s `ScribeOverlay`, `ScribeModels`, and `GenieAccessibilityService.transcribeAudio`:
 
-❓ Final modes (lecture notes only, or keep Genie's medical SOAP mode).
+| Task | Implementation Details |
+| :--- | :--- |
+| **Audio Recording & Chunking (FR-1.1)** | Up to **30-minute** in-app lecture recording (`AudioRecord` 16 kHz mono PCM), segmented into **10-minute chunks** (and streamed through LiteRT-LM in <=30s WAV windows) |
+| **Academic Study Template (FR-1.2)** | Formats transcription into: (1) **Key takeaways & high-level summary**, (2) **In-depth details & concept breakdowns**, (3) **Essential study notes**. *(Medical SOAP mode removed)* |
+| **Follow-up Q&A (FR-1.3)** | Interactive chat grounded strictly on the transcribed lecture chunks and generated study notes |
 
 ---
 
-## 10. Health Feature (tier-gated parts)
+## 10. Health & Nutrition Feature (FR-2 — Capability-Gated by `supportsImage`) ✅
 
-| Capability | Low tier | High tier |
-| :--- | :--- | :--- |
-| Offline health topics library (Genie WHO JSON as reference) | ✅ | ✅ |
-| Food analysis by photo | ❌ | ✅ (vision) |
-| Food analysis by text/catalog | ❓ fallback | ✅ |
+Refactored from `Genie`'s `HealthUI` and `FoodNutritionAnalysis`:
+
+| Task | Implementation Details |
+| :--- | :--- |
+| **Image Capture & Gallery (FR-2.1)** | Take a food photo via camera or pick an existing image from the device gallery |
+| **Nutritional & Health Analysis (FR-2.2)** | Multimodal Gemma vision analysis returning structured JSON for: (1) **Calories + macro/micronutrient breakdown**, (2) **Health impact analysis** (benefits, drawbacks, dietary considerations), (3) **Preparation & consumption guidance** (cooking methods, serving suggestions, dietary tips) |
+| **Offline Health Library** | Retain `Genie`'s `HealthLibraryManager` + `local_health_library.json` (200+ WHO topics) for zero-bandwidth reference |
 
 ---
 
@@ -307,17 +307,9 @@ The model **cannot** advance, skip, or grade — the runtime does.
 
 ---
 
-## 15. Open Decisions (consolidated)
+## 15. Remaining Open Decisions
 
-1. 🟡 Approve hybrid guided-steps orchestration (§4).
-2. 🟡 Approve skill package format (§3).
-3. ❓ Download unit: subject / chapter / topic.
-4. ❓ GCS access model + bucket name/project.
-5. ❓ Interactive components: native registry / WebView bundles / both.
-6. ❓ Revamped board: final interaction set; standalone mode or a component inside lessons.
-7. ❓ Media size budgets; optional "lite" downloads.
-8. ❓ Content sourcing and licensing.
-9. ❓ Hackathon demo depth and deadline.
-10. ❓ Tier detection: automatic vs user choice; model hosting location.
-11. ❓ Scribe modes; Health low-tier food fallback.
-12. ❓ Local progress tracking scope.
+1. 🟡 **Approve Skill Package Format & Hybrid Guided-Steps Orchestration (§3–4).**
+2. ❓ **Interactive Whiteboard Revamp (FR-4):** Confirm specific interactive additions on top of `Genie`'s `VisualizerCanvasActivity` / `VisualizerBoardRenderer` (e.g., student freehand drawing layer, tap-on-node explanations, inline step quizzes, Rive tutor dock).
+3. ❓ **GCS Bucket & Distribution:** GCS bucket name/URL and preferred download unit (whole subject vs chapter vs topic).
+4. ❓ **Hackathon Demo Content Target:** Which initial topic skill(s) across the 5 subjects (**English, Mathematics, Chemistry, Physics, Biology**) to build out first for the end-to-end demo.
