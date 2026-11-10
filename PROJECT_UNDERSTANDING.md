@@ -129,6 +129,9 @@ Subject Skill   (coordinator: teaching philosophy, curriculum index, chapter dir
 ```
 Example: `Mathematics` → `Algebra` → `Linear Equations`.
 
+* **Subject skill** = coordinator. **Chapter skills** = organize their topics. **Topic skills** = deliver the actual teaching experience.
+* **Depth/level is expressed through the hierarchy itself** (which chapters and topics exist). There is no separate level layer — the student navigates to what they need.
+
 ### 7.3. Three-Layer Package Separation (must be preserved)
 | Layer | Responsibility |
 | :--- | :--- |
