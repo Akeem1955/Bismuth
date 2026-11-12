@@ -13,7 +13,6 @@ import android.speech.RecognizerIntent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,30 +31,33 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.FolderOpen
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material.icons.filled.Summarize
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,11 +66,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.bismuth.app.ui.animation.CelebrationBurstOverlay
+import com.bismuth.app.ui.animation.ScannerBeamView
 import androidx.compose.ui.unit.sp
 import com.bismuth.app.engine.BismuthEngine
 import com.bismuth.app.engine.BismuthModelConfig
@@ -102,7 +104,7 @@ data class LoadedDocumentSource(
     val totalPages: Int,
     val chapters: List<ChapterBoundary>,
     val pageTexts: Map<Int, String>,
-    val isBuiltInSample: Boolean = false
+    val isAppInternalStorage: Boolean = false
 )
 
 enum class QuizDifficulty(val label: String) {
@@ -124,127 +126,47 @@ data class ParsedVoiceDocCommand(
     val pageCountOrEnd: Int?,
     val questionCount: Int?,
     val difficulty: QuizDifficulty?,
-    val action: String // "QUIZ" or "SUMMARY"
+    val action: String
 )
 
-object BuiltInAcademicDocuments {
-    val SAMPLES: List<LoadedDocumentSource> = listOf(
-        createSampleDoc(
-            id = "chemistry_textbook_pdf",
-            fileName = "Chemistry_Principles_and_Reactions.pdf",
-            chapters = listOf(
-                ChapterBoundary(
-                    chapterNumber = 1,
-                    title = "Chapter 1: Atomic Structure & Electron Configuration",
-                    startPage = 1,
-                    endPage = 3,
-                    content = """
-                        Chapter 1: Atomic Structure & Electron Configuration.
-                        Atoms consist of a dense positively charged nucleus containing protons and neutrons, surrounded by electrons in quantized orbitals.
-                        The atomic number (Z) equals the number of protons and defines the chemical element.
-                        Isotopes are atoms of the same element with identical proton counts but different neutron numbers, giving different mass numbers (A = Z + N).
-                        Electrons occupy orbitals according to the Aufbau principle, Pauli exclusion principle, and Hund's rule.
-                    """.trimIndent()
-                ),
-                ChapterBoundary(
-                    chapterNumber = 2,
-                    title = "Chapter 2: Periodic Trends & Chemical Bonding",
-                    startPage = 4,
-                    endPage = 6,
-                    content = """
-                        Chapter 2: Periodic Trends & Chemical Bonding.
-                        Across a period from left to right, effective nuclear charge (Z_eff) increases, causing atomic radius to decrease and first ionization energy and electronegativity to increase.
-                        Ionic bonding arises from electrostatic attraction between cations and anions after electron transfer (typically metal + nonmetal).
-                        Covalent bonding involves sharing valence electron pairs between atoms with similar electronegativities.
-                    """.trimIndent()
-                ),
-                ChapterBoundary(
-                    chapterNumber = 3,
-                    title = "Chapter 3: Stoichiometry & Limiting Reagents",
-                    startPage = 7,
-                    endPage = 9,
-                    content = """
-                        Chapter 3: Stoichiometry & Limiting Reagents.
-                        The mole relates macroscopic mass to particle count via Avogadro's constant (6.022 x 10^23 mol^-1).
-                        Balanced chemical equations enforce conservation of mass and atoms.
-                        The limiting reagent is the reactant completely consumed first in a chemical reaction, determining the maximum theoretical yield of product.
-                    """.trimIndent()
-                ),
-                ChapterBoundary(
-                    chapterNumber = 4,
-                    title = "Chapter 4: Thermochemistry & Enthalpy Changes",
-                    startPage = 10,
-                    endPage = 12,
-                    content = """
-                        Chapter 4: Thermochemistry & Enthalpy Changes.
-                        Exothermic reactions release thermal energy to the surroundings (Delta H < 0), while endothermic reactions absorb heat (Delta H > 0).
-                        Hess's Law states that the total enthalpy change of a reaction is independent of the pathway taken because enthalpy is a state function.
-                        Calorimetry measures heat transfer using q = m * c * Delta T.
-                    """.trimIndent()
-                )
-            )
-        ),
-        createSampleDoc(
-            id = "biology_cell_genetics_pdf",
-            fileName = "Biology_Cellular_Energetics_and_Genetics.pdf",
-            chapters = listOf(
-                ChapterBoundary(
-                    chapterNumber = 1,
-                    title = "Chapter 1: Cell Organelles & Membrane Transport",
-                    startPage = 1,
-                    endPage = 3,
-                    content = """
-                        Chapter 1: Cell Organelles & Membrane Transport.
-                        Eukaryotic cells compartmentalize biochemical pathways inside membrane-bound organelles including the nucleus, mitochondria, endoplasmic reticulum, and Golgi apparatus.
-                        The phospholipid bilayer is selectively permeable. Passive transport (diffusion and osmosis) moves solutes down their concentration gradient without ATP, whereas active transport uses ATP-driven pumps such as the Na+/K+ ATPase.
-                    """.trimIndent()
-                ),
-                ChapterBoundary(
-                    chapterNumber = 2,
-                    title = "Chapter 2: Photosynthesis & Cellular Respiration",
-                    startPage = 4,
-                    endPage = 6,
-                    content = """
-                        Chapter 2: Photosynthesis & Cellular Respiration.
-                        Photosynthesis converts light energy into chemical bond energy in chloroplasts: 6CO2 + 6H2O -> C6H12O6 + 6O2.
-                        Light-dependent reactions in the thylakoid membrane split water (photolysis), release O2, and generate ATP and NADPH.
-                        The Calvin cycle in the stroma fixes CO2 using RuBisCO to synthesize G3P sugars.
-                    """.trimIndent()
-                ),
-                ChapterBoundary(
-                    chapterNumber = 3,
-                    title = "Chapter 3: DNA Replication & Protein Synthesis",
-                    startPage = 7,
-                    endPage = 10,
-                    content = """
-                        Chapter 3: DNA Replication & Protein Synthesis.
-                        DNA replication is semiconservative, catalyzed by helicase, primase, DNA polymerase III, and ligase.
-                        Transcription synthesizes mRNA from a DNA template via RNA polymerase, and translation decodes mRNA codons into polypeptide chains at the ribosome using tRNA anticodons.
-                    """.trimIndent()
-                )
-            )
-        )
-    )
+object PersistentDocumentStore {
+    private fun getDocDir(context: Context): File {
+        val dir = File(context.filesDir, "imported_documents")
+        if (!dir.exists()) dir.mkdirs()
+        return dir
+    }
 
-    private fun createSampleDoc(
-        id: String,
-        fileName: String,
-        chapters: List<ChapterBoundary>
-    ): LoadedDocumentSource {
-        val pageMap = mutableMapOf<Int, String>()
-        chapters.forEach { ch ->
-            for (p in ch.startPage..ch.endPage) {
-                pageMap[p] = "[Page $p — ${ch.title}]\n${ch.content}"
-            }
+    suspend fun importAndPersistPdf(context: Context, uri: Uri): LoadedDocumentSource? = withContext(Dispatchers.IO) {
+        val rawName = PdfDocumentExtractor.resolveUriFileName(context, uri) ?: "Document_${System.currentTimeMillis()}.pdf"
+        val cleanName = rawName.replace(Regex("""[^a-zA-Z0-9._\-]"""), "_")
+        val targetFile = File(getDocDir(context), cleanName)
+        try {
+            context.contentResolver.openInputStream(uri)?.use { input ->
+                targetFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            } ?: return@withContext null
+            PdfDocumentExtractor.extractPdfFile(context, targetFile, rawName, isInternal = true)
+        } catch (_: Exception) {
+            null
         }
-        return LoadedDocumentSource(
-            id = id,
-            fileName = fileName,
-            totalPages = chapters.maxOf { it.endPage },
-            chapters = chapters,
-            pageTexts = pageMap,
-            isBuiltInSample = true
-        )
+    }
+
+    suspend fun loadPersistedDocuments(context: Context): List<LoadedDocumentSource> = withContext(Dispatchers.IO) {
+        val dir = getDocDir(context)
+        val files = dir.listFiles()?.filter { it.isFile && it.name.endsWith(".pdf", ignoreCase = true) } ?: emptyList()
+        files.mapNotNull { PdfDocumentExtractor.extractPdfFile(context, it, it.name, isInternal = true) }
+    }
+
+    suspend fun deleteDocument(context: Context, doc: LoadedDocumentSource): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val file = File(doc.id)
+            if (file.exists() && file.parentFile?.absolutePath == getDocDir(context).absolutePath) {
+                file.delete()
+            } else false
+        } catch (_: Exception) {
+            false
+        }
     }
 }
 
@@ -252,23 +174,6 @@ object PdfDocumentExtractor {
     private val chapterRegex = Regex(
         """(?im)^\s*(?:chapter|unit|module|section)\s+(\d+)\b[:\s\-]*(.*)$"""
     )
-
-    suspend fun loadPdfFromUri(context: Context, uri: Uri): LoadedDocumentSource? = withContext(Dispatchers.IO) {
-        val displayName = resolveUriFileName(context, uri) ?: "Selected_Document.pdf"
-        val tempFile = File(context.cacheDir, "bismuth_doc_${System.currentTimeMillis()}.pdf")
-        try {
-            context.contentResolver.openInputStream(uri)?.use { input ->
-                tempFile.outputStream().use { output ->
-                    input.copyTo(output)
-                }
-            } ?: return@withContext null
-            extractPdfFile(tempFile, displayName)
-        } catch (_: Exception) {
-            null
-        } finally {
-            tempFile.delete()
-        }
-    }
 
     suspend fun scanDevicePdfFiles(): List<File> = withContext(Dispatchers.IO) {
         val roots = listOfNotNull(
@@ -285,42 +190,43 @@ object PdfDocumentExtractor {
                 }
             }
         }
-        found.take(10)
+        found.take(15)
     }
 
-    suspend fun extractPdfFile(file: File, displayName: String = file.name): LoadedDocumentSource? =
-        withContext(Dispatchers.IO) {
-            if (!file.exists()) return@withContext null
-            var pfd: ParcelFileDescriptor? = null
-            var renderer: PdfRenderer? = null
-            try {
-                pfd = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-                renderer = PdfRenderer(pfd)
-                val totalPages = renderer.pageCount.coerceAtLeast(1)
+    private fun extractWithPdfBox(
+        context: Context,
+        file: File,
+        displayName: String,
+        isInternal: Boolean
+    ): LoadedDocumentSource? {
+        return try {
+            com.tom_roush.pdfbox.android.PDFBoxResourceLoader.init(context.applicationContext)
+            com.tom_roush.pdfbox.pdmodel.PDDocument.load(file).use { document ->
+                val totalPages = document.numberOfPages.coerceAtLeast(1)
                 val maxInspectPages = totalPages.coerceAtMost(60)
+                val stripper = com.tom_roush.pdfbox.text.PDFTextStripper().apply {
+                    sortByPosition = true
+                }
                 val pageTexts = mutableMapOf<Int, String>()
-
-                for (i in 0 until maxInspectPages) {
-                    val pageNum = i + 1
-                    val page = renderer.openPage(i)
+                var nonBlankPages = 0
+                for (pageNum in 1..maxInspectPages) {
+                    stripper.startPage = pageNum
+                    stripper.endPage = pageNum
                     val extracted = try {
-                        if (Build.VERSION.SDK_INT >= 35) {
-                            page.textContents.joinToString("\n") { it.text }.trim()
-                        } else {
-                            ""
-                        }
+                        stripper.getText(document).trim()
                     } catch (_: Throwable) {
                         ""
-                    } finally {
-                        page.close()
                     }
-                    pageTexts[pageNum] = if (extracted.isNotBlank()) {
-                        extracted
+                    if (extracted.isNotBlank()) {
+                        nonBlankPages++
+                        pageTexts[pageNum] = extracted
                     } else {
-                        "Page $pageNum of $displayName (Offline PDF page indexed)."
+                        pageTexts[pageNum] = "Page $pageNum of $displayName (no selectable text extracted)."
                     }
                 }
-
+                if (nonBlankPages == 0 && Build.VERSION.SDK_INT >= 35) {
+                    return null
+                }
                 val detectedChapters = detectChaptersFromPages(pageTexts, totalPages)
                 LoadedDocumentSource(
                     id = file.absolutePath,
@@ -328,27 +234,85 @@ object PdfDocumentExtractor {
                     totalPages = totalPages,
                     chapters = detectedChapters,
                     pageTexts = pageTexts,
-                    isBuiltInSample = false
+                    isAppInternalStorage = isInternal
                 )
-            } catch (_: Exception) {
-                null
-            } finally {
-                try {
-                    renderer?.close()
-                } catch (_: Exception) {
+            }
+        } catch (_: Throwable) {
+            null
+        }
+    }
+
+    suspend fun extractPdfFile(
+        context: Context,
+        file: File,
+        displayName: String = file.name,
+        isInternal: Boolean = false
+    ): LoadedDocumentSource? = withContext(Dispatchers.IO) {
+        if (!file.exists()) return@withContext null
+
+        val pdfBoxResult = extractWithPdfBox(context, file, displayName, isInternal)
+        if (pdfBoxResult != null) {
+            return@withContext pdfBoxResult
+        }
+
+        var pfd: ParcelFileDescriptor? = null
+        var renderer: PdfRenderer? = null
+        try {
+            pfd = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+            renderer = PdfRenderer(pfd)
+            val totalPages = renderer.pageCount.coerceAtLeast(1)
+            val maxInspectPages = totalPages.coerceAtMost(60)
+            val pageTexts = mutableMapOf<Int, String>()
+
+            for (i in 0 until maxInspectPages) {
+                val pageNum = i + 1
+                val page = renderer.openPage(i)
+                val extracted = try {
+                    if (Build.VERSION.SDK_INT >= 35) {
+                        page.textContents.joinToString("\n") { it.text }.trim()
+                    } else {
+                        ""
+                    }
+                } catch (_: Throwable) {
+                    ""
+                } finally {
+                    page.close()
                 }
-                try {
-                    pfd?.close()
-                } catch (_: Exception) {
+                pageTexts[pageNum] = if (extracted.isNotBlank()) {
+                    extracted
+                } else {
+                    "Page $pageNum of $displayName (no selectable text extracted)."
                 }
             }
+
+            val detectedChapters = detectChaptersFromPages(pageTexts, totalPages)
+            LoadedDocumentSource(
+                id = file.absolutePath,
+                fileName = displayName,
+                totalPages = totalPages,
+                chapters = detectedChapters,
+                pageTexts = pageTexts,
+                isAppInternalStorage = isInternal
+            )
+        } catch (_: Exception) {
+            null
+        } finally {
+            try {
+                renderer?.close()
+            } catch (_: Exception) {
+            }
+            try {
+                pfd?.close()
+            } catch (_: Exception) {
+            }
         }
+    }
 
     private fun detectChaptersFromPages(
         pageTexts: Map<Int, String>,
         totalPages: Int
     ): List<ChapterBoundary> {
-        val rawHits = mutableListOf<Triple<Int, String, Int>>() // (chapterNum, title, startPage)
+        val rawHits = mutableListOf<Triple<Int, String, Int>>()
         pageTexts.toSortedMap().forEach { (pageNum, text) ->
             val match = chapterRegex.find(text)
             if (match != null) {
@@ -380,7 +344,6 @@ object PdfDocumentExtractor {
             }
         }
 
-        // Fallback when PDF has no explicit chapter headings: segment into logical 5-page chapters
         val pagesPerSegment = 5
         val segments = mutableListOf<ChapterBoundary>()
         var pageCursor = 1
@@ -403,7 +366,7 @@ object PdfDocumentExtractor {
         return segments
     }
 
-    private fun resolveUriFileName(context: Context, uri: Uri): String? {
+    fun resolveUriFileName(context: Context, uri: Uri): String? {
         return try {
             context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
                 val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
@@ -431,7 +394,7 @@ object VoiceDocumentCommandParser {
             "biology" in lower -> "biology"
             "physics" in lower -> "physics"
             "math" in lower -> "math"
-            else -> Regex("""open\s+(?:the\s+)?([a-z0-9_\-]+)\s+pdf""").find(lower)?.groupValues?.getOrNull(1)
+            else -> Regex("""open\s+(?:the\s+)?([a-z0-9_\-]+)\s*(?:pdf)?""").find(lower)?.groupValues?.getOrNull(1)
         }
 
         val chapterRangeMatch = Regex("""chapters?\s+(\d+)\s*(?:through|to|\-|and)\s*(\d+)""").find(lower)
@@ -527,6 +490,8 @@ object VoiceDocumentCommandParser {
     }
 }
 
+private val quizJsonParser = Json { ignoreUnknownKeys = true }
+
 @Composable
 fun DocumentFeatureScreen(
     selectedModel: BismuthModelConfig,
@@ -535,59 +500,65 @@ fun DocumentFeatureScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val availableDocs = remember {
-        mutableStateOf(BuiltInAcademicDocuments.SAMPLES)
-    }
-    var activeDoc by remember { mutableStateOf(BuiltInAcademicDocuments.SAMPLES.first()) }
+    val availableDocs = remember { mutableStateListOf<LoadedDocumentSource>() }
+    var activeDoc by remember { mutableStateOf<LoadedDocumentSource?>(null) }
 
-    // Selection controls
     var rangeMode by remember { mutableStateOf(RangeSelectionMode.CHAPTER_RANGE) }
     var startChapter by remember(activeDoc) { mutableIntStateOf(1) }
     var endChapter by remember(activeDoc) {
-        mutableIntStateOf(activeDoc.chapters.size.coerceAtMost(4))
+        mutableIntStateOf(activeDoc?.chapters?.size?.coerceAtMost(4) ?: 1)
     }
     var selectedPageCount by remember(activeDoc) {
-        mutableIntStateOf(5.coerceAtMost(activeDoc.totalPages))
+        mutableIntStateOf(5.coerceAtMost(activeDoc?.totalPages ?: 1))
     }
     var questionCount by remember { mutableIntStateOf(5) }
     var difficulty by remember { mutableStateOf(QuizDifficulty.INTERMEDIATE) }
 
-    // Voice / natural language command bar
-    var voiceCommandText by remember {
-        mutableStateOf("Open the chemistry PDF and generate a quiz based on Chapters 1 through 4")
-    }
+    var voiceCommandText by remember { mutableStateOf("") }
     var commandFeedbackBanner by remember { mutableStateOf<String?>(null) }
+    var docErrorMessage by remember { mutableStateOf<String?>(null) }
 
-    // Generated outputs
     var isGenerating by remember { mutableStateOf(false) }
     var generatedQuiz by remember { mutableStateOf<List<DocumentQuizQuestion>>(emptyList()) }
     var generatedSummary by remember { mutableStateOf<String?>(null) }
     val selectedAnswers = remember { mutableStateMapOf<Int, Int>() }
     var quizSubmitted by remember { mutableStateOf(false) }
 
-    // Scan local Download/Documents PDFs on startup
+    // Load persisted documents from app internal storage + scan device public folders on startup
     LaunchedEffect(Unit) {
+        val persisted = PersistentDocumentStore.loadPersistedDocuments(context)
         val deviceFiles = PdfDocumentExtractor.scanDevicePdfFiles()
-        val loadedDeviceDocs = deviceFiles.mapNotNull { PdfDocumentExtractor.extractPdfFile(it) }
-        if (loadedDeviceDocs.isNotEmpty()) {
-            availableDocs.value = BuiltInAcademicDocuments.SAMPLES + loadedDeviceDocs
+        val deviceDocs = deviceFiles.mapNotNull { PdfDocumentExtractor.extractPdfFile(context, it, it.name) }
+
+        val combined = (persisted + deviceDocs).distinctBy { it.id }
+        availableDocs.clear()
+        availableDocs.addAll(combined)
+        if (combined.isNotEmpty()) {
+            activeDoc = combined.first()
         }
     }
 
-    // System PDF File Picker Launcher
     val pdfPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
         if (uri != null) {
             scope.launch {
-                val extracted = PdfDocumentExtractor.loadPdfFromUri(context, uri)
+                val extracted = PersistentDocumentStore.importAndPersistPdf(context, uri)
                 if (extracted != null) {
-                    availableDocs.value = listOf(extracted) + availableDocs.value.filterNot { it.id == extracted.id }
+                    val existingIdx = availableDocs.indexOfFirst { it.id == extracted.id }
+                    if (existingIdx >= 0) {
+                        availableDocs[existingIdx] = extracted
+                    } else {
+                        availableDocs.add(0, extracted)
+                    }
                     activeDoc = extracted
                     startChapter = 1
-                    endChapter = extracted.chapters.size
+                    endChapter = extracted.chapters.size.coerceAtMost(4)
                     selectedPageCount = 5.coerceAtMost(extracted.totalPages)
-                    commandFeedbackBanner = "Loaded PDF: ${extracted.fileName} (${extracted.totalPages} pages, ${extracted.chapters.size} chapters indexed)"
+                    commandFeedbackBanner = "Saved to Library: ${extracted.fileName} (${extracted.totalPages} pages, ${extracted.chapters.size} segments)"
+                    docErrorMessage = null
+                } else {
+                    docErrorMessage = "Unable to read and persist selected PDF file. Please verify file permissions."
                 }
             }
         }
@@ -595,73 +566,121 @@ fun DocumentFeatureScreen(
 
     fun buildTargetContentSlice(doc: LoadedDocumentSource): Pair<String, String> {
         return if (rangeMode == RangeSelectionMode.CHAPTER_RANGE) {
-            val s = startChapter.coerceIn(1, doc.chapters.size)
-            val e = endChapter.coerceIn(s, doc.chapters.size)
+            val s = startChapter.coerceIn(1, doc.chapters.size.coerceAtLeast(1))
+            val e = endChapter.coerceIn(s, doc.chapters.size.coerceAtLeast(1))
             val chaptersSlice = doc.chapters.filter { it.chapterNumber in s..e }
             val label = "Chapters $s through $e (${doc.fileName})"
             val text = chaptersSlice.joinToString("\n\n") { "${it.title}\n${it.content}" }
             label to text
         } else {
-            val maxP = selectedPageCount.coerceIn(1, doc.totalPages)
+            val maxP = selectedPageCount.coerceIn(1, doc.totalPages.coerceAtLeast(1))
             val label = "Selected Pages 1–$maxP (${doc.fileName})"
             val text = (1..maxP).mapNotNull { doc.pageTexts[it] }.joinToString("\n\n")
             label to text
         }
     }
 
-    fun triggerQuizGeneration(doc: LoadedDocumentSource = activeDoc) {
+    fun triggerQuizGeneration(doc: LoadedDocumentSource) {
         scope.launch {
             isGenerating = true
+            docErrorMessage = null
             generatedSummary = null
             selectedAnswers.clear()
             quizSubmitted = false
-            val (scopeLabel, sourceText) = buildTargetContentSlice(doc)
+            val (scopeLabel, rawSourceText) = buildTargetContentSlice(doc)
+            val maxContextChars = 6_500
+            val sourceText = if (rawSourceText.length > maxContextChars) {
+                rawSourceText.take(maxContextChars) + "\n[Truncated to fit on-device context window]"
+            } else {
+                rawSourceText
+            }
+            val profile = com.bismuth.app.profile.StudentProfilePrefs.getProfile(context)
+            val languageRule = com.bismuth.app.profile.StudentProfilePrefs.languageInstruction(profile.preferredLanguage)
             val prompt = """
-                Generate a $questionCount-question multiple-choice quiz at ${difficulty.label} difficulty based strictly on $scopeLabel:
+                You are an academic examination board.
+                Student Level: ${profile.academicLevel}.
+                Language Requirement: $languageRule
+                Generate a $questionCount-question multiple-choice quiz at ${difficulty.label} difficulty level strictly using the provided textbook content:
+                
+                Content Slice ($scopeLabel):
                 $sourceText
-                Return a JSON array with fields: question, options (4 strings), correctIndex (0-3), explanation.
+                
+                Output MUST be a valid JSON array of objects with fields:
+                - question: string
+                - options: array of exactly 4 strings
+                - correctIndex: integer from 0 to 3
+                - explanation: concise explanation based on the text
             """.trimIndent()
+
             val rawModelResponse = BismuthEngine.generateTextOrNull(
                 context = context,
                 prompt = prompt,
                 config = selectedModel
             )
-            generatedQuiz = parseModelQuizOrFallback(
-                rawJson = rawModelResponse,
-                doc = doc,
-                scopeLabel = scopeLabel,
-                sourceText = sourceText,
-                questionCount = questionCount,
-                difficulty = difficulty
-            )
+
+            val parsedQuiz = parseJsonQuiz(rawModelResponse, questionCount)
+            if (parsedQuiz.isNotEmpty()) {
+                generatedQuiz = parsedQuiz
+            } else {
+                docErrorMessage = "Could not generate quiz: Make sure an offline AI is saved in AI Brains."
+            }
             isGenerating = false
         }
     }
 
-    fun triggerSummaryGeneration(doc: LoadedDocumentSource = activeDoc) {
+    fun triggerSummaryGeneration(doc: LoadedDocumentSource) {
         scope.launch {
             isGenerating = true
+            docErrorMessage = null
             generatedQuiz = emptyList()
-            val (scopeLabel, sourceText) = buildTargetContentSlice(doc)
+            val (scopeLabel, rawSourceText) = buildTargetContentSlice(doc)
+            val maxContextChars = 6_500
+            val sourceText = if (rawSourceText.length > maxContextChars) {
+                rawSourceText.take(maxContextChars) + "\n[Truncated to fit on-device context window]"
+            } else {
+                rawSourceText
+            }
+            val profile = com.bismuth.app.profile.StudentProfilePrefs.getProfile(context)
+            val languageRule = com.bismuth.app.profile.StudentProfilePrefs.languageInstruction(profile.preferredLanguage)
             val prompt = """
-                Summarize $scopeLabel into structured academic study notes with Key Concepts, Core Mechanisms/Formulas, and Exam Review Takeaways:
+                You are an academic scholar.
+                Student Level: ${profile.academicLevel}.
+                Language Requirement: $languageRule
+                Summarize $scopeLabel into structured academic study notes with:
+                1. Core Concepts & Definitions
+                2. Key Mechanisms & Relationships
+                3. Critical Exam Takeaways
+                
+                Document Text:
                 $sourceText
             """.trimIndent()
+
             val rawModelResponse = BismuthEngine.generateTextOrNull(
                 context = context,
                 prompt = prompt,
                 config = selectedModel
             )
-            generatedSummary = rawModelResponse ?: buildDeterministicDocumentSummary(doc, scopeLabel, sourceText)
+
+            if (!rawModelResponse.isNullOrBlank()) {
+                generatedSummary = rawModelResponse
+            } else {
+                docErrorMessage = "Could not generate summary: Make sure an offline AI is saved in AI Brains."
+            }
             isGenerating = false
         }
     }
 
     fun executeNaturalLanguageVoiceCommand(rawCommand: String) {
+        val current = activeDoc
+        if (current == null) {
+            docErrorMessage = "Please load a PDF document first before running voice commands."
+            return
+        }
+
         val parsed = VoiceDocumentCommandParser.parse(rawCommand)
-        var targetDoc = activeDoc
+        var targetDoc = current
         if (parsed.matchedDocQuery != null) {
-            val matched = availableDocs.value.firstOrNull {
+            val matched = availableDocs.firstOrNull {
                 it.fileName.contains(parsed.matchedDocQuery, ignoreCase = true)
             }
             if (matched != null) {
@@ -681,13 +700,13 @@ fun DocumentFeatureScreen(
         parsed.difficulty?.let { difficulty = it }
 
         commandFeedbackBanner = buildString {
-            append("Voice Action Applied → Document: ${targetDoc.fileName} | ")
+            append("Action: ${targetDoc.fileName} • ")
             if (rangeMode == RangeSelectionMode.CHAPTER_RANGE) {
-                append("Chapters $startChapter–$endChapter | ")
+                append("Chapters $startChapter–$endChapter • ")
             } else {
-                append("$selectedPageCount Selected Pages | ")
+                append("$selectedPageCount Pages • ")
             }
-            append("$questionCount Questions (${difficulty.label})")
+            append("$questionCount Qs (${difficulty.label})")
         }
 
         if (parsed.action == "SUMMARY") {
@@ -697,7 +716,6 @@ fun DocumentFeatureScreen(
         }
     }
 
-    // Android Speech Recognizer Launcher
     val speechRecognizerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -712,376 +730,503 @@ fun DocumentFeatureScreen(
         }
     }
 
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFF0A0F1D))
-            .verticalScroll(rememberScrollState())
-            .padding(14.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        // Header
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
+                .padding(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
         Text(
             text = "Document Analysis & Quiz Studio",
-            color = Color.White,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
+            color = MaterialTheme.colorScheme.onBackground
         )
         Text(
-            text = "Issue natural language voice commands or use manual UI controls to analyze PDFs by chapter range or selected pages.",
-            color = Color(0xFF94A3B8),
-            fontSize = 12.sp
+            text = "Ingest real academic textbooks and PDFs. Segment by chapter boundaries or page ranges, generate AI quizzes offline, and produce grounded summaries.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        // FR-3.1 Voice-Driven Natural Language Command Bar
+        // Document Management & Picker Card
         Card(
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ),
             shape = RoundedCornerShape(16.dp),
-            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF0284C7)),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Column(modifier = Modifier.padding(12.dp)) {
+            Column(modifier = Modifier.padding(16.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Voice-Driven Document Command",
-                        color = Color(0xFF38BDF8),
+                        text = "Document Library",
+                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 13.sp
+                        color = MaterialTheme.colorScheme.onSurface
                     )
-                    IconButton(
-                        onClick = {
-                            try {
-                                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                                    putExtra(
-                                        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                                    )
-                                    putExtra(
-                                        RecognizerIntent.EXTRA_PROMPT,
-                                        "Say e.g. 'Open the chemistry PDF and generate a quiz based on Chapters 1 through 4'"
-                                    )
-                                }
-                                speechRecognizerLauncher.launch(intent)
-                            } catch (_: Exception) {
-                                executeNaturalLanguageVoiceCommand(voiceCommandText)
-                            }
-                        },
-                        modifier = Modifier
-                            .size(34.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFF0284C7))
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Mic,
-                            contentDescription = "Speak Document Command",
-                            tint = Color.White,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(6.dp))
-
-                OutlinedTextField(
-                    value = voiceCommandText,
-                    onValueChange = { voiceCommandText = it },
-                    label = { Text("Natural language command", fontSize = 11.sp) },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF38BDF8),
-                        unfocusedBorderColor = Color(0xFF334155)
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Preset Voice Command Chips matching User Specification
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    FilterChip(
-                        selected = false,
-                        onClick = {
-                            val cmd = "Open the chemistry PDF and generate a quiz based on Chapters 1 through 4"
-                            voiceCommandText = cmd
-                            executeNaturalLanguageVoiceCommand(cmd)
-                        },
-                        label = { Text("\"Open chemistry PDF • Quiz Chapters 1–4\"", fontSize = 11.sp) }
-                    )
-                    FilterChip(
-                        selected = false,
-                        onClick = {
-                            val cmd = "Create a quiz using five selected pages"
-                            voiceCommandText = cmd
-                            executeNaturalLanguageVoiceCommand(cmd)
-                        },
-                        label = { Text("\"Create a quiz using five selected pages\"", fontSize = 11.sp) }
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(6.dp))
-
-                Button(
-                    onClick = { executeNaturalLanguageVoiceCommand(voiceCommandText) },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0284C7)),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("Run Voice / Natural Language Command", fontSize = 12.sp)
-                }
-
-                if (!commandFeedbackBanner.isNullOrBlank()) {
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = commandFeedbackBanner!!,
-                        color = Color(0xFF34D399),
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-            }
-        }
-
-        // FR-3.2 Manual UI Controls Card
-        Card(
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(modifier = Modifier.padding(14.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Manual Document & Quiz Controls",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
-                    )
-                    OutlinedButton(
+                    Button(
                         onClick = { pdfPickerLauncher.launch(arrayOf("application/pdf")) }
                     ) {
-                        Icon(Icons.Default.FolderOpen, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Icon(Icons.Default.FolderOpen, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Upload PDF", fontSize = 12.sp)
+                        Text("Upload PDF", style = MaterialTheme.typography.labelMedium)
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Document Selector chips
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    availableDocs.value.forEach { doc ->
-                        FilterChip(
-                            selected = doc.id == activeDoc.id,
-                            onClick = {
-                                activeDoc = doc
-                                startChapter = 1
-                                endChapter = doc.chapters.size
-                                selectedPageCount = 5.coerceAtMost(doc.totalPages)
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Description,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(14.dp)
-                                )
-                            },
-                            label = {
-                                Text(
-                                    "${doc.fileName} (${doc.chapters.size} ch / ${doc.totalPages} p)",
-                                    fontSize = 11.sp
-                                )
-                            }
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                // Mode toggle: Chapter Range vs Page Count
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    RangeSelectionMode.entries.forEach { mode ->
-                        FilterChip(
-                            selected = rangeMode == mode,
-                            onClick = { rangeMode = mode },
-                            label = { Text(mode.label, fontSize = 12.sp) },
-                            colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = Color(0xFF1E3A8A),
-                                selectedLabelColor = Color.White
-                            )
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                if (rangeMode == RangeSelectionMode.CHAPTER_RANGE) {
-                    Text(
-                        text = "Select Chapter Range (1 to ${activeDoc.chapters.size}):",
-                        color = Color(0xFFCBD5E1),
-                        fontSize = 12.sp
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                if (availableDocs.isEmpty()) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("From Ch:", color = Color(0xFF94A3B8), fontSize = 11.sp)
-                        activeDoc.chapters.forEach { ch ->
-                            FilterChip(
-                                selected = startChapter == ch.chapterNumber,
-                                onClick = {
-                                    startChapter = ch.chapterNumber
-                                    if (endChapter < startChapter) endChapter = startChapter
-                                },
-                                label = { Text("Ch ${ch.chapterNumber}", fontSize = 11.sp) }
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Description,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(36.dp)
                             )
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("To Ch:", color = Color(0xFF94A3B8), fontSize = 11.sp)
-                        activeDoc.chapters.forEach { ch ->
-                            FilterChip(
-                                selected = endChapter == ch.chapterNumber,
-                                onClick = {
-                                    endChapter = ch.chapterNumber.coerceAtLeast(startChapter)
-                                },
-                                label = { Text("Ch ${ch.chapterNumber}", fontSize = 11.sp) }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "No Local PDF Documents Loaded",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = "Click 'Upload PDF' above to import and permanently store a textbook from your device.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
                 } else {
-                    Text(
-                        text = "Number of Selected Pages (Total: ${activeDoc.totalPages} pages):",
-                        color = Color(0xFFCBD5E1),
-                        fontSize = 12.sp
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        listOf(3, 5, 8, 10, activeDoc.totalPages).distinct().forEach { count ->
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Stored Documents (${availableDocs.size}):",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        activeDoc?.let { current ->
+                            if (current.isAppInternalStorage) {
+                                IconButton(
+                                    onClick = {
+                                        scope.launch {
+                                            PersistentDocumentStore.deleteDocument(context, current)
+                                            availableDocs.remove(current)
+                                            activeDoc = availableDocs.firstOrNull()
+                                        }
+                                    },
+                                    modifier = Modifier.size(28.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Delete Document",
+                                        tint = MaterialTheme.colorScheme.error,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        availableDocs.forEach { doc ->
+                            val isDocSelected = doc.id == activeDoc?.id
                             FilterChip(
-                                selected = selectedPageCount == count,
-                                onClick = { selectedPageCount = count },
-                                label = { Text("$count Pages", fontSize = 11.sp) }
+                                selected = isDocSelected,
+                                onClick = {
+                                    activeDoc = doc
+                                    startChapter = 1
+                                    endChapter = doc.chapters.size.coerceAtMost(4)
+                                    selectedPageCount = 5.coerceAtMost(doc.totalPages)
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Description,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(14.dp)
+                                    )
+                                },
+                                label = {
+                                    Text(
+                                        text = "${doc.fileName} (${doc.totalPages}p)",
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                }
                             )
                         }
                     }
                 }
+            }
+        }
 
-                Spacer(modifier = Modifier.height(8.dp))
+        // Active Document Controls & Voice Command Bar
+        activeDoc?.let { doc ->
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Voice Command Bar",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
 
-                // Number of Quiz Questions & Difficulty Level
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        Text("Question Count:", color = Color(0xFFCBD5E1), fontSize = 12.sp)
-                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            listOf(3, 5, 10).forEach { qCount ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        OutlinedTextField(
+                            value = voiceCommandText,
+                            onValueChange = { voiceCommandText = it },
+                            placeholder = {
+                                Text("e.g. Generate a quiz based on Chapters 1 through 4", style = MaterialTheme.typography.bodySmall)
+                            },
+                            modifier = Modifier.weight(1f)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        IconButton(
+                            onClick = {
+                                try {
+                                    val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                                        putExtra(
+                                            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                                        )
+                                        putExtra(
+                                            RecognizerIntent.EXTRA_PROMPT,
+                                            "Say e.g. 'Generate a 5-question quiz for Chapter 1'"
+                                        )
+                                    }
+                                    speechRecognizerLauncher.launch(intent)
+                                } catch (_: Exception) {
+                                    if (voiceCommandText.isNotBlank()) {
+                                        executeNaturalLanguageVoiceCommand(voiceCommandText)
+                                    }
+                                }
+                            },
+                            modifier = Modifier
+                                .size(44.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.primaryContainer)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Mic,
+                                contentDescription = "Speak Command",
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(6.dp))
+
+                    // Quick-action chips
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        FilterChip(
+                            selected = false,
+                            onClick = {
+                                val cmd = "Generate a quiz based on Chapters 1 through 2"
+                                voiceCommandText = cmd
+                                executeNaturalLanguageVoiceCommand(cmd)
+                            },
+                            label = { Text("Quiz: Ch 1–2", style = MaterialTheme.typography.labelSmall) }
+                        )
+                        FilterChip(
+                            selected = false,
+                            onClick = {
+                                val cmd = "Create a quiz using five selected pages"
+                                voiceCommandText = cmd
+                                executeNaturalLanguageVoiceCommand(cmd)
+                            },
+                            label = { Text("Quiz: 5 Pages", style = MaterialTheme.typography.labelSmall) }
+                        )
+                        FilterChip(
+                            selected = false,
+                            onClick = {
+                                val cmd = "Summarize Chapters 1 through 2"
+                                voiceCommandText = cmd
+                                executeNaturalLanguageVoiceCommand(cmd)
+                            },
+                            label = { Text("Summarize: Ch 1–2", style = MaterialTheme.typography.labelSmall) }
+                        )
+                    }
+
+                    if (voiceCommandText.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Button(
+                            onClick = { executeNaturalLanguageVoiceCommand(voiceCommandText) },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Run Voice Command", style = MaterialTheme.typography.labelMedium)
+                        }
+                    }
+
+                    if (!commandFeedbackBanner.isNullOrBlank()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = commandFeedbackBanner!!,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(14.dp))
+                    Text(
+                        text = "Manual Scope Controls",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        RangeSelectionMode.entries.forEach { mode ->
+                            FilterChip(
+                                selected = rangeMode == mode,
+                                onClick = { rangeMode = mode },
+                                label = { Text(mode.label, style = MaterialTheme.typography.labelSmall) }
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    if (rangeMode == RangeSelectionMode.CHAPTER_RANGE) {
+                        Text(
+                            text = "Chapter Range (${doc.chapters.size} Segments detected):",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .horizontalScroll(rememberScrollState()),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text("From:", style = MaterialTheme.typography.labelSmall)
+                            doc.chapters.forEach { ch ->
                                 FilterChip(
-                                    selected = questionCount == qCount,
-                                    onClick = { questionCount = qCount },
-                                    label = { Text("$qCount Qs", fontSize = 11.sp) }
+                                    selected = startChapter == ch.chapterNumber,
+                                    onClick = {
+                                        startChapter = ch.chapterNumber
+                                        if (endChapter < startChapter) endChapter = startChapter
+                                    },
+                                    label = { Text("Ch ${ch.chapterNumber}", style = MaterialTheme.typography.labelSmall) }
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("To:", style = MaterialTheme.typography.labelSmall)
+                            doc.chapters.forEach { ch ->
+                                FilterChip(
+                                    selected = endChapter == ch.chapterNumber,
+                                    onClick = {
+                                        endChapter = ch.chapterNumber.coerceAtLeast(startChapter)
+                                    },
+                                    label = { Text("Ch ${ch.chapterNumber}", style = MaterialTheme.typography.labelSmall) }
+                                )
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = "Page Count (Total: ${doc.totalPages} pages):",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            listOf(3, 5, 8, 10, doc.totalPages).distinct().forEach { count ->
+                                FilterChip(
+                                    selected = selectedPageCount == count,
+                                    onClick = { selectedPageCount = count },
+                                    label = { Text("$count Pages", style = MaterialTheme.typography.labelSmall) }
                                 )
                             }
                         }
                     }
-                }
 
-                Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
 
-                Text("Difficulty Level:", color = Color(0xFFCBD5E1), fontSize = 12.sp)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    QuizDifficulty.entries.forEach { diff ->
-                        FilterChip(
-                            selected = difficulty == diff,
-                            onClick = { difficulty = diff },
-                            label = { Text(diff.label, fontSize = 11.sp) }
-                        )
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Column {
+                            Text("Questions:", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .horizontalScroll(rememberScrollState()),
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                listOf(3, 5, 10).forEach { qCount ->
+                                    FilterChip(
+                                        selected = questionCount == qCount,
+                                        onClick = { questionCount = qCount },
+                                        label = { Text("$qCount Qs", style = MaterialTheme.typography.labelSmall) }
+                                    )
+                                }
+                            }
+                        }
+
+                        Column {
+                            Text("Difficulty:", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .horizontalScroll(rememberScrollState()),
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                QuizDifficulty.entries.forEach { diff ->
+                                    FilterChip(
+                                        selected = difficulty == diff,
+                                        onClick = { difficulty = diff },
+                                        label = { Text(diff.label, style = MaterialTheme.typography.labelSmall) }
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Button(
+                            onClick = { triggerQuizGeneration(doc) },
+                            enabled = !isGenerating,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(Icons.Default.Quiz, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Generate Quiz", style = MaterialTheme.typography.labelMedium)
+                        }
+
+                        OutlinedButton(
+                            onClick = { triggerSummaryGeneration(doc) },
+                            enabled = !isGenerating,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(Icons.Default.Summarize, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Study Summary", style = MaterialTheme.typography.labelMedium)
+                        }
                     }
                 }
+            }
+        }
 
-                Spacer(modifier = Modifier.height(10.dp))
-
+        if (docErrorMessage != null) {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer
+                ),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    modifier = Modifier.padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Button(
-                        onClick = { triggerQuizGeneration(activeDoc) },
-                        enabled = !isGenerating,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7C3AED)),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(Icons.Default.Quiz, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text("Generate Quiz", fontSize = 12.sp)
-                    }
-
-                    Button(
-                        onClick = { triggerSummaryGeneration(activeDoc) },
-                        enabled = !isGenerating,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0D9488)),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(Icons.Default.Summarize, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text("Study Summary", fontSize = 12.sp)
-                    }
+                    Icon(
+                        imageVector = Icons.Default.Warning,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = docErrorMessage!!,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
                 }
             }
         }
 
         if (isGenerating) {
             Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-                shape = RoundedCornerShape(14.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                ),
+                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CircularProgressIndicator(modifier = Modifier.size(22.dp), strokeWidth = 2.dp)
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = "Analyzing ${activeDoc.fileName} with ${selectedModel.displayName}...",
-                        color = Color.White,
-                        fontSize = 13.sp
-                    )
+                    ScannerBeamView(modifier = Modifier.size(52.dp))
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Column {
+                        Text(
+                            text = "Analyzing Document Segment",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = "Extracting grounded quiz questions with ${selectedModel.displayName}...",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }
 
-        // Interactive Quiz Output
+        // Generated Quiz View
         if (generatedQuiz.isNotEmpty()) {
             Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ),
                 shape = RoundedCornerShape(16.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF8B5CF6)),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(14.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
                     val correctCount = generatedQuiz.indices.count { idx ->
                         selectedAnswers[idx] == generatedQuiz[idx].correctIndex
                     }
@@ -1092,16 +1237,16 @@ fun DocumentFeatureScreen(
                     ) {
                         Text(
                             text = "Generated Quiz (${generatedQuiz.size} Questions • ${difficulty.label})",
-                            color = Color(0xFFC4B5FD),
+                            style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp
+                            color = MaterialTheme.colorScheme.primary
                         )
                         if (quizSubmitted) {
                             Text(
                                 text = "Score: $correctCount / ${generatedQuiz.size}",
-                                color = Color(0xFF34D399),
+                                style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp
+                                color = MaterialTheme.colorScheme.secondary
                             )
                         }
                     }
@@ -1129,24 +1274,30 @@ fun DocumentFeatureScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 6.dp)
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0xFF0F172A))
+                                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                                 .padding(12.dp)
                         ) {
                             Text(
                                 text = "Q${qIdx + 1}. ${q.question}",
-                                color = Color.White,
+                                style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.SemiBold,
-                                fontSize = 13.sp
+                                color = MaterialTheme.colorScheme.onSurface
                             )
-                            Spacer(modifier = Modifier.height(6.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
                             q.options.forEachIndexed { optIdx, optText ->
                                 val picked = selectedAnswers[qIdx] == optIdx
-                                val borderCol = when {
-                                    quizSubmitted && optIdx == q.correctIndex -> Color(0xFF10B981)
-                                    quizSubmitted && picked && optIdx != q.correctIndex -> Color(0xFFEF4444)
-                                    picked -> Color(0xFF38BDF8)
-                                    else -> Color(0xFF1E293B)
+                                val cardBg = when {
+                                    quizSubmitted && optIdx == q.correctIndex -> MaterialTheme.colorScheme.primaryContainer
+                                    quizSubmitted && picked && optIdx != q.correctIndex -> MaterialTheme.colorScheme.errorContainer
+                                    picked -> MaterialTheme.colorScheme.surfaceContainerHighest
+                                    else -> MaterialTheme.colorScheme.surface
                                 }
+                                val cardTextColor = when {
+                                    quizSubmitted && optIdx == q.correctIndex -> MaterialTheme.colorScheme.onPrimaryContainer
+                                    quizSubmitted && picked && optIdx != q.correctIndex -> MaterialTheme.colorScheme.onErrorContainer
+                                    else -> MaterialTheme.colorScheme.onSurface
+                                }
+
                                 Surface(
                                     onClick = {
                                         if (!quizSubmitted) {
@@ -1154,236 +1305,96 @@ fun DocumentFeatureScreen(
                                         }
                                     },
                                     shape = RoundedCornerShape(8.dp),
-                                    color = if (picked) Color(0xFF1E293B) else Color(0xFF0A0F1D),
-                                    border = androidx.compose.foundation.BorderStroke(1.dp, borderCol),
+                                    color = cardBg,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(vertical = 3.dp)
                                 ) {
                                     Text(
                                         text = "${('A' + optIdx)}. $optText",
-                                        color = Color.White,
-                                        fontSize = 12.sp,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = cardTextColor,
                                         modifier = Modifier.padding(10.dp)
                                     )
                                 }
                             }
                             if (quizSubmitted) {
-                                Spacer(modifier = Modifier.height(4.dp))
+                                Spacer(modifier = Modifier.height(6.dp))
                                 Text(
                                     text = "Explanation: ${q.explanation}",
-                                    color = Color(0xFF93C5FD),
-                                    fontSize = 11.sp
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                     Button(
                         onClick = { quizSubmitted = !quizSubmitted },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981)),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        ),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(Icons.Default.CheckCircle, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text(if (quizSubmitted) "Hide Explanations & Retry" else "Submit Quiz & Grade Offline")
+                        Text(if (quizSubmitted) "Retry Quiz" else "Submit & Grade Offline")
                     }
                 }
             }
         }
 
-        // Summary Output
+        // Summary View
         if (!generatedSummary.isNullOrBlank()) {
             Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(14.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = "Document Study Summary",
-                        color = Color(0xFF34D399),
+                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
+                        color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = generatedSummary!!,
-                        color = Color(0xFFE2E8F0),
-                        fontSize = 12.sp,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface,
                         lineHeight = 18.sp
                     )
                 }
             }
         }
-    }
-}
-
-private val quizJsonParser = Json { ignoreUnknownKeys = true }
-
-private fun parseModelQuizOrFallback(
-    rawJson: String?,
-    doc: LoadedDocumentSource,
-    scopeLabel: String,
-    sourceText: String,
-    questionCount: Int,
-    difficulty: QuizDifficulty
-): List<DocumentQuizQuestion> {
-    if (!rawJson.isNullOrBlank()) {
-        try {
-            val startIdx = rawJson.indexOf('[')
-            val endIdx = rawJson.lastIndexOf(']')
-            if (startIdx >= 0 && endIdx > startIdx) {
-                val parsed = quizJsonParser.decodeFromString<List<DocumentQuizQuestion>>(
-                    rawJson.substring(startIdx, endIdx + 1)
-                )
-                if (parsed.isNotEmpty()) return parsed.take(questionCount)
-            }
-        } catch (_: Exception) {
         }
-    }
 
-    val baseBank = if (doc.fileName.contains("Biology", ignoreCase = true)) {
-        listOf(
-            DocumentQuizQuestion(
-                question = "[${difficulty.label}] In $scopeLabel, how does active transport differ from passive diffusion across the cell membrane?",
-                options = listOf(
-                    "Active transport pumps solutes against their concentration gradient using ATP",
-                    "Active transport requires no membrane proteins",
-                    "Passive diffusion only moves water molecules",
-                    "Active transport occurs exclusively in prokaryotic cell walls"
-                ),
-                correctIndex = 0,
-                explanation = "Active transport uses ATP hydrolysis (e.g., Na+/K+ pump) to move ions against their electrochemical gradient."
-            ),
-            DocumentQuizQuestion(
-                question = "[${difficulty.label}] Where do the light-dependent reactions of photosynthesis occur and what do they produce?",
-                options = listOf(
-                    "Mitochondrial matrix producing pyruvate",
-                    "Thylakoid membrane producing O2, ATP, and NADPH",
-                    "Chloroplast stroma producing lactic acid",
-                    "Ribosomes producing polypeptides"
-                ),
-                correctIndex = 1,
-                explanation = "Photolysis of water and photosystem electron transport take place in the thylakoid membrane, generating ATP, NADPH, and O2."
-            ),
-            DocumentQuizQuestion(
-                question = "[${difficulty.label}] What is the primary role of RuBisCO in the Calvin cycle?",
-                options = listOf(
-                    "Splitting water molecules using photons",
-                    "Fixing inorganic CO2 onto RuBP in the chloroplast stroma",
-                    "Unwinding double-stranded DNA during replication",
-                    "Synthesizing tRNA anticodons"
-                ),
-                correctIndex = 1,
-                explanation = "RuBisCO catalyzes carbon fixation by attaching CO2 to ribulose-1,5-bisphosphate (RuBP)."
-            ),
-            DocumentQuizQuestion(
-                question = "[${difficulty.label}] Why is DNA replication described as semiconservative?",
-                options = listOf(
-                    "Only half of the genome is replicated per cell cycle",
-                    "Each daughter DNA molecule contains one original template strand and one newly synthesized strand",
-                    "RNA primers remain permanently embedded in mature chromosomes",
-                    "Replication occurs without DNA polymerase"
-                ),
-                correctIndex = 1,
-                explanation = "Each parental strand serves as a template for a new complementary strand."
-            ),
-            DocumentQuizQuestion(
-                question = "[${difficulty.label}] Which enzyme synthesizes mRNA from a DNA template during transcription?",
-                options = listOf(
-                    "DNA Ligase",
-                    "RNA Polymerase",
-                    "ATP Synthase",
-                    "Restriction Endonuclease"
-                ),
-                correctIndex = 1,
-                explanation = "RNA polymerase binds the promoter and polymerizes ribonucleotides complementary to the template DNA strand."
-            )
-        )
-    } else {
-        listOf(
-            DocumentQuizQuestion(
-                question = "[${difficulty.label}] Based on $scopeLabel, what defines the atomic number (Z) of an element?",
-                options = listOf(
-                    "Total sum of protons and valence electrons",
-                    "Number of protons in the atomic nucleus",
-                    "Number of neutrons in the heaviest isotope",
-                    "Principal quantum number of the outermost shell"
-                ),
-                correctIndex = 1,
-                explanation = "The atomic number (Z) is uniquely determined by the number of nuclear protons."
-            ),
-            DocumentQuizQuestion(
-                question = "[${difficulty.label}] Why does atomic radius decrease across a period from left to right?",
-                options = listOf(
-                    "Principal quantum shells are removed across a period",
-                    "Increasing effective nuclear charge (Z_eff) pulls valence electrons closer to the nucleus",
-                    "Neutron-to-proton repulsion expands the core orbitals",
-                    "Electronegativity drops to zero at the noble gases"
-                ),
-                correctIndex = 1,
-                explanation = "Protons are added to the nucleus while electrons enter the same principal shell, increasing Z_eff."
-            ),
-            DocumentQuizQuestion(
-                question = "[${difficulty.label}] What determines the maximum theoretical yield of product in a chemical reaction?",
-                options = listOf(
-                    "The reactant present in the largest mass excess",
-                    "The limiting reagent that is completely consumed first",
-                    "The ambient atmospheric pressure alone",
-                    "The catalyst concentration"
-                ),
-                correctIndex = 1,
-                explanation = "Once the limiting reagent is exhausted, the reaction cannot form additional product."
-            ),
-            DocumentQuizQuestion(
-                question = "[${difficulty.label}] For an exothermic reaction at constant pressure, which thermodynamic relation holds?",
-                options = listOf(
-                    "Enthalpy change Delta H < 0 and thermal energy is released to surroundings",
-                    "Enthalpy change Delta H > 0 and temperature of surroundings drops",
-                    "Delta H = 0 for all combustion reactions",
-                    "Activation energy is negative"
-                ),
-                correctIndex = 0,
-                explanation = "Exothermic reactions have lower product enthalpy than reactant enthalpy (Delta H < 0)."
-            ),
-            DocumentQuizQuestion(
-                question = "[${difficulty.label}] According to Hess's Law, why can reaction enthalpies of individual steps be summed?",
-                options = listOf(
-                    "Enthalpy (H) is a state function independent of reaction pathway",
-                    "All chemical reactions occur in a single elementary collision",
-                    "Heat capacity is identical for all substances",
-                    "Entropy always decreases in isolated systems"
-                ),
-                correctIndex = 0,
-                explanation = "Because enthalpy is a state function, Delta H_net depends only on initial reactants and final products."
-            )
+        // Celebration Particle Burst on Quiz Submission
+        CelebrationBurstOverlay(
+            visible = quizSubmitted,
+            modifier = Modifier.fillMaxSize()
         )
     }
-
-    val result = mutableListOf<DocumentQuizQuestion>()
-    while (result.size < questionCount) {
-        val template = baseBank[result.size % baseBank.size]
-        result.add(template)
-    }
-    return result
 }
 
-private fun buildDeterministicDocumentSummary(
-    doc: LoadedDocumentSource,
-    scopeLabel: String,
-    sourceText: String
-): String {
-    return """
-        1. Scope Analyzed
-        • Document: ${doc.fileName}
-        • Selection: $scopeLabel
-        
-        2. High-Level Takeaways
-        ${doc.chapters.joinToString("\n") { "• ${it.title} (Pages ${it.startPage}–${it.endPage})" }}
-        
-        3. Extracted Concept Breakdown
-        ${sourceText.take(900)}
-    """.trimIndent()
+private fun parseJsonQuiz(
+    rawJson: String?,
+    questionCount: Int
+): List<DocumentQuizQuestion> {
+    if (rawJson.isNullOrBlank()) return emptyList()
+    try {
+        val startIdx = rawJson.indexOf('[')
+        val endIdx = rawJson.lastIndexOf(']')
+        if (startIdx >= 0 && endIdx > startIdx) {
+            val slice = rawJson.substring(startIdx, endIdx + 1)
+            val parsed = quizJsonParser.decodeFromString<List<DocumentQuizQuestion>>(slice)
+            if (parsed.isNotEmpty()) return parsed.take(questionCount)
+        }
+    } catch (_: Exception) {
+    }
+    return emptyList()
 }

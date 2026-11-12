@@ -1,0 +1,119 @@
+{
+  "chapterId": "atomic-reactions",
+  "subjectId": "chemistry",
+  "title": "Atomic Structure & Quantitative Stoichiometry",
+  "summary": "Subatomic composition, isotopes, molar mass conversions, and limiting reagents.",
+  "chapterObjectives": [
+    "Determine proton, neutron, and electron counts from atomic number Z and mass number A",
+    "Balance chemical equations and identify limiting reagents using mole ratios"
+  ],
+  "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/SKILL.md",
+  "topics": [
+    {
+      "topicId": "chem_atomic_orbitals",
+      "subjectId": "chemistry",
+      "chapterId": "atomic-reactions",
+      "title": "Atomic Structure, Isotopes & Electron Shells",
+      "summary": "Nuclear composition (Z, N, A), isotopic mass, and Bohr/orbital valence configurations.",
+      "version": "1.1.0",
+      "bundledInApk": false,
+      "packageSizeBytes": 505133,
+      "bundleSha256": "3b7609bcfa7949f9b869424435f220c67d1be2add1cc0920b05d5e36ad59b54e",
+      "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/bundle.json",
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/SKILL.md",
+      "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/lesson.json",
+      "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assessment.json",
+      "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/manifest.json",
+      "mediaFiles": [
+        {
+          "relativePath": "assets/images/step_1.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_1.png",
+          "sha256": "204974f7af8e08a112722cede39825234943115231b18b8e221934c870f4e912",
+          "sizeBytes": 35558,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_2.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_2.png",
+          "sha256": "023a15b410cce82bb42d07230dde5936de5bdf6f41eb446b3c2ce760ed24fe6c",
+          "sizeBytes": 34481,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_3.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_3.png",
+          "sha256": "a0c02e3b7f330af2e05e4f7aaf5be19f02fada8bac8d42b1302cfc6b0e5be264",
+          "sizeBytes": 34926,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/video/walkthrough.mp4",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/video/walkthrough.mp4",
+          "sha256": "944d74eca7a46e8120e5725ba509d35415cec0bbb8af885cd9ed7d65097c77fc",
+          "sizeBytes": 379346,
+          "mimeType": "video/mp4"
+        },
+        {
+          "relativePath": "assets/board/scene.json",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/board/scene.json",
+          "sha256": "4c200c137767672c213f278a7903866e0bbbd9ea93dbef19ca24d0f38e4c9cd9",
+          "sizeBytes": 5448,
+          "mimeType": "application/json"
+        }
+      ]
+    },
+    {
+      "topicId": "chem_stoichiometry_moles",
+      "subjectId": "chemistry",
+      "chapterId": "atomic-reactions",
+      "title": "Stoichiometry, Molar Mass & Limiting Reagents",
+      "summary": "Converting mass to moles (n = m/M) and using balanced coefficients to identify the limiting reactant.",
+      "version": "1.1.0",
+      "bundledInApk": false,
+      "packageSizeBytes": 334636,
+      "bundleSha256": "ba72452702f5c1d1332925ac5d95f470e9f6149ff98b662e18e75bc05c231a9d",
+      "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/bundle.json",
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/SKILL.md",
+      "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/lesson.json",
+      "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assessment.json",
+      "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/manifest.json",
+      "mediaFiles": [
+        {
+          "relativePath": "assets/images/step_1.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/images/step_1.png",
+          "sha256": "81057548ded941bdc943ee2745deb6106dcc1289e6eb76b718c412fc5885cfcb",
+          "sizeBytes": 24965,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_2.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/images/step_2.png",
+          "sha256": "238928cadc280b38ae7e6bab40315d8030b10e9d7e2e576d754a5d75ca42ecbf",
+          "sizeBytes": 22639,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_3.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/images/step_3.png",
+          "sha256": "79381d5542687658082db44dcbd8006e06493fad5673045570f682e5d546be81",
+          "sizeBytes": 25314,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/video/walkthrough.mp4",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/video/walkthrough.mp4",
+          "sha256": "630dade01e4789a1e468a44df09128ede565d0fd56721dbf7e4b08e499bf64fa",
+          "sizeBytes": 240529,
+          "mimeType": "video/mp4"
+        },
+        {
+          "relativePath": "assets/board/scene.json",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/board/scene.json",
+          "sha256": "4e4aee449c93b117fccd46f4df88feaa469ec26b3a3b1cc9b81cdd831aa4ca4a",
+          "sizeBytes": 5498,
+          "mimeType": "application/json"
+        }
+      ]
+    }
+  ]
+}

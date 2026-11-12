@@ -89,17 +89,33 @@ object BismuthEngine {
             @OptIn(ExperimentalApi::class)
             run { ExperimentalFlags.enableConversationConstrainedDecoding = constrainedDecoding }
 
-            val engineConfig = EngineConfig(
-                modelPath = modelPath,
-                backend = Backend.GPU(),
-                visionBackend = if (supportsImage) Backend.GPU() else null,
-                audioBackend = if (supportsAudio) Backend.CPU() else null,
-                maxNumTokens = maxNumTokens,
-                cacheDir = context.cacheDir.path,
-            )
-
-            val newEngine = Engine(engineConfig)
-            newEngine.initialize()
+            var candidateGpuEngine: Engine? = null
+            val (newEngine, activeBackend) = try {
+                val gpuConfig = EngineConfig(
+                    modelPath = modelPath,
+                    backend = Backend.GPU(),
+                    visionBackend = if (supportsImage) Backend.GPU() else null,
+                    audioBackend = if (supportsAudio) Backend.CPU() else null,
+                    maxNumTokens = maxNumTokens,
+                    cacheDir = context.cacheDir.path,
+                )
+                Engine(gpuConfig).also {
+                    candidateGpuEngine = it
+                    it.initialize()
+                } to "GPU"
+            } catch (gpuError: Exception) {
+                runCatching { candidateGpuEngine?.close() }
+                Log.w(TAG, "GPU init failed for $modelPath (${gpuError.message}); falling back to CPU backend.")
+                val cpuConfig = EngineConfig(
+                    modelPath = modelPath,
+                    backend = Backend.CPU(),
+                    visionBackend = if (supportsImage) Backend.CPU() else null,
+                    audioBackend = if (supportsAudio) Backend.CPU() else null,
+                    maxNumTokens = maxNumTokens,
+                    cacheDir = context.cacheDir.path,
+                )
+                Engine(cpuConfig).also { it.initialize() } to "CPU"
+            }
 
             val newConversation = newEngine.createConversation(
                 ConversationConfig(
@@ -118,7 +134,7 @@ object BismuthEngine {
             conversation = newConversation
             activeModelPath = modelPath
             isInitialized = true
-            Log.d(TAG, "BismuthEngine initialized with $modelPath")
+            Log.d(TAG, "BismuthEngine initialized ($activeBackend) with $modelPath")
             true
         } catch (e: Exception) {
             Log.e(TAG, "Engine initialization failed: ${e.message}", e)

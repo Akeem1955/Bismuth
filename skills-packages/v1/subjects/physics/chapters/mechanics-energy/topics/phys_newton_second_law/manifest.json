@@ -1,0 +1,58 @@
+{
+  "topicId": "phys_newton_second_law",
+  "subjectId": "physics",
+  "chapterId": "mechanics-energy",
+  "version": "1.1.0",
+  "files": {
+    "SKILL.md": {
+      "sizeBytes": 1701,
+      "sha256": "2e4ac81828d34528070749fdfebf943aa84112e06983ce63a8ae0b8519031a86",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/SKILL.md"
+    },
+    "lesson.json": {
+      "sizeBytes": 13038,
+      "sha256": "37285ceded16e8f99a2472eb027f8cc832df8ba3c42d42bf2c79eb2c2c4c7f56",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/lesson.json"
+    },
+    "assessment.json": {
+      "sizeBytes": 403,
+      "sha256": "78e29c09a8f5f1fbd9f52b7ce20853cffa52fa5297841c049607a2f2716bf098",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assessment.json"
+    },
+    "bundle.json": {
+      "sizeBytes": 17250,
+      "sha256": "b7143320804907f954974a2185701cc4d6e102249b61bc72690cf289559de43c",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/bundle.json"
+    },
+    "assets/images/step_1.png": {
+      "sizeBytes": 24329,
+      "sha256": "312d0e566e6eb434596b13e352516ac72bbb9219e36dd45f6ac4b8098d7721ce",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/images/step_1.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_2.png": {
+      "sizeBytes": 25050,
+      "sha256": "383630104404007b384a44476df7473e56764b199df34a93b1f8faf1dcd0e960",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/images/step_2.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_3.png": {
+      "sizeBytes": 23529,
+      "sha256": "2bcdda2d7524c163154af6b2bc7a45c04481501d8741fda9dd26e3b07a68d047",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/images/step_3.png",
+      "mimeType": "image/png"
+    },
+    "assets/video/walkthrough.mp4": {
+      "sizeBytes": 249870,
+      "sha256": "ac9cd72ae0f1dc20acc4a054b195d85048a5caed27c5062d80fb32763efcd687",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/video/walkthrough.mp4",
+      "mimeType": "video/mp4"
+    },
+    "assets/board/scene.json": {
+      "sizeBytes": 7095,
+      "sha256": "adaacc63dfb3e84c53f35d39c36a5f94c81a77d628aace24fc5faf1d19e1857a",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/board/scene.json",
+      "mimeType": "application/json"
+    }
+  }
+}

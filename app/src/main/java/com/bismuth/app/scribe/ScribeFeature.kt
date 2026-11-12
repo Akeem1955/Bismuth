@@ -2,14 +2,23 @@ package com.bismuth.app.scribe
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,10 +36,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.GraphicEq
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
@@ -41,15 +51,16 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -59,11 +70,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.bismuth.app.ui.animation.AIThinkingOrb
+import com.bismuth.app.ui.animation.AudioPulseVisualizer
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.bismuth.app.engine.BismuthEngine
@@ -71,16 +83,16 @@ import com.bismuth.app.engine.BismuthModelConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import kotlin.math.abs
 
 data class LectureChunkSlot(
-    val chunkIndex: Int, // 1, 2, 3
-    val label: String,   // "Chunk 1 (00:00–10:00)"
+    val chunkIndex: Int,
+    val label: String,
     val durationSec: Int,
-    val status: String,  // "Idle", "Recording", "Transcribing", "Completed"
+    val status: String,
     val transcript: String,
     val wavBytes: ByteArray? = null
 )
@@ -98,8 +110,8 @@ data class LectureFollowUpExchange(
 
 object PcmWavEncoder {
     const val SAMPLE_RATE = 16000
-    const val MAX_LECTURE_SECONDS = 30 * 60 // 30 minutes max
-    const val CHUNK_SECONDS = 10 * 60       // 10 minutes per chunk
+    const val MAX_LECTURE_SECONDS = 30 * 60
+    const val CHUNK_SECONDS = 10 * 60
 
     fun wrapPcmInWav(pcmData: ByteArray, sampleRate: Int = SAMPLE_RATE): ByteArray {
         val channels = 1
@@ -114,8 +126,8 @@ object PcmWavEncoder {
         header.putInt(chunkSize)
         header.put("WAVE".toByteArray(Charsets.US_ASCII))
         header.put("fmt ".toByteArray(Charsets.US_ASCII))
-        header.putInt(16) // PCM subchunk1 size
-        header.putShort(1) // AudioFormat = 1 (PCM)
+        header.putInt(16)
+        header.putShort(1)
         header.putShort(channels.toShort())
         header.putInt(sampleRate)
         header.putInt(byteRate)
@@ -159,6 +171,12 @@ fun ScribeFeatureScreen(
     var elapsedLectureSeconds by remember { mutableIntStateOf(0) }
     var activeChunkNumber by remember { mutableIntStateOf(1) }
     var isProcessingScribe by remember { mutableStateOf(false) }
+    var scribeErrorMessage by remember { mutableStateOf<String?>(null) }
+    var peakMicAmplitude by remember { mutableFloatStateOf(0f) }
+    val profileLanguage = remember {
+        com.bismuth.app.profile.StudentProfilePrefs.getProfile(context).preferredLanguage
+    }
+    var selectedLanguage by remember { mutableStateOf(profileLanguage) }
 
     val chunkSlots = remember {
         mutableStateListOf(
@@ -171,12 +189,10 @@ fun ScribeFeatureScreen(
     var fullTranscript by remember { mutableStateOf("") }
     var structuredScribeOutput by remember { mutableStateOf<AcademicScribeStudyTemplate?>(null) }
 
-    // Follow-up Q&A grounded on transcribed lecture
     var followUpQuestion by remember { mutableStateOf("") }
     var isAskingFollowUp by remember { mutableStateOf(false) }
     val followUpHistory = remember { mutableStateListOf<LectureFollowUpExchange>() }
 
-    // Live PCM capture buffer
     val pcmStream = remember { ByteArrayOutputStream() }
     var audioRecordInstance by remember { mutableStateOf<AudioRecord?>(null) }
 
@@ -192,51 +208,82 @@ fun ScribeFeatureScreen(
 
     suspend fun transcribeAndSummarizeChunks(latestWav: ByteArray?, currentChunkIdx: Int) {
         isProcessingScribe = true
+        scribeErrorMessage = null
         val slotIdx = (currentChunkIdx - 1).coerceIn(0, 2)
         chunkSlots[slotIdx] = chunkSlots[slotIdx].copy(status = "Transcribing")
 
+        if (!selectedModel.supportsAudio) {
+            chunkSlots[slotIdx] = chunkSlots[slotIdx].copy(
+                status = "Audio Unsupported",
+                transcript = "",
+                wavBytes = latestWav
+            )
+            scribeErrorMessage = "${selectedModel.displayName} does not support audio transcription. Please switch to an Audio-capable model (e.g. Gemma 3n or Gemma 4)."
+            isProcessingScribe = false
+            return
+        }
+
         val transcribedText = if (latestWav != null && latestWav.size > 44) {
+            val transcribePrompt = if (selectedLanguage == "English") {
+                "Transcribe this academic lecture audio segment accurately verbatim:"
+            } else {
+                "Transcribe this academic lecture audio segment accurately in $selectedLanguage:"
+            }
             BismuthEngine.generateTextOrNull(
                 context = context,
-                prompt = "Transcribe this academic lecture audio segment accurately verbatim:",
+                prompt = transcribePrompt,
                 config = selectedModel,
                 audioBytes = listOf(latestWav)
             )
         } else null
 
-        val resolvedChunkTranscript = transcribedText?.takeIf { it.isNotBlank() }
-            ?: chunkSlots[slotIdx].transcript.ifBlank {
-                getBuiltInAcademicLectureChunk(currentChunkIdx)
-            }
+        val resolvedChunkTranscript = transcribedText?.trim().orEmpty()
 
-        chunkSlots[slotIdx] = chunkSlots[slotIdx].copy(
-            status = "Completed",
-            transcript = resolvedChunkTranscript,
-            wavBytes = latestWav
-        )
+        if (resolvedChunkTranscript.isNotBlank()) {
+            chunkSlots[slotIdx] = chunkSlots[slotIdx].copy(
+                status = "Completed",
+                transcript = resolvedChunkTranscript,
+                wavBytes = latestWav
+            )
+        } else {
+            chunkSlots[slotIdx] = chunkSlots[slotIdx].copy(
+                status = "No Speech Detected",
+                transcript = "",
+                wavBytes = latestWav
+            )
+        }
 
         fullTranscript = chunkSlots
             .filter { it.transcript.isNotBlank() }
             .joinToString("\n\n") { "[${it.label}]\n${it.transcript}" }
 
-        // Generate 3-part Academic Scribe Study Template
-        val summaryPrompt = """
-            Format the following lecture transcription into the 3-part Academic Scribe Study Template:
-            1. Key Takeaways & High-Level Summary
-            2. In-Depth Details & Concept Breakdowns
-            3. Essential Study Notes
-            
-            Lecture Transcript:
-            $fullTranscript
-        """.trimIndent()
+        if (fullTranscript.isNotBlank()) {
+            val summaryPrompt = """
+                You are an expert academic tutor. Analyze this verbatim lecture transcript and format it strictly into the 3-part Academic Scribe Study Template in $selectedLanguage:
+                
+                [1. KEY TAKEAWAYS & HIGH-LEVEL SUMMARY]
+                - Bullet point summary of core principles covered.
+                
+                [2. IN-DEPTH DETAILS & CONCEPT BREAKDOWNS]
+                Concept Name: Detailed explanation, equations, and mechanisms.
+                
+                [3. ESSENTIAL STUDY NOTES]
+                - Critical exam reminders, pitfalls to avoid, and formula relationships.
+                
+                Lecture Transcript:
+                $fullTranscript
+            """.trimIndent()
 
-        val llmStructured = BismuthEngine.generateTextOrNull(
-            context = context,
-            prompt = summaryPrompt,
-            config = selectedModel
-        )
+            val llmStructured = BismuthEngine.generateTextOrNull(
+                context = context,
+                prompt = summaryPrompt,
+                config = selectedModel
+            )
 
-        structuredScribeOutput = parseOrBuildAcademicScribeTemplate(llmStructured, fullTranscript)
+            structuredScribeOutput = parseAcademicScribeTemplate(llmStructured, fullTranscript)
+        } else {
+            structuredScribeOutput = null
+        }
         isProcessingScribe = false
     }
 
@@ -246,10 +293,17 @@ fun ScribeFeatureScreen(
             micPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
             return
         }
+        scribeErrorMessage = null
         pcmStream.reset()
         elapsedLectureSeconds = 0
         activeChunkNumber = 1
-        chunkSlots[0] = chunkSlots[0].copy(status = "Recording", durationSec = 0)
+        peakMicAmplitude = 0f
+        chunkSlots[0] = chunkSlots[0].copy(status = "Recording", durationSec = 0, transcript = "")
+        chunkSlots[1] = chunkSlots[1].copy(status = "Ready", durationSec = 0, transcript = "")
+        chunkSlots[2] = chunkSlots[2].copy(status = "Ready", durationSec = 0, transcript = "")
+        fullTranscript = ""
+        structuredScribeOutput = null
+        followUpHistory.clear()
         isRecording = true
 
         scope.launch(Dispatchers.IO) {
@@ -278,8 +332,15 @@ fun ScribeFeatureScreen(
                     while (isRecording) {
                         val read = recorder.read(readBuf, 0, readBuf.size)
                         if (read > 0) {
+                            var maxSample = 0
+                            for (i in 0 until read - 1 step 2) {
+                                val sample = (readBuf[i + 1].toInt() shl 8) or (readBuf[i].toInt() and 0xFF)
+                                val absVal = abs(sample)
+                                if (absVal > maxSample) maxSample = absVal
+                            }
+                            peakMicAmplitude = (maxSample / 32768f).coerceIn(0f, 1f)
+
                             synchronized(pcmStream) {
-                                // Cap raw buffer per chunk so memory stays bounded
                                 if (pcmStream.size() < 16000 * 2 * 60) {
                                     pcmStream.write(readBuf, 0, read)
                                 }
@@ -300,6 +361,7 @@ fun ScribeFeatureScreen(
 
     fun stopRecordingAndProcess() {
         isRecording = false
+        peakMicAmplitude = 0f
         val rawBytes = synchronized(pcmStream) { pcmStream.toByteArray() }
         val wavBytes = if (rawBytes.isNotEmpty()) PcmWavEncoder.wrapPcmInWav(rawBytes) else null
         scope.launch {
@@ -307,7 +369,7 @@ fun ScribeFeatureScreen(
         }
     }
 
-    // Recording Timer & Automatic 10-Minute Chunk Boundary Rotation (Up to 30 Min Max)
+    // Auto-rotate and immediately transcribe completed 10-minute chunks in the background while recording next
     LaunchedEffect(isRecording) {
         while (isRecording) {
             delay(1000)
@@ -323,7 +385,6 @@ fun ScribeFeatureScreen(
                 )
             }
 
-            // Rotate chunk every 10 minutes (600s)
             if (elapsedLectureSeconds % PcmWavEncoder.CHUNK_SECONDS == 0 && elapsedLectureSeconds < PcmWavEncoder.MAX_LECTURE_SECONDS) {
                 val finishedChunk = elapsedLectureSeconds / PcmWavEncoder.CHUNK_SECONDS
                 val rawChunkPcm = synchronized(pcmStream) {
@@ -338,7 +399,6 @@ fun ScribeFeatureScreen(
                 }
             }
 
-            // Stop automatically at 30 minutes (1800s)
             if (elapsedLectureSeconds >= PcmWavEncoder.MAX_LECTURE_SECONDS) {
                 stopRecordingAndProcess()
             }
@@ -348,70 +408,91 @@ fun ScribeFeatureScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFF0A0F1D))
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
-            .padding(14.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(16.dp)
+            .padding(bottom = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         Text(
             text = "Lecture Transcription & Academic Scribe",
-            color = Color.White,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
+            color = MaterialTheme.colorScheme.onBackground
         )
         Text(
-            text = "Record in-person lectures (up to 30 mins in three 10-minute chunks), format into the 3-part Academic Scribe Study Template, and ask grounded follow-up questions.",
-            color = Color(0xFF94A3B8),
-            fontSize = 12.sp
+            text = "Record in-person lectures (up to 30 mins in three 10-minute auto-chunks), transcribe verbatim offline, and format into the 3-part Academic Scribe Study Template.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        // Hardware/Model Audio Capability Gate Banner
+        // Language Selector Chips
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Language:", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            listOf("English", "Nigerian Pidgin", "French", "Spanish", "Yoruba", "Hausa", "Igbo").forEach { lang ->
+                FilterChip(
+                    selected = selectedLanguage == lang,
+                    onClick = { selectedLanguage = lang },
+                    label = { Text(lang, style = MaterialTheme.typography.labelSmall) }
+                )
+            }
+        }
+
         if (!selectedModel.supportsAudio) {
             Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF3B1822)),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer
+                ),
                 shape = RoundedCornerShape(14.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF43F5E)),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
-                    modifier = Modifier.padding(12.dp),
+                    modifier = Modifier.padding(14.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         imageVector = Icons.Default.Warning,
                         contentDescription = null,
-                        tint = Color(0xFFF43F5E),
-                        modifier = Modifier.size(22.dp)
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(24.dp)
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = "${selectedModel.displayName} is Text-Only",
-                            color = Color.White,
+                            style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp
+                            color = MaterialTheme.colorScheme.onErrorContainer
                         )
                         Text(
-                            text = "Direct neural audio transcription requires a model with Audio Input support (Gemma 3n E2B-INT4, Gemma 4 E2B, or Gemma 4 E4B).",
-                            color = Color(0xFFFECDD3),
-                            fontSize = 11.sp
+                            text = "Audio transcription requires a model with Audio Input capability. Switch to Gemma 3n or Gemma 4 in Models.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onErrorContainer
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     OutlinedButton(onClick = onRequestSwitchToAudioModel) {
-                        Text("Switch Model", fontSize = 11.sp, color = Color.White)
+                        Text("Switch", style = MaterialTheme.typography.labelMedium)
                     }
                 }
             }
         }
 
-        // Recorder & 30-Minute / 10-Minute Chunk Pipeline Card
+        // Live Audio Recorder Card
         Card(
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Column(modifier = Modifier.padding(14.dp)) {
+            Column(modifier = Modifier.padding(16.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -419,16 +500,16 @@ fun ScribeFeatureScreen(
                 ) {
                     Column {
                         Text(
-                            text = "In-Person Lecture Recorder (16 kHz Mono PCM)",
-                            color = Color.White,
+                            text = "Live Lecture Audio (16 kHz Mono PCM)",
+                            style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = "Elapsed: ${formatMmSs(elapsedLectureSeconds)} / 30:00 Max (10-min Auto-Chunks)",
-                            color = Color(0xFF38BDF8),
-                            fontSize = 12.sp,
-                            fontFamily = FontFamily.Monospace
+                            text = "Elapsed: ${formatMmSs(elapsedLectureSeconds)} / 30:00 Max (10-min chunks)",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontFamily = FontFamily.Monospace,
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
 
@@ -441,251 +522,383 @@ fun ScribeFeatureScreen(
                             }
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (isRecording) Color(0xFFEF4444) else Color(0xFF0284C7)
+                            containerColor = if (isRecording) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
                         )
                     ) {
                         Icon(
                             imageVector = if (isRecording) Icons.Default.Stop else Icons.Default.Mic,
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(18.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text(if (isRecording) "Stop & Transcribe" else "Record Lecture", fontSize = 12.sp)
+                        Text(
+                            text = if (isRecording) "Stop" else "Record",
+                            style = MaterialTheme.typography.labelLarge
+                        )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(10.dp))
+                // Audio waveform visualizer when recording
+                if (isRecording) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(32.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        AudioPulseVisualizer(modifier = Modifier.size(28.dp))
+                        val baseAmp = peakMicAmplitude.coerceIn(0.1f, 1f)
+                        val infTransition = rememberInfiniteTransition(label = "audio_bars")
+                        for (i in 0 until 16) {
+                            val animMultiplier by infTransition.animateFloat(
+                                initialValue = 0.3f,
+                                targetValue = 1.0f,
+                                animationSpec = infiniteRepeatable(
+                                    animation = tween(200 + (i * 35), easing = FastOutSlowInEasing),
+                                    repeatMode = RepeatMode.Reverse
+                                ),
+                                label = "bar_$i"
+                            )
+                            val barHeight = (baseAmp * animMultiplier * 24).coerceIn(4f, 26f).dp
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(barHeight)
+                                    .clip(RoundedCornerShape(2.dp))
+                                    .background(MaterialTheme.colorScheme.error)
+                            )
+                        }
+                    }
+                }
 
-                // 3 x 10-Minute Chunk Slots
+                Spacer(modifier = Modifier.height(14.dp))
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     chunkSlots.forEach { slot ->
-                        val borderColor = when (slot.status) {
-                            "Recording" -> Color(0xFFEF4444)
-                            "Transcribing" -> Color(0xFFF59E0B)
-                            "Completed" -> Color(0xFF10B981)
-                            else -> Color(0xFF334155)
+                        val slotContainer = when (slot.status) {
+                            "Recording" -> MaterialTheme.colorScheme.errorContainer
+                            "Transcribing" -> MaterialTheme.colorScheme.tertiaryContainer
+                            "Completed" -> MaterialTheme.colorScheme.secondaryContainer
+                            else -> MaterialTheme.colorScheme.surfaceContainerHigh
                         }
+                        val slotContentColor = when (slot.status) {
+                            "Recording" -> MaterialTheme.colorScheme.onErrorContainer
+                            "Transcribing" -> MaterialTheme.colorScheme.onTertiaryContainer
+                            "Completed" -> MaterialTheme.colorScheme.onSecondaryContainer
+                            else -> MaterialTheme.colorScheme.onSurfaceVariant
+                        }
+
                         Surface(
                             shape = RoundedCornerShape(10.dp),
-                            color = Color(0xFF0F172A),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, borderColor),
+                            color = slotContainer,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Column(modifier = Modifier.padding(8.dp)) {
+                            Column(modifier = Modifier.padding(10.dp)) {
                                 Text(
                                     text = "Chunk ${slot.chunkIndex}",
-                                    color = Color.White,
+                                    style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 11.sp
+                                    color = slotContentColor
                                 )
                                 Text(
-                                    text = "${ (slot.chunkIndex - 1) * 10 }–${ slot.chunkIndex * 10 } min",
-                                    color = Color(0xFF94A3B8),
-                                    fontSize = 10.sp
+                                    text = "${ (slot.chunkIndex - 1) * 10 }–${ slot.chunkIndex * 10 }m",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = slotContentColor.copy(alpha = 0.8f)
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = slot.status,
-                                    color = borderColor,
+                                    style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.SemiBold,
-                                    fontSize = 10.sp
+                                    color = slotContentColor
                                 )
                             }
                         }
                     }
                 }
+            }
+        }
 
-                Spacer(modifier = Modifier.height(10.dp))
-
-                // Load Multi-Chunk Sample Lecture for Instant Verification
-                OutlinedButton(
-                    onClick = {
-                        scope.launch {
-                            for (i in 0..2) {
-                                chunkSlots[i] = chunkSlots[i].copy(
-                                    durationSec = 600,
-                                    status = "Completed",
-                                    transcript = getBuiltInAcademicLectureChunk(i + 1)
-                                )
-                            }
-                            elapsedLectureSeconds = 1800
-                            transcribeAndSummarizeChunks(null, 3)
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth()
+        if (scribeErrorMessage != null) {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer
+                ),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.Default.GraphicEq, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("Load 30-Min (3 × 10-Min Chunks) Physics & Thermodynamics Lecture", fontSize = 11.sp)
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = scribeErrorMessage!!,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
                 }
             }
         }
 
         if (isProcessingScribe) {
             Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-                shape = RoundedCornerShape(14.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                ),
+                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
-                    modifier = Modifier.padding(14.dp),
+                    modifier = Modifier.padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        text = "Transcribing audio chunks & formatting Academic Scribe Study Template...",
-                        color = Color.White,
-                        fontSize = 12.sp
-                    )
+                    AIThinkingOrb(modifier = Modifier.size(44.dp))
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Column {
+                        Text(
+                            text = "Synthesizing Academic Scribe Notes",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = "Transcribing verbatim & structuring 3-part study template in $selectedLanguage with ${selectedModel.displayName}...",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }
 
-        // FR-1.2 Structured Summarization (Academic Scribe Method — 3 Sections)
+        if (fullTranscript.isNotBlank()) {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Verbatim Lecture Transcription",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        IconButton(
+                            onClick = {
+                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                clipboard.setPrimaryClip(ClipData.newPlainText("Lecture Transcript", fullTranscript))
+                                Toast.makeText(context, "Transcript copied", Toast.LENGTH_SHORT).show()
+                            },
+                            modifier = Modifier.size(28.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ContentCopy,
+                                contentDescription = "Copy Transcript",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerLow,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = fullTranscript,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(12.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        // Structured Academic Scribe Study Template
         structuredScribeOutput?.let { scribe ->
             Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ),
                 shape = RoundedCornerShape(16.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF0284C7)),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier = Modifier.padding(14.dp),
+                    modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Text(
-                        text = "Structured Academic Scribe Study Template",
-                        color = Color(0xFF38BDF8),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp
-                    )
-
-                    // Section 1: Key Takeaways & High-Level Summary
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFF0F172A),
-                        modifier = Modifier.fillMaxWidth()
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text(
-                                text = "1. Key Takeaways & High-Level Summary",
-                                color = Color(0xFF34D399),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp
+                        Text(
+                            text = "Academic Scribe Study Template",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        IconButton(
+                            onClick = {
+                                val text = buildString {
+                                    appendLine("=== Academic Scribe Notes ===")
+                                    appendLine("\n1. Key Takeaways & Summary:")
+                                    scribe.keyTakeawaysAndSummary.forEach { appendLine("• $it") }
+                                    appendLine("\n2. In-Depth Concepts:")
+                                    scribe.inDepthDetailsAndConcepts.forEach { appendLine("${it.first}: ${it.second}") }
+                                    appendLine("\n3. Essential Study Notes:")
+                                    scribe.essentialStudyNotes.forEach { appendLine("• $it") }
+                                }
+                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                clipboard.setPrimaryClip(ClipData.newPlainText("Study Notes", text))
+                                Toast.makeText(context, "Study notes copied", Toast.LENGTH_SHORT).show()
+                            },
+                            modifier = Modifier.size(28.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ContentCopy,
+                                contentDescription = "Copy Study Notes",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(18.dp)
                             )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            scribe.keyTakeawaysAndSummary.forEach { bullet ->
-                                Text(
-                                    text = "• $bullet",
-                                    color = Color(0xFFE2E8F0),
-                                    fontSize = 12.sp,
-                                    lineHeight = 17.sp,
-                                    modifier = Modifier.padding(vertical = 2.dp)
-                                )
-                            }
                         }
                     }
 
-                    // Section 2: In-Depth Details & Concept Breakdowns
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFF0F172A),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text(
-                                text = "2. In-Depth Details & Concept Breakdowns",
-                                color = Color(0xFFFBBF24),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            scribe.inDepthDetailsAndConcepts.forEach { (concept, detail) ->
-                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
+                    // 1. Key Takeaways & High-Level Summary
+                    if (scribe.keyTakeawaysAndSummary.isNotEmpty()) {
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(modifier = Modifier.padding(12.dp)) {
+                                Text(
+                                    text = "1. Key Takeaways & High-Level Summary",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.secondary
+                                )
+                                Spacer(modifier = Modifier.height(6.dp))
+                                scribe.keyTakeawaysAndSummary.forEach { bullet ->
                                     Text(
-                                        text = concept,
-                                        color = Color.White,
-                                        fontWeight = FontWeight.SemiBold,
-                                        fontSize = 12.sp
-                                    )
-                                    Text(
-                                        text = detail,
-                                        color = Color(0xFFCBD5E1),
-                                        fontSize = 12.sp,
-                                        lineHeight = 17.sp
+                                        text = "• $bullet",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        modifier = Modifier.padding(vertical = 2.dp)
                                     )
                                 }
                             }
                         }
                     }
 
-                    // Section 3: Essential Study Notes
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFF0F172A),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text(
-                                text = "3. Essential Study Notes",
-                                color = Color(0xFFC084FC),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            scribe.essentialStudyNotes.forEach { note ->
+                    // 2. In-Depth Details & Concept Breakdowns
+                    if (scribe.inDepthDetailsAndConcepts.isNotEmpty()) {
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(modifier = Modifier.padding(12.dp)) {
                                 Text(
-                                    text = "• $note",
-                                    color = Color(0xFFE2E8F0),
-                                    fontSize = 12.sp,
-                                    lineHeight = 17.sp,
-                                    modifier = Modifier.padding(vertical = 2.dp)
+                                    text = "2. In-Depth Details & Concept Breakdowns",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.tertiary
                                 )
+                                Spacer(modifier = Modifier.height(6.dp))
+                                scribe.inDepthDetailsAndConcepts.forEach { (concept, detail) ->
+                                    Column(modifier = Modifier.padding(vertical = 4.dp)) {
+                                        Text(
+                                            text = concept,
+                                            style = MaterialTheme.typography.labelMedium,
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                        Text(
+                                            text = detail,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // 3. Essential Study Notes
+                    if (scribe.essentialStudyNotes.isNotEmpty()) {
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(modifier = Modifier.padding(12.dp)) {
+                                Text(
+                                    text = "3. Essential Study Notes",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.height(6.dp))
+                                scribe.essentialStudyNotes.forEach { note ->
+                                    Text(
+                                        text = "• $note",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        modifier = Modifier.padding(vertical = 2.dp)
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
+        }
 
-            // FR-1.3 Follow-Up Interaction Grounded on Transcribed Lecture Content
+        // Grounded Follow-Up Q&A
+        if (fullTranscript.isNotBlank()) {
             Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(14.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Follow-Up Lecture Q&A (Grounded in Transcribed Lecture)",
-                        color = Color.White,
+                        text = "Follow-Up Lecture Q&A",
+                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
+                        color = MaterialTheme.colorScheme.onSurface
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        listOf(
-                            "How does the First Law relate internal energy, heat, and work?",
-                            "Why can no heat engine reach 100% thermal efficiency?",
-                            "Explain isothermal vs adiabatic expansion from Chunk 2."
-                        ).forEach { sampleQ ->
-                            FilterChip(
-                                selected = false,
-                                onClick = { followUpQuestion = sampleQ },
-                                label = { Text(sampleQ, fontSize = 11.sp) }
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = "Ask questions strictly answered by the transcribed lecture audio.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -695,18 +908,8 @@ fun ScribeFeatureScreen(
                             value = followUpQuestion,
                             onValueChange = { followUpQuestion = it },
                             placeholder = {
-                                Text(
-                                    "Ask a question about the recorded lecture...",
-                                    fontSize = 12.sp,
-                                    color = Color(0xFF64748B)
-                                )
+                                Text("Ask a question about the recorded lecture...", style = MaterialTheme.typography.bodySmall)
                             },
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedTextColor = Color.White,
-                                unfocusedTextColor = Color.White,
-                                focusedBorderColor = Color(0xFF38BDF8),
-                                unfocusedBorderColor = Color(0xFF334155)
-                            ),
                             modifier = Modifier.weight(1f)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -717,7 +920,8 @@ fun ScribeFeatureScreen(
                                 scope.launch {
                                     isAskingFollowUp = true
                                     val prompt = """
-                                        Answer the student's follow-up question strictly using the transcribed lecture below.
+                                        You are an academic teaching assistant. Answer the student's question strictly and accurately using the transcribed lecture below in $selectedLanguage.
+                                        If the information is not in the transcript, state that clearly.
                                         
                                         Transcribed Lecture:
                                         $fullTranscript
@@ -728,50 +932,50 @@ fun ScribeFeatureScreen(
                                         context = context,
                                         prompt = prompt,
                                         config = selectedModel
-                                    ) ?: buildGroundedLectureFollowUpAnswer(q, fullTranscript)
+                                    ) ?: extractTranscriptAnswerFallback(q, fullTranscript)
+
                                     followUpHistory.add(0, LectureFollowUpExchange(q, llmAnswer))
                                     followUpQuestion = ""
                                     isAskingFollowUp = false
                                 }
                             },
-                            enabled = !isAskingFollowUp && followUpQuestion.isNotBlank(),
-                            modifier = Modifier
-                                .size(44.dp)
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(Color(0xFF0284C7))
+                            enabled = !isAskingFollowUp && followUpQuestion.isNotBlank()
                         ) {
                             if (isAskingFollowUp) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.size(18.dp),
                                     strokeWidth = 2.dp,
-                                    color = Color.White
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             } else {
-                                Icon(Icons.Default.Send, contentDescription = "Ask Lecture Follow-up", tint = Color.White)
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.Send,
+                                    contentDescription = "Ask Lecture Follow-up",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
                             }
                         }
                     }
 
                     followUpHistory.forEach { item ->
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
                         Surface(
                             shape = RoundedCornerShape(10.dp),
-                            color = Color(0xFF0F172A),
+                            color = MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Column(modifier = Modifier.padding(10.dp)) {
+                            Column(modifier = Modifier.padding(12.dp)) {
                                 Text(
                                     text = "Q: ${item.question}",
-                                    color = Color(0xFF38BDF8),
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 12.sp
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = item.answer,
-                                    color = Color(0xFFE2E8F0),
-                                    fontSize = 12.sp,
-                                    lineHeight = 17.sp
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                             }
                         }
@@ -788,64 +992,86 @@ private fun formatMmSs(totalSeconds: Int): String {
     return String.format("%02d:%02d", m, s)
 }
 
-private fun getBuiltInAcademicLectureChunk(chunkIndex: Int): String {
-    return when (chunkIndex) {
-        1 -> """
-            Welcome to today's lecture on Classical Thermodynamics and Energy Conservation.
-            In this first ten-minute segment, we establish the First Law of Thermodynamics: Delta U = Q - W, where Delta U is the change in internal energy of a closed system, Q is thermal energy added to the system, and W is mechanical work done by the system on its surroundings.
-            Internal energy U is a state function—it depends only on the current macroscopic state (pressure, volume, temperature), whereas heat Q and work W are path functions that depend on the process trajectory on a P-V diagram.
-        """.trimIndent()
-        2 -> """
-            In our second ten-minute segment, we compare four fundamental thermodynamic processes for an ideal gas:
-            1. Isobaric (constant pressure): W = P * Delta V.
-            2. Isochoric (constant volume): Delta V = 0, so boundary work W = 0 and Delta U = Q_v.
-            3. Isothermal (constant temperature): For an ideal gas, Delta U = 0, so Q = W = nRT * ln(V_f / V_i).
-            4. Adiabatic (no heat exchange, Q = 0): Delta U = -W, and P * V^gamma = constant.
-        """.trimIndent()
-        else -> """
-            In our final ten-minute segment, we examine the Second Law of Thermodynamics, Entropy (S), and Carnot Heat Engines.
-            Entropy measures the dispersal of energy and microscopic configurations (dS >= delta Q / T).
-            No cyclic heat engine operating between a hot reservoir at T_H and a cold reservoir at T_C can exceed the Carnot efficiency: eta_max = 1 - (T_C / T_H), where temperatures must be expressed in absolute Kelvin.
-        """.trimIndent()
-    }
-}
-
-private fun parseOrBuildAcademicScribeTemplate(
+private fun parseAcademicScribeTemplate(
     llmOutput: String?,
     transcript: String
 ): AcademicScribeStudyTemplate {
+    if (!llmOutput.isNullOrBlank()) {
+        val takeaways = mutableListOf<String>()
+        val concepts = mutableListOf<Pair<String, String>>()
+        val notes = mutableListOf<String>()
+
+        var currentSection = 0
+        for (line in llmOutput.lines()) {
+            val trimmed = line.trim()
+            if (trimmed.isEmpty()) continue
+
+            val lower = trimmed.lowercase()
+            when {
+                "takeaway" in lower || "high-level" in lower || "[1." in lower -> {
+                    currentSection = 1
+                    continue
+                }
+                "in-depth" in lower || "concept" in lower || "[2." in lower -> {
+                    currentSection = 2
+                    continue
+                }
+                "essential" in lower || "study notes" in lower || "[3." in lower -> {
+                    currentSection = 3
+                    continue
+                }
+            }
+
+            val cleanLine = trimmed.removePrefix("-").removePrefix("•").removePrefix("*").trim()
+            if (cleanLine.isBlank()) continue
+
+            when (currentSection) {
+                1 -> takeaways.add(cleanLine)
+                2 -> {
+                    if (cleanLine.contains(":")) {
+                        val parts = cleanLine.split(":", limit = 2)
+                        concepts.add(parts[0].trim() to parts[1].trim())
+                    } else {
+                        concepts.add("Concept" to cleanLine)
+                    }
+                }
+                3 -> notes.add(cleanLine)
+                else -> takeaways.add(cleanLine)
+            }
+        }
+
+        if (takeaways.isNotEmpty() || concepts.isNotEmpty() || notes.isNotEmpty()) {
+            return AcademicScribeStudyTemplate(
+                keyTakeawaysAndSummary = takeaways.ifEmpty { listOf("Lecture transcribed successfully.") },
+                inDepthDetailsAndConcepts = concepts,
+                essentialStudyNotes = notes
+            )
+        }
+    }
+
+    val nonBlankLines = transcript.lines().map { it.trim() }.filter { it.length > 20 }
+    val takeaways = nonBlankLines.take(3)
+    val concepts = nonBlankLines.drop(3).take(3).mapIndexed { idx, s ->
+        "Core Segment ${idx + 1}" to s
+    }
+    val notes = nonBlankLines.takeLast(2)
+
     return AcademicScribeStudyTemplate(
-        keyTakeawaysAndSummary = listOf(
-            "First Law of Thermodynamics (Conservation of Energy): ΔU = Q - W relates internal energy change (state function) to heat added (Q) and work done by the system (W).",
-            "Thermodynamic Processes on P-V Diagrams: Isobaric (constant P), Isochoric (constant V, W = 0), Isothermal (constant T, ΔU = 0), and Adiabatic (Q = 0, ΔU = -W).",
-            "Second Law & Carnot Efficiency Limit: Total entropy of an isolated system never decreases (ΔS_univ ≥ 0), capping heat engine efficiency at η_max = 1 - (T_C / T_H)."
-        ),
-        inDepthDetailsAndConcepts = listOf(
-            "State Functions vs. Path Functions (Chunk 1: 00:00–10:00)" to
-                "Internal energy (U), enthalpy (H), and entropy (S) depend solely on initial and final states. Heat (Q) and mechanical work (W = ∫ P dV) depend on the specific path taken between states.",
-            "Ideal Gas Process Equations (Chunk 2: 10:00–20:00)" to
-                "In isothermal expansion of an ideal gas, temperature is constant so ΔU = 0 and all absorbed heat converts to work: W = nRT ln(V_f / V_i). In an adiabatic process, Q = 0 so expansion cools the gas.",
-            "Entropy & Carnot Cycle (Chunk 3: 20:00–30:00)" to
-                "Heat flows spontaneously from hotter (T_H) to colder (T_C) reservoirs. Reaching 100% thermal efficiency would require T_C = 0 K, which is unattainable by the Third Law."
-        ),
-        essentialStudyNotes = listOf(
-            "Sign Convention Check: Q > 0 when heat enters the system; W > 0 when the gas expands against external pressure.",
-            "Formula Sheet: ΔU = Q - W | W_isothermal = nRT ln(V_f/V_i) | η_Carnot = 1 - (T_C / T_H) (always convert °C to Kelvin: T(K) = T(°C) + 273.15).",
-            "Exam Pitfall: Never use Celsius directly in the Carnot efficiency equation or Ideal Gas Law."
-        )
+        keyTakeawaysAndSummary = takeaways.ifEmpty { listOf("Audio transcribed verbatim from live lecture.") },
+        inDepthDetailsAndConcepts = concepts,
+        essentialStudyNotes = notes
     )
 }
 
-private fun buildGroundedLectureFollowUpAnswer(question: String, transcript: String): String {
-    val qLower = question.lowercase()
-    return when {
-        "first law" in qLower || "internal energy" in qLower ->
-            "From Chunk 1 of the transcribed lecture: The First Law states ΔU = Q - W. Internal energy U is a state function, while heat Q added to the system and work W done by the system are path-dependent."
-        "carnot" in qLower || "100%" in qLower || "efficiency" in qLower ->
-            "From Chunk 3 of the transcribed lecture: Maximum thermal efficiency is governed by η_max = 1 - (T_C / T_H) in Kelvin. Achieving 100% efficiency would require a cold reservoir at absolute zero (T_C = 0 K), violating thermodynamic laws."
-        "isothermal" in qLower || "adiabatic" in qLower || "chunk 2" in qLower ->
-            "From Chunk 2 of the transcribed lecture: Isothermal expansion keeps temperature constant (ΔU = 0, so Q = W = nRT ln(V_f/V_i)), whereas adiabatic expansion occurs with zero heat transfer (Q = 0, so ΔU = -W and temperature drops)."
-        else ->
-            "Grounded in your recorded lecture transcript:\n• ${transcript.lines().firstOrNull { it.isNotBlank() } ?: "Lecture covers energy conservation, P-V work, and entropy."}\n• Remember to apply ΔU = Q - W and express temperatures in Kelvin."
+private fun extractTranscriptAnswerFallback(question: String, transcript: String): String {
+    val qWords = question.lowercase().split(" ").filter { it.length > 3 }
+    val matchingLines = transcript.lines().filter { line ->
+        val lineLower = line.lowercase()
+        qWords.any { word -> lineLower.contains(word) }
+    }
+    return if (matchingLines.isNotEmpty()) {
+        "Relevant lecture segment:\n" + matchingLines.take(3).joinToString("\n") { "• $it" }
+    } else {
+        "The question could not be directly matched to the recorded lecture transcript. Please verify the terms or consult the full transcription above."
     }
 }

@@ -1,0 +1,194 @@
+{
+  "sceneId": "scene_math_circle_theorems",
+  "subjectTitle": "Mathematics",
+  "chapterTitle": "Foundations of Algebra & Geometry",
+  "topicTitle": "Circle Geometry: Tangents, Chords & Inscribed Angles",
+  "objects": [
+    {
+      "objectId": "node_central_angle",
+      "objectType": "circle",
+      "label": "Central Angle (∠AOB)",
+      "subLabel": "Vertex at Circle Center O",
+      "formula": "∠AOB = 2θ",
+      "explanation": "The angle formed by two radii meeting at the center O is always twice the inscribed angle subtended by the same arc AB.",
+      "position": {
+        "x": 60,
+        "y": 70
+      },
+      "size": {
+        "width": 220,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_1"
+    },
+    {
+      "objectId": "node_inscribed_angle",
+      "objectType": "formula",
+      "label": "Inscribed Angle (∠ACB)",
+      "subLabel": "Vertex on Circumference",
+      "formula": "θ = ½ ∠AOB",
+      "explanation": "Any inscribed angle subtended by arc AB equals half the central angle, meaning all inscribed angles on the same arc are equal.",
+      "position": {
+        "x": 330,
+        "y": 70
+      },
+      "size": {
+        "width": 220,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_1"
+    },
+    {
+      "objectId": "node_thales",
+      "objectType": "highlight",
+      "label": "Thales' Semicircle Law",
+      "subLabel": "Arc is a 180° Diameter",
+      "formula": "∠ACB = ½(180°) = 90°",
+      "explanation": "When chord AB passes through center O (diameter), the central angle is 180°, so the inscribed angle is a 90° right angle.",
+      "position": {
+        "x": 190,
+        "y": 230
+      },
+      "size": {
+        "width": 230,
+        "height": 92
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_2"
+    },
+    {
+      "objectId": "node_tangent_radius",
+      "objectType": "formula",
+      "label": "Tangent-Radius Orthogonality",
+      "subLabel": "Point of Contact T",
+      "formula": "OT ⊥ Tangent  (∠OTP = 90°)",
+      "explanation": "The shortest distance from center O to a tangent line is the radius OT, forming a strict 90° angle.",
+      "position": {
+        "x": 180,
+        "y": 390
+      },
+      "size": {
+        "width": 250,
+        "height": 92
+      },
+      "style": {
+        "strokeWidth": 2.5,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_3"
+    }
+  ],
+  "arrows": [
+    {
+      "fromObjectId": "node_central_angle",
+      "toObjectId": "node_inscribed_angle",
+      "label": "2 : 1 ratio",
+      "stepId": "step_1"
+    },
+    {
+      "fromObjectId": "node_inscribed_angle",
+      "toObjectId": "node_thales",
+      "label": "when ∠AOB = 180°",
+      "stepId": "step_2"
+    },
+    {
+      "fromObjectId": "node_thales",
+      "toObjectId": "node_tangent_radius",
+      "label": "right-angle geometry",
+      "stepId": "step_3"
+    }
+  ],
+  "steps": [
+    {
+      "stepId": "step_1",
+      "stepNumber": 1,
+      "title": "Central vs. Inscribed Angle Theorem",
+      "narration": "When a central angle ∠AOB and an inscribed angle ∠ACB subtend the exact same arc AB, the central angle is always twice the inscribed angle.",
+      "tutorTip": "Tap both angle nodes on the board to compare their vertex positions.",
+      "focusObjectIds": [
+        "node_central_angle",
+        "node_inscribed_angle"
+      ],
+      "inlineQuiz": {
+        "question": "If an inscribed angle ∠ACB subtended by arc AB measures 38°, what is the measure of the central angle ∠AOB?",
+        "options": [
+          "76°",
+          "19°",
+          "142°",
+          "52°"
+        ],
+        "correctIndex": 0,
+        "explanation": "The central angle is twice the inscribed angle on the same arc: 2 × 38° = 76°."
+      },
+      "diagramResourceId": "img_step_1",
+      "diagramRelativePath": "assets/images/step_1.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_2",
+      "stepNumber": 2,
+      "title": "Thales' Theorem: Angles in a Semicircle",
+      "narration": "A special case of the Inscribed Angle Theorem occurs when the chord is a diameter. Because a straight diameter forms a 180° central angle, any angle inscribed in a semicircle is 90°.",
+      "tutorTip": "Use this to immediately spot right-angled triangles inside circles.",
+      "focusObjectIds": [
+        "node_thales"
+      ],
+      "inlineQuiz": {
+        "question": "Triangle ABC is inscribed in a circle where side AB is the diameter. If ∠CAB = 35°, what is ∠CBA?",
+        "options": [
+          "55°",
+          "65°",
+          "90°",
+          "45°"
+        ],
+        "correctIndex": 0,
+        "explanation": "Since AB is a diameter, ∠ACB = 90°. Therefore ∠CBA = 180° - 90° - 35° = 55°."
+      },
+      "diagramResourceId": "img_step_2",
+      "diagramRelativePath": "assets/images/step_2.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_3",
+      "stepNumber": 3,
+      "title": "Tangent-Radius Perpendicularity",
+      "narration": "A line tangent to a circle touches it at exactly one point T. At that point of contact, the radius OT is always perpendicular (90°) to the tangent line.",
+      "tutorTip": "Combine ∠OTP = 90° with the Pythagorean theorem to find tangent segment lengths.",
+      "focusObjectIds": [
+        "node_tangent_radius"
+      ],
+      "inlineQuiz": {
+        "question": "A circle has radius OT = 5 cm. A tangent from external point P touches the circle at T, and OP = 13 cm. What is the tangent length PT?",
+        "options": [
+          "12 cm",
+          "8 cm",
+          "14 cm",
+          "9 cm"
+        ],
+        "correctIndex": 0,
+        "explanation": "Since ∠OTP = 90°, OT² + PT² = OP² ⇒ 5² + PT² = 13² ⇒ PT = √(169 - 25) = 12 cm."
+      },
+      "diagramResourceId": "img_step_3",
+      "diagramRelativePath": "assets/images/step_3.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    }
+  ]
+}

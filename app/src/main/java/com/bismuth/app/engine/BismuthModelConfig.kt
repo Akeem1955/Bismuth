@@ -6,11 +6,18 @@ import android.net.Uri
 import java.io.File
 import kotlin.math.ceil
 
+enum class ModelFamily(val displayName: String, val badgeColorHex: Long) {
+    GEMMA("Gemma", 0xFF3A5282L),
+    QWEN("Qwen", 0xFF6D28D9L),
+    DEEPSEEK("DeepSeek", 0xFF0F766EL),
+    PHI("Phi", 0xFFB45309L),
+}
+
 enum class ModelTier(val label: String, val badgeText: String) {
-    HIGH_END("Gemma 4 Multimodal (High-End)", "Vision + Audio + Deep Quiz"),
-    MID_HIGH("Gemma 4 Compact (Mid-High)", "Vision + Audio + Standard Quiz"),
-    LOW_END("Gemma 3n Audio+Text (Low-End)", "Audio + Text + Core Quiz"),
-    ULTRA_LOW("Gemma 3n Lite (Basic Phone)", "Text-Only + Fast Core Quiz");
+    HIGH_END("Flagship Tier (8GB+ RAM)", "Deep Reasoning / Multimodal"),
+    MID_HIGH("Balanced Tier (6GB+ RAM)", "Multimodal + Standard Quiz"),
+    LOW_END("Efficiency Tier (4GB+ RAM)", "Fast On-Device Tutoring"),
+    ULTRA_LOW("Ultra-Compact Tier (2GB+ RAM)", "Text-Only + Fast Core Quiz");
 
     val isHighCapability: Boolean
         get() = this == HIGH_END || this == MID_HIGH
@@ -36,6 +43,7 @@ data class BismuthModelConfig(
     val tier: ModelTier,
     val supportsAudio: Boolean,
     val supportsImage: Boolean,
+    val family: ModelFamily = ModelFamily.GEMMA,
 ) {
     val normalizedName: String = Regex("[^a-zA-Z0-9]").replace(modelId, "_")
 
@@ -106,7 +114,60 @@ data class BismuthModelConfig(
             supportsImage = false,
         )
 
-        val ALL = listOf(GEMMA_4_E4B, GEMMA_4_E2B, GEMMA_3N_E2B, GEMMA_3N_LITE)
+        val QWEN_2_5_1_5B = BismuthModelConfig(
+            modelId = "litert-community/Qwen2.5-1.5B-Instruct",
+            modelFile = "Qwen2.5-1.5B-Instruct_multi-prefill-seq_q8_ekv4096.litertlm",
+            commitHash = "main",
+            sizeInBytes = 1_597_922_856L,
+            displayName = "Qwen 2.5 (1.5B Instruct)",
+            subtitle = "Alibaba Qwen family • Fast structured math, code & step-by-step tutoring",
+            downloadUrl = "https://huggingface.co/litert-community/Qwen2.5-1.5B-Instruct/resolve/main/Qwen2.5-1.5B-Instruct_multi-prefill-seq_q8_ekv4096.litertlm?download=true",
+            minRamGb = 4,
+            tier = ModelTier.LOW_END,
+            supportsAudio = false,
+            supportsImage = false,
+            family = ModelFamily.QWEN,
+        )
+
+        val DEEPSEEK_R1_QWEN_1_5B = BismuthModelConfig(
+            modelId = "litert-community/DeepSeek-R1-Distill-Qwen-1.5B",
+            modelFile = "DeepSeek-R1-Distill-Qwen-1.5B_multi-prefill-seq_q8_ekv4096.litertlm",
+            commitHash = "main",
+            sizeInBytes = 1_625_493_432L,
+            displayName = "DeepSeek-R1 Distill Qwen (1.5B)",
+            subtitle = "Qwen architecture • Chain-of-thought reasoning distilled for physics & proofs",
+            downloadUrl = "https://huggingface.co/litert-community/DeepSeek-R1-Distill-Qwen-1.5B/resolve/main/DeepSeek-R1-Distill-Qwen-1.5B_multi-prefill-seq_q8_ekv4096.litertlm?download=true",
+            minRamGb = 4,
+            tier = ModelTier.LOW_END,
+            supportsAudio = false,
+            supportsImage = false,
+            family = ModelFamily.DEEPSEEK,
+        )
+
+        val PHI_4_MINI = BismuthModelConfig(
+            modelId = "litert-community/Phi-4-mini-instruct",
+            modelFile = "Phi-4-mini-instruct_multi-prefill-seq_q8_ekv4096.litertlm",
+            commitHash = "main",
+            sizeInBytes = 3_910_050_199L,
+            displayName = "Phi-4 Mini Instruct",
+            subtitle = "Microsoft Phi family • High-accuracy logical & mathematical reasoning",
+            downloadUrl = "https://huggingface.co/litert-community/Phi-4-mini-instruct/resolve/main/Phi-4-mini-instruct_multi-prefill-seq_q8_ekv4096.litertlm?download=true",
+            minRamGb = 8,
+            tier = ModelTier.HIGH_END,
+            supportsAudio = false,
+            supportsImage = false,
+            family = ModelFamily.PHI,
+        )
+
+        val ALL = listOf(
+            GEMMA_4_E4B,
+            GEMMA_4_E2B,
+            QWEN_2_5_1_5B,
+            DEEPSEEK_R1_QWEN_1_5B,
+            PHI_4_MINI,
+            GEMMA_3N_E2B,
+            GEMMA_3N_LITE,
+        )
     }
 }
 
@@ -118,7 +179,17 @@ object HardwareCapabilityEvaluator {
         am.getMemoryInfo(memInfo)
 
         val totalBytes = memInfo.totalMem
-        val totalRamGb = ceil(totalBytes / (1024.0 * 1024.0 * 1024.0)).toInt().coerceAtLeast(2)
+        val totalGiB = totalBytes / (1024.0 * 1024.0 * 1024.0)
+        val totalRamGb = when {
+            totalGiB >= 20.0 -> 24
+            totalGiB >= 14.0 -> 16
+            totalGiB >= 10.0 -> 12
+            totalGiB >= 6.4 -> 8
+            totalGiB >= 4.6 -> 6
+            totalGiB >= 3.1 -> 4
+            totalGiB >= 2.2 -> 3
+            else -> 2
+        }
         val availMb = memInfo.availMem / (1024L * 1024L)
         val cores = Runtime.getRuntime().availableProcessors()
 
@@ -167,27 +238,37 @@ object ModelPrefs {
         return hw.recommendedModelId
     }
 
+    fun customConfigForFilename(filename: String): BismuthModelConfig {
+        val lower = filename.lowercase()
+        val isGemma4 = lower.contains("gemma-4") || lower.contains("e4b")
+        val hasAudio = isGemma4 || lower.contains("3n-e2b") || (lower.contains("3n") && !lower.contains("lite"))
+        val hasImage = isGemma4 || lower.contains("e2b-it")
+        val family = when {
+            "deepseek" in lower -> ModelFamily.DEEPSEEK
+            "qwen" in lower -> ModelFamily.QWEN
+            "phi" in lower -> ModelFamily.PHI
+            else -> ModelFamily.GEMMA
+        }
+        return BismuthModelConfig(
+            modelId = "custom:$filename",
+            modelFile = filename,
+            commitHash = "local",
+            sizeInBytes = 0L,
+            displayName = "Custom: $filename",
+            subtitle = "Imported local .litertlm model",
+            downloadUrl = "",
+            minRamGb = 2,
+            tier = if (hasImage) ModelTier.HIGH_END else if (hasAudio) ModelTier.LOW_END else ModelTier.ULTRA_LOW,
+            supportsAudio = hasAudio,
+            supportsImage = hasImage,
+            family = family,
+        )
+    }
+
     fun getSelectedConfig(context: Context): BismuthModelConfig {
         val id = getSelectedModelId(context)
         if (id.startsWith("custom:")) {
-            val filename = id.substringAfter("custom:")
-            val lower = filename.lowercase()
-            val isGemma4 = lower.contains("gemma-4") || lower.contains("e4b")
-            val hasAudio = isGemma4 || lower.contains("3n") || lower.contains("e2b")
-            val hasImage = isGemma4 || lower.contains("e2b")
-            return BismuthModelConfig(
-                modelId = id,
-                modelFile = filename,
-                commitHash = "local",
-                sizeInBytes = 0L,
-                displayName = "Custom: $filename",
-                subtitle = "Imported local .litertlm model",
-                downloadUrl = "",
-                minRamGb = 2,
-                tier = if (hasImage) ModelTier.HIGH_END else if (hasAudio) ModelTier.LOW_END else ModelTier.ULTRA_LOW,
-                supportsAudio = hasAudio,
-                supportsImage = hasImage,
-            )
+            return customConfigForFilename(id.substringAfter("custom:"))
         }
         return BismuthModelConfig.ALL.firstOrNull { it.modelId == id }
             ?: BismuthModelConfig.ALL.first {

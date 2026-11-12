@@ -1,0 +1,17 @@
+{
+  "topicId": "phys_conservation_energy",
+  "questions": [
+    {
+      "questionId": "phys_en_q1",
+      "question": "If the speed of a moving vehicle triples, by what factor does its kinetic energy increase?",
+      "options": [
+        "9 times",
+        "3 times",
+        "6 times",
+        "27 times"
+      ],
+      "correctIndex": 0,
+      "explanation": "Because KE = ½mv², tripling v multiplies KE by 3² = 9."
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "topicId": "phys_conservation_energy",
+  "subjectId": "physics",
+  "chapterId": "mechanics-energy",
+  "version": "1.1.0",
+  "files": {
+    "SKILL.md": {
+      "sizeBytes": 1782,
+      "sha256": "1c747c59ccfa855400b5579db686adbba782436c9e66a213fdf54a32036dbaa8",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/SKILL.md"
+    },
+    "lesson.json": {
+      "sizeBytes": 11234,
+      "sha256": "06003e5b199016918993baafa2228281d050840cd6971b7a385bf03714d6e2f7",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/lesson.json"
+    },
+    "assessment.json": {
+      "sizeBytes": 433,
+      "sha256": "4476c541677a7b920235130499cf942285f856b6cf4c9214603cd804c9aa4912",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assessment.json"
+    },
+    "bundle.json": {
+      "sizeBytes": 15564,
+      "sha256": "e222cd85c61b7a0116a5c91b3f7c162a4a5345f1893664aee0c3fe208c514be2",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/bundle.json"
+    },
+    "assets/images/step_1.png": {
+      "sizeBytes": 22048,
+      "sha256": "1bc5b9891753051473d67af378026fb17ac3d8ac7b93710cba2d3c8a09d167e5",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/images/step_1.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_2.png": {
+      "sizeBytes": 23741,
+      "sha256": "8fa72737ba56aa176ac5054adece5d874b7b62509890f1d84f3b0fd00fb9b06d",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/images/step_2.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_3.png": {
+      "sizeBytes": 28181,
+      "sha256": "83aa93445d9bc97f545e8b9c93be1dc22fa5d1846dbea8f5de3847534d88028b",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/images/step_3.png",
+      "mimeType": "image/png"
+    },
+    "assets/video/walkthrough.mp4": {
+      "sizeBytes": 250897,
+      "sha256": "92543603190505acee592c40ef7d46159aa47b8829e492c61c73fc613739b7f9",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/video/walkthrough.mp4",
+      "mimeType": "video/mp4"
+    },
+    "assets/board/scene.json": {
+      "sizeBytes": 5431,
+      "sha256": "887804549cc846e2972e89430197802de40db0e9661b15ddb44f8f7abbd6064d",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/board/scene.json",
+      "mimeType": "application/json"
+    }
+  }
+}

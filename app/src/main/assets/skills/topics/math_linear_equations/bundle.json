@@ -1,0 +1,378 @@
+{
+  "topicId": "math_linear_equations",
+  "subjectId": "mathematics",
+  "subjectTitle": "Mathematics",
+  "chapterId": "algebra-geometry",
+  "chapterTitle": "Foundations of Algebra & Geometry",
+  "title": "Linear Equations & Balancing Operations",
+  "summary": "Isolating variables using inverse operations while preserving equality across the balance scale.",
+  "version": "1.1.0",
+  "skillMarkdown": "---\nname: math_linear_equations\ndescription: Isolating variables using inverse operations while preserving equality across the balance scale.\nsubject_id: mathematics\nchapter_id: algebra-geometry\ntopic_id: math_linear_equations\nversion: \"1.1.0\"\n---\n\n# Linear Equations & Balancing Operations\n\n## Socratic System Directive\nYou are orchestrating the Linear Equations lesson. Guide the student to treat '=' as a physical balance scale: any operation performed on the left expression must be mirrored identically on the right expression.\n\n## Learning Objectives\n1. Understand the equality sign as a strict mathematical balance invariant\n2. Apply inverse operations in reverse order of operations (undo addition/subtraction before multiplication/division)\n3. Verify solutions by substituting the root back into the original equation\n\n## Step-by-Step Orchestration Sequence\n- Step 1: Introduce the Equation Balance Invariant (ax + b = c)\n- Step 2: Isolate the variable term by applying the additive inverse (-b to both sides)\n- Step 3: Isolate the variable coefficient using the multiplicative inverse (divide by a) and verify\n\n## Teacher-Curated Offline Media Alignment\n- **Step 1 (The Equality Balance Invariant)**: Curated Diagram `assets/images/step_1.png` + Walkthrough Video `assets/video/walkthrough.mp4` (Phase 1)\n- **Step 2 (Clearing the Constant via Additive Inverse)**: Curated Diagram `assets/images/step_2.png` + Walkthrough Video `assets/video/walkthrough.mp4` (Phase 2)\n- **Step 3 (Isolating x & Substitution Verification)**: Curated Diagram `assets/images/step_3.png` + Walkthrough Video `assets/video/walkthrough.mp4` (Phase 3)\n- **Interactive Whiteboard Scene**: `assets/board/scene.json`\n\n## Common Misconceptions to Watch & Remediate\n- Dividing only the variable term by the coefficient instead of every term on both sides\n- Subtracting a negative constant instead of adding its opposite when moving across the equals sign\n- Dividing by the coefficient before clearing constant terms, leading to arithmetic fraction errors\n",
+  "instructions": {
+    "skillId": "math_linear_equations",
+    "learningObjectives": [
+      "Understand the equality sign as a strict mathematical balance invariant",
+      "Apply inverse operations in reverse order of operations (undo addition/subtraction before multiplication/division)",
+      "Verify solutions by substituting the root back into the original equation"
+    ],
+    "explanationSequence": [
+      "Step 1: Introduce the Equation Balance Invariant (ax + b = c)",
+      "Step 2: Isolate the variable term by applying the additive inverse (-b to both sides)",
+      "Step 3: Isolate the variable coefficient using the multiplicative inverse (divide by a) and verify"
+    ],
+    "commonMisconceptions": [
+      "Dividing only the variable term by the coefficient instead of every term on both sides",
+      "Subtracting a negative constant instead of adding its opposite when moving across the equals sign",
+      "Dividing by the coefficient before clearing constant terms, leading to arithmetic fraction errors"
+    ],
+    "socraticSystemPrompt": "You are orchestrating the Linear Equations lesson. Guide the student to treat '=' as a physical balance scale: any operation performed on the left expression must be mirrored identically on the right expression."
+  },
+  "resources": [
+    {
+      "id": "res_math_linear_rules",
+      "title": "Golden Rules of Equality Transformations",
+      "type": "formula_sheet",
+      "summary": "Addition, Subtraction, Multiplication, and Division Properties of Equality.",
+      "bodyText": "1. Addition Property: If A = B, then A + c = B + c.\n2. Subtraction Property: If A = B, then A - c = B - c.\n3. Multiplication Property: If A = B, then A * c = B * c (c != 0).\n4. Division Property: If A = B, then A / c = B / c (c != 0).",
+      "stepId": "all",
+      "relativePath": "",
+      "url": "",
+      "sha256": "",
+      "sizeBytes": 0
+    },
+    {
+      "id": "img_step_1",
+      "title": "Step 1 Visual Diagram: The Equality Balance Invariant",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 1 (The Equality Balance Invariant).",
+      "bodyText": "Consider the linear equation 3x + 5 = 20. Think of the equals sign as a rigid balance beam: whatever operation we perform on the left side must be performed identically on the right side.",
+      "stepId": "step_1",
+      "relativePath": "assets/images/step_1.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_1.png",
+      "sha256": "292bf764ebbdd2f7bc5f51333c6d60bb1a518e500898b53649d1686590292769",
+      "sizeBytes": 21689
+    },
+    {
+      "id": "img_step_2",
+      "title": "Step 2 Visual Diagram: Clearing the Constant via Additive Inverse",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 2 (Clearing the Constant via Additive Inverse).",
+      "bodyText": "By subtracting 5 from both sides, +5 and -5 cancel to zero on the left, leaving 3x = 15.",
+      "stepId": "step_2",
+      "relativePath": "assets/images/step_2.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_2.png",
+      "sha256": "c0721988683d3e11bea6381db79c48b07886e59f9510d76483b669100d157949",
+      "sizeBytes": 21846
+    },
+    {
+      "id": "img_step_3",
+      "title": "Step 3 Visual Diagram: Isolating x & Substitution Verification",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 3 (Isolating x & Substitution Verification).",
+      "bodyText": "Finally, since x is multiplied by 3 in 3x = 15, we divide both sides by 3 to obtain x = 5. Substituting x = 5 back into 3(5) + 5 confirms 15 + 5 = 20.",
+      "stepId": "step_3",
+      "relativePath": "assets/images/step_3.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_3.png",
+      "sha256": "3735b8b9fec5abf79eed14d366d93b234349edafcb2dc9fe1a250db67a6861d2",
+      "sizeBytes": 25552
+    },
+    {
+      "id": "vid_walkthrough",
+      "title": "Animated Concept Walkthrough: Linear Equations & Balancing Operations",
+      "type": "instructional_video",
+      "summary": "12-second teacher-curated animated walkthrough covering Steps 1–3 of Linear Equations & Balancing Operations.",
+      "bodyText": "Step 1 (The Equality Balance Invariant): Consider the linear equation 3x + 5 = 20. Think of the equals sign as a rigid balance beam: whatever operation we perform on the left side must be performed identically on the right side.\n\nStep 2 (Clearing the Constant via Additive Inverse): By subtracting 5 from both sides, +5 and -5 cancel to zero on the left, leaving 3x = 15.\n\nStep 3 (Isolating x & Substitution Verification): Finally, since x is multiplied by 3 in 3x = 15, we divide both sides by 3 to obtain x = 5. Substituting x = 5 back into 3(5) + 5 confirms 15 + 5 = 20.",
+      "stepId": "all",
+      "relativePath": "assets/video/walkthrough.mp4",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/video/walkthrough.mp4",
+      "sha256": "b34db7faa5cc6d1af2e821ff81413d34ab03c280df7fe5a7c34a9db45d1835a3",
+      "sizeBytes": 250010
+    }
+  ],
+  "whiteboardScene": {
+    "sceneId": "scene_math_linear_equations",
+    "subjectTitle": "Mathematics",
+    "chapterTitle": "Foundations of Algebra & Geometry",
+    "topicTitle": "Linear Equations & Balancing Operations",
+    "objects": [
+      {
+        "objectId": "node_eq_initial",
+        "objectType": "formula",
+        "label": "Target Equation",
+        "subLabel": "Two-Step Linear Form",
+        "formula": "3x + 5 = 20",
+        "explanation": "A linear equation where the unknown x is scaled by 3 and shifted up by 5 to equal 20.",
+        "position": {
+          "x": 190,
+          "y": 50
+        },
+        "size": {
+          "width": 220,
+          "height": 90
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_1"
+      },
+      {
+        "objectId": "node_balance_law",
+        "objectType": "box",
+        "label": "Balance Invariant",
+        "subLabel": "Left Side = Right Side",
+        "formula": "LHS ⇔ RHS",
+        "explanation": "The equals sign guarantees both sides have identical value. Every operation must be applied equally to both sides.",
+        "position": {
+          "x": 190,
+          "y": 175
+        },
+        "size": {
+          "width": 220,
+          "height": 88
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_1"
+      },
+      {
+        "objectId": "node_sub_inverse",
+        "objectType": "highlight",
+        "label": "Additive Inverse",
+        "subLabel": "Subtract 5 from Both Sides",
+        "formula": "(3x + 5) - 5 = 20 - 5",
+        "explanation": "To undo +5 attached to the 3x term, we apply its inverse (-5) to both sides, simplifying to 3x = 15.",
+        "position": {
+          "x": 60,
+          "y": 310
+        },
+        "size": {
+          "width": 230,
+          "height": 92
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_2"
+      },
+      {
+        "objectId": "node_simplified",
+        "objectType": "formula",
+        "label": "Isolated Term",
+        "subLabel": "Constant Cleared",
+        "formula": "3x = 15",
+        "explanation": "Now the variable term 3x stands alone on the left side, ready for coefficient division.",
+        "position": {
+          "x": 330,
+          "y": 310
+        },
+        "size": {
+          "width": 210,
+          "height": 92
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_2"
+      },
+      {
+        "objectId": "node_div_inverse",
+        "objectType": "formula",
+        "label": "Multiplicative Inverse",
+        "subLabel": "Divide Both Sides by 3",
+        "formula": "3x / 3 = 15 / 3  ⇒  x = 5",
+        "explanation": "Dividing by the coefficient 3 isolates x = 5. Check: 3(5) + 5 = 15 + 5 = 20.",
+        "position": {
+          "x": 180,
+          "y": 445
+        },
+        "size": {
+          "width": 250,
+          "height": 94
+        },
+        "style": {
+          "strokeWidth": 2.5,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_3"
+      }
+    ],
+    "arrows": [
+      {
+        "fromObjectId": "node_eq_initial",
+        "toObjectId": "node_balance_law",
+        "label": "governed by",
+        "stepId": "step_1"
+      },
+      {
+        "fromObjectId": "node_balance_law",
+        "toObjectId": "node_sub_inverse",
+        "label": "undo +5",
+        "stepId": "step_2"
+      },
+      {
+        "fromObjectId": "node_sub_inverse",
+        "toObjectId": "node_simplified",
+        "label": "yields",
+        "stepId": "step_2"
+      },
+      {
+        "fromObjectId": "node_simplified",
+        "toObjectId": "node_div_inverse",
+        "label": "divide by 3",
+        "stepId": "step_3"
+      }
+    ],
+    "steps": [
+      {
+        "stepId": "step_1",
+        "stepNumber": 1,
+        "title": "The Equality Balance Invariant",
+        "narration": "Consider the linear equation 3x + 5 = 20. Think of the equals sign as a rigid balance beam: whatever operation we perform on the left side must be performed identically on the right side.",
+        "tutorTip": "Tap 'Target Equation' or 'Balance Invariant' on the canvas to inspect the algebraic structure.",
+        "focusObjectIds": [
+          "node_eq_initial",
+          "node_balance_law"
+        ],
+        "inlineQuiz": {
+          "question": "In the equation 3x + 5 = 20, which operation should we undo FIRST to isolate the variable term 3x?",
+          "options": [
+            "Subtract 5 from both sides",
+            "Divide only 3x by 3",
+            "Add 20 to both sides",
+            "Multiply 3x by 5"
+          ],
+          "correctIndex": 0,
+          "explanation": "We undo addition/subtraction before multiplication/division: subtracting 5 from both sides cleanly isolates 3x."
+        },
+        "diagramResourceId": "img_step_1",
+        "diagramRelativePath": "assets/images/step_1.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      },
+      {
+        "stepId": "step_2",
+        "stepNumber": 2,
+        "title": "Clearing the Constant via Additive Inverse",
+        "narration": "By subtracting 5 from both sides, +5 and -5 cancel to zero on the left, leaving 3x = 15.",
+        "tutorTip": "Always apply the subtraction to both sides so the equation remains balanced.",
+        "focusObjectIds": [
+          "node_sub_inverse",
+          "node_simplified"
+        ],
+        "inlineQuiz": {
+          "question": "If you are solving 4x - 7 = 21, what is the resulting equation after clearing the constant term?",
+          "options": [
+            "4x = 28",
+            "4x = 14",
+            "x = 28",
+            "4x = -28"
+          ],
+          "correctIndex": 0,
+          "explanation": "The inverse of -7 is +7. Adding 7 to both sides gives 4x = 21 + 7 = 28."
+        },
+        "diagramResourceId": "img_step_2",
+        "diagramRelativePath": "assets/images/step_2.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      },
+      {
+        "stepId": "step_3",
+        "stepNumber": 3,
+        "title": "Isolating x & Substitution Verification",
+        "narration": "Finally, since x is multiplied by 3 in 3x = 15, we divide both sides by 3 to obtain x = 5. Substituting x = 5 back into 3(5) + 5 confirms 15 + 5 = 20.",
+        "tutorTip": "Always verify your root by plugging it back into the original left-hand expression.",
+        "focusObjectIds": [
+          "node_div_inverse"
+        ],
+        "inlineQuiz": {
+          "question": "Solve for x: 5x - 8 = 17.",
+          "options": [
+            "x = 5",
+            "x = 9/5",
+            "x = 3",
+            "x = 25"
+          ],
+          "correctIndex": 0,
+          "explanation": "Add 8 to both sides to get 5x = 25, then divide both sides by 5 to get x = 5."
+        },
+        "diagramResourceId": "img_step_3",
+        "diagramRelativePath": "assets/images/step_3.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      }
+    ]
+  },
+  "assessment": [
+    {
+      "questionId": "math_lin_q1",
+      "question": "What is the solution to 2(x - 3) = 14?",
+      "options": [
+        "x = 10",
+        "x = 4",
+        "x = 7",
+        "x = 8.5"
+      ],
+      "correctIndex": 0,
+      "explanation": "Divide by 2 (or expand 2x - 6 = 14): x - 3 = 7, then add 3 to get x = 10."
+    },
+    {
+      "questionId": "math_lin_q2",
+      "question": "Solve for y: 7 - 2y = 1.",
+      "options": [
+        "y = 3",
+        "y = -3",
+        "y = 4",
+        "y = -4"
+      ],
+      "correctIndex": 0,
+      "explanation": "Subtract 7 from both sides: -2y = -6. Divide by -2: y = 3."
+    }
+  ],
+  "mediaFiles": [
+    {
+      "relativePath": "assets/images/step_1.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_1.png",
+      "sha256": "292bf764ebbdd2f7bc5f51333c6d60bb1a518e500898b53649d1686590292769",
+      "sizeBytes": 21689,
+      "mimeType": "image/png"
+    },
+    {
+      "relativePath": "assets/images/step_2.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_2.png",
+      "sha256": "c0721988683d3e11bea6381db79c48b07886e59f9510d76483b669100d157949",
+      "sizeBytes": 21846,
+      "mimeType": "image/png"
+    },
+    {
+      "relativePath": "assets/images/step_3.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_3.png",
+      "sha256": "3735b8b9fec5abf79eed14d366d93b234349edafcb2dc9fe1a250db67a6861d2",
+      "sizeBytes": 25552,
+      "mimeType": "image/png"
+    },
+    {
+      "relativePath": "assets/video/walkthrough.mp4",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/video/walkthrough.mp4",
+      "sha256": "b34db7faa5cc6d1af2e821ff81413d34ab03c280df7fe5a7c34a9db45d1835a3",
+      "sizeBytes": 250010,
+      "mimeType": "video/mp4"
+    },
+    {
+      "relativePath": "assets/board/scene.json",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/board/scene.json",
+      "sha256": "ddf2c9c25eb868cb124204c67a969d27ab549e5d8c6edc5783ca0f1974d60350",
+      "sizeBytes": 6921,
+      "mimeType": "application/json"
+    }
+  ]
+}

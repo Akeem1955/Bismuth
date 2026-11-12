@@ -1,0 +1,171 @@
+{
+  "sceneId": "scene_eng_sentence_clauses",
+  "subjectTitle": "English",
+  "chapterTitle": "Clause Architecture & Rhetorical Voice",
+  "topicTitle": "Independent vs. Dependent Clauses & Complex Sentences",
+  "objects": [
+    {
+      "objectId": "node_indep",
+      "objectType": "formula",
+      "label": "Independent Clause (IC)",
+      "subLabel": "Stands Alone as a Sentence",
+      "formula": "Subject + Verb = Complete Thought",
+      "explanation": "Example: 'The network dropped.' Contains a subject, a finite predicate verb, and expresses a complete proposition.",
+      "position": {
+        "x": 60,
+        "y": 80
+      },
+      "size": {
+        "width": 225,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_1"
+    },
+    {
+      "objectId": "node_dep",
+      "objectType": "box",
+      "label": "Dependent Clause (DC)",
+      "subLabel": "Starts with Subordinator",
+      "formula": "Although + S + V (Fragment Alone)",
+      "explanation": "Example: 'Although the network dropped...' Has a subject and verb, but the subordinator makes it structurally dependent on an IC.",
+      "position": {
+        "x": 330,
+        "y": 80
+      },
+      "size": {
+        "width": 225,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_2"
+    },
+    {
+      "objectId": "node_complex_rule",
+      "objectType": "highlight",
+      "label": "Complex Punctuation Law",
+      "subLabel": "Introductory DC Takes Comma",
+      "formula": "[DC], [IC]  vs.  [IC] [DC]",
+      "explanation": "'Although the network dropped, the tutor continued.' When the DC comes first, place a comma before the IC.",
+      "position": {
+        "x": 180,
+        "y": 250
+      },
+      "size": {
+        "width": 255,
+        "height": 94
+      },
+      "style": {
+        "strokeWidth": 2.5,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_3"
+    }
+  ],
+  "arrows": [
+    {
+      "fromObjectId": "node_indep",
+      "toObjectId": "node_dep",
+      "label": "add subordinator",
+      "stepId": "step_2"
+    },
+    {
+      "fromObjectId": "node_dep",
+      "toObjectId": "node_complex_rule",
+      "label": "attach to IC",
+      "stepId": "step_3"
+    },
+    {
+      "fromObjectId": "node_indep",
+      "toObjectId": "node_complex_rule",
+      "label": "main clause",
+      "stepId": "step_3"
+    }
+  ],
+  "steps": [
+    {
+      "stepId": "step_1",
+      "stepNumber": 1,
+      "title": "Independent Clauses: The Structural Core",
+      "narration": "An independent clause contains a subject and a finite verb and expresses a complete thought—for example, 'The student solved the equation.'",
+      "tutorTip": "Tap 'Independent Clause' to see why a phrase without a finite verb is not a clause.",
+      "focusObjectIds": [
+        "node_indep"
+      ],
+      "inlineQuiz": {
+        "question": "Which of the following is a complete independent clause?",
+        "options": [
+          "The experiment yielded accurate results.",
+          "Because the experiment yielded accurate results.",
+          "During the long laboratory experiment.",
+          "Having tested the chemical sample."
+        ],
+        "correctIndex": 0,
+        "explanation": "'The experiment yielded accurate results' has a subject ('experiment'), a finite verb ('yielded'), and stands alone."
+      },
+      "diagramResourceId": "img_step_1",
+      "diagramRelativePath": "assets/images/step_1.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_2",
+      "stepNumber": 2,
+      "title": "Dependent Clauses & Subordinating Conjunctions",
+      "narration": "Placing a subordinating conjunction (such as 'because', 'although', 'since', or 'if') in front of an independent clause turns it into a dependent clause that cannot stand alone.",
+      "tutorTip": "A dependent clause standing alone with a period is a sentence fragment error.",
+      "focusObjectIds": [
+        "node_dep"
+      ],
+      "inlineQuiz": {
+        "question": "In 'Although the battery was low, the offline model finished the lesson,' which part is the dependent clause?",
+        "options": [
+          "Although the battery was low",
+          "the offline model finished the lesson",
+          "the battery was low",
+          "finished the lesson"
+        ],
+        "correctIndex": 0,
+        "explanation": "The subordinating conjunction 'Although' makes 'Although the battery was low' a dependent adverbial clause."
+      },
+      "diagramResourceId": "img_step_2",
+      "diagramRelativePath": "assets/images/step_2.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_3",
+      "stepNumber": 3,
+      "title": "Punctuating Complex Sentences & Fixing Comma Splices",
+      "narration": "When a dependent clause precedes an independent clause ([DC], [IC]), separate them with a comma. Never join two independent clauses with only a comma (a comma splice)—use a semicolon or a coordinating conjunction (, and / , but).",
+      "tutorTip": "Tap 'Complex Punctuation Law' to compare [DC], [IC] against [IC] [DC].",
+      "focusObjectIds": [
+        "node_complex_rule"
+      ],
+      "inlineQuiz": {
+        "question": "Which sentence is punctuated correctly without a comma splice?",
+        "options": [
+          "The power went out; however, the offline tutor kept running.",
+          "The power went out, the offline tutor kept running.",
+          "The power went out, however, the offline tutor kept running.",
+          "Although the power went out; the offline tutor kept running."
+        ],
+        "correctIndex": 0,
+        "explanation": "Two independent clauses linked by a conjunctive adverb ('however') require a semicolon before 'however' and a comma after it."
+      },
+      "diagramResourceId": "img_step_3",
+      "diagramRelativePath": "assets/images/step_3.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    }
+  ]
+}

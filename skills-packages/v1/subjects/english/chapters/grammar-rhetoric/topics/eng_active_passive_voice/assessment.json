@@ -1,0 +1,17 @@
+{
+  "topicId": "eng_active_passive_voice",
+  "questions": [
+    {
+      "questionId": "eng_vo_q1",
+      "question": "Why is the sentence 'The students were studying for the exam' ACTIVE rather than passive?",
+      "options": [
+        "The subject ('The students') is performing the action, and 'studying' is a present participle (progressive aspect), not a passive past participle",
+        "It contains the auxiliary verb 'were'",
+        "It is in the future tense",
+        "It has no subject"
+      ],
+      "correctIndex": 0,
+      "explanation": "'Were studying' is past progressive active; the students are doing the studying."
+    }
+  ]
+}

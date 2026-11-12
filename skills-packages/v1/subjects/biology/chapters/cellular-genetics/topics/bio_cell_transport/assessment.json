@@ -1,0 +1,17 @@
+{
+  "topicId": "bio_cell_transport",
+  "questions": [
+    {
+      "questionId": "bio_trans_q1",
+      "question": "If a metabolic poison blocks ATP synthesis in a neuron, which transport process will stop immediately?",
+      "options": [
+        "Na⁺/K⁺ pump active transport",
+        "Simple diffusion of O₂ into the cell",
+        "Osmosis of water across aquaporins",
+        "Diffusion of CO₂ out of the cell"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Na⁺/K⁺ pump directly requires ATP hydrolysis to pump ions against their gradients."
+    }
+  ]
+}

@@ -1,0 +1,252 @@
+{
+  "topicId": "chem_atomic_orbitals",
+  "subjectId": "chemistry",
+  "chapterId": "atomic-reactions",
+  "title": "Atomic Structure, Isotopes & Electron Shells",
+  "summary": "Nuclear composition (Z, N, A), isotopic mass, and Bohr/orbital valence configurations.",
+  "instructions": {
+    "skillId": "chem_atomic_orbitals",
+    "learningObjectives": [
+      "Define Atomic Number (Z = protons) and Mass Number (A = protons + neutrons)",
+      "Explain why isotopes of an element have identical chemical properties but different masses",
+      "Determine valence electron counts and ion charges from shell configurations"
+    ],
+    "explanationSequence": [
+      "Step 1: Nuclear Identity (Z and A)",
+      "Step 2: Isotopes and Neutron Count (N = A - Z)",
+      "Step 3: Electron Shells & Valence Reactivity"
+    ],
+    "commonMisconceptions": [
+      "Confusing mass number A with the number of neutrons N",
+      "Adding electrons instead of subtracting electrons when forming a positively charged cation"
+    ],
+    "socraticSystemPrompt": "You are orchestrating the Atomic Structure lesson. Remind students that proton count Z uniquely locks the element identity."
+  },
+  "resources": [
+    {
+      "id": "res_chem_atomic",
+      "title": "Nuclide Notation & Subatomic Particles",
+      "type": "formula_sheet",
+      "summary": "Proton, neutron, and electron relationships.",
+      "bodyText": "• Atomic Number (Z) = number of protons\n• Mass Number (A) = protons (Z) + neutrons (N)\n• Neutral Atom: electrons = Z | Ion with charge q: electrons = Z - q",
+      "stepId": "all",
+      "relativePath": "",
+      "url": "",
+      "sha256": "",
+      "sizeBytes": 0
+    },
+    {
+      "id": "img_step_1",
+      "title": "Step 1 Visual Diagram: Nuclear Identity: Atomic Number (Z)",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 1 (Nuclear Identity: Atomic Number (Z)).",
+      "bodyText": "Every element is uniquely defined by its atomic number Z, the number of positively charged protons in its nucleus.",
+      "stepId": "step_1",
+      "relativePath": "assets/images/step_1.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_1.png",
+      "sha256": "204974f7af8e08a112722cede39825234943115231b18b8e221934c870f4e912",
+      "sizeBytes": 35558
+    },
+    {
+      "id": "img_step_2",
+      "title": "Step 2 Visual Diagram: Mass Number (A) and Isotopes",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 2 (Mass Number (A) and Isotopes).",
+      "bodyText": "Mass number A equals protons (Z) plus neutrons (N). Isotopes are atoms of the same element (same Z) with different numbers of neutrons (N = A - Z).",
+      "stepId": "step_2",
+      "relativePath": "assets/images/step_2.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_2.png",
+      "sha256": "023a15b410cce82bb42d07230dde5936de5bdf6f41eb446b3c2ce760ed24fe6c",
+      "sizeBytes": 34481
+    },
+    {
+      "id": "img_step_3",
+      "title": "Step 3 Visual Diagram: Valence Shells & Ion Formation",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 3 (Valence Shells & Ion Formation).",
+      "bodyText": "Electrons fill shells (2, 8, 8). When Magnesium (Z = 12, shell 2,8,2) loses its 2 valence electrons to achieve a stable octet, it forms the Mg²⁺ cation with 10 electrons.",
+      "stepId": "step_3",
+      "relativePath": "assets/images/step_3.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_3.png",
+      "sha256": "a0c02e3b7f330af2e05e4f7aaf5be19f02fada8bac8d42b1302cfc6b0e5be264",
+      "sizeBytes": 34926
+    },
+    {
+      "id": "vid_walkthrough",
+      "title": "Animated Concept Walkthrough: Atomic Structure, Isotopes & Electron Shells",
+      "type": "instructional_video",
+      "summary": "12-second teacher-curated animated walkthrough covering Steps 1–3 of Atomic Structure, Isotopes & Electron Shells.",
+      "bodyText": "Step 1 (Nuclear Identity: Atomic Number (Z)): Every element is uniquely defined by its atomic number Z, the number of positively charged protons in its nucleus.\n\nStep 2 (Mass Number (A) and Isotopes): Mass number A equals protons (Z) plus neutrons (N). Isotopes are atoms of the same element (same Z) with different numbers of neutrons (N = A - Z).\n\nStep 3 (Valence Shells & Ion Formation): Electrons fill shells (2, 8, 8). When Magnesium (Z = 12, shell 2,8,2) loses its 2 valence electrons to achieve a stable octet, it forms the Mg²⁺ cation with 10 electrons.",
+      "stepId": "all",
+      "relativePath": "assets/video/walkthrough.mp4",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/video/walkthrough.mp4",
+      "sha256": "944d74eca7a46e8120e5725ba509d35415cec0bbb8af885cd9ed7d65097c77fc",
+      "sizeBytes": 379346
+    }
+  ],
+  "whiteboardScene": {
+    "sceneId": "scene_chem_atomic_orbitals",
+    "subjectTitle": "Chemistry",
+    "chapterTitle": "Atomic Structure & Quantitative Stoichiometry",
+    "topicTitle": "Atomic Structure, Isotopes & Electron Shells",
+    "objects": [
+      {
+        "objectId": "node_nucleus_z",
+        "objectType": "formula",
+        "label": "Atomic Number (Z)",
+        "subLabel": "Nuclear Proton Count",
+        "formula": "Z = # Protons (+1)",
+        "explanation": "The number of protons in the nucleus defines the chemical element (e.g., Z = 6 is always Carbon).",
+        "position": {
+          "x": 60,
+          "y": 80
+        },
+        "size": {
+          "width": 220,
+          "height": 90
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_1"
+      },
+      {
+        "objectId": "node_mass_a",
+        "objectType": "formula",
+        "label": "Mass Number (A)",
+        "subLabel": "Total Nucleons",
+        "formula": "A = Z + N  ⇒  N = A - Z",
+        "explanation": "Total protons plus neutrons in the nucleus. Isotopes share the same Z but differ in neutron count N.",
+        "position": {
+          "x": 330,
+          "y": 80
+        },
+        "size": {
+          "width": 220,
+          "height": 90
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_2"
+      },
+      {
+        "objectId": "node_valence_shells",
+        "objectType": "highlight",
+        "label": "Electron Shells & Ions",
+        "subLabel": "2, 8, 8 Octet Filling",
+        "formula": "e⁻ = Z - charge",
+        "explanation": "Outer valence electrons govern bonding. Losing electrons forms a positive cation; gaining forms a negative anion.",
+        "position": {
+          "x": 180,
+          "y": 250
+        },
+        "size": {
+          "width": 250,
+          "height": 94
+        },
+        "style": {
+          "strokeWidth": 2.5,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_3"
+      }
+    ],
+    "arrows": [
+      {
+        "fromObjectId": "node_nucleus_z",
+        "toObjectId": "node_mass_a",
+        "label": "plus N neutrons",
+        "stepId": "step_2"
+      },
+      {
+        "fromObjectId": "node_nucleus_z",
+        "toObjectId": "node_valence_shells",
+        "label": "balances e⁻",
+        "stepId": "step_3"
+      }
+    ],
+    "steps": [
+      {
+        "stepId": "step_1",
+        "stepNumber": 1,
+        "title": "Nuclear Identity: Atomic Number (Z)",
+        "narration": "Every element is uniquely defined by its atomic number Z, the number of positively charged protons in its nucleus.",
+        "tutorTip": "Tap 'Atomic Number (Z)' to review how proton count locks element identity.",
+        "focusObjectIds": [
+          "node_nucleus_z"
+        ],
+        "inlineQuiz": {
+          "question": "A neutral atom of Sodium (Z = 11) contains how many protons and electrons?",
+          "options": [
+            "11 protons and 11 electrons",
+            "11 protons and 23 electrons",
+            "23 protons and 11 electrons",
+            "12 protons and 11 electrons"
+          ],
+          "correctIndex": 0,
+          "explanation": "In a neutral atom, positive protons (Z = 11) equal negative electrons (11)."
+        },
+        "diagramResourceId": "img_step_1",
+        "diagramRelativePath": "assets/images/step_1.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      },
+      {
+        "stepId": "step_2",
+        "stepNumber": 2,
+        "title": "Mass Number (A) and Isotopes",
+        "narration": "Mass number A equals protons (Z) plus neutrons (N). Isotopes are atoms of the same element (same Z) with different numbers of neutrons (N = A - Z).",
+        "tutorTip": "Subtract Z from A to find the exact neutron count.",
+        "focusObjectIds": [
+          "node_mass_a"
+        ],
+        "inlineQuiz": {
+          "question": "Carbon-14 (A = 14, Z = 6) is used in radiocarbon dating. How many neutrons are in a Carbon-14 nucleus?",
+          "options": [
+            "8 neutrons",
+            "6 neutrons",
+            "14 neutrons",
+            "20 neutrons"
+          ],
+          "correctIndex": 0,
+          "explanation": "N = A - Z = 14 - 6 = 8 neutrons."
+        },
+        "diagramResourceId": "img_step_2",
+        "diagramRelativePath": "assets/images/step_2.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      },
+      {
+        "stepId": "step_3",
+        "stepNumber": 3,
+        "title": "Valence Shells & Ion Formation",
+        "narration": "Electrons fill shells (2, 8, 8). When Magnesium (Z = 12, shell 2,8,2) loses its 2 valence electrons to achieve a stable octet, it forms the Mg²⁺ cation with 10 electrons.",
+        "tutorTip": "Remember: losing negative electrons leaves a net positive charge.",
+        "focusObjectIds": [
+          "node_valence_shells"
+        ],
+        "inlineQuiz": {
+          "question": "How many electrons are present in an Oxide ion, O²⁻, given that Oxygen has atomic number Z = 8?",
+          "options": [
+            "10 electrons",
+            "6 electrons",
+            "8 electrons",
+            "16 electrons"
+          ],
+          "correctIndex": 0,
+          "explanation": "A 2- negative charge means the atom gained 2 electrons: 8 + 2 = 10 electrons."
+        },
+        "diagramResourceId": "img_step_3",
+        "diagramRelativePath": "assets/images/step_3.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      }
+    ]
+  }
+}

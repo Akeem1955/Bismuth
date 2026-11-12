@@ -1,0 +1,58 @@
+{
+  "topicId": "bio_cell_transport",
+  "subjectId": "biology",
+  "chapterId": "cellular-genetics",
+  "version": "1.1.0",
+  "files": {
+    "SKILL.md": {
+      "sizeBytes": 1828,
+      "sha256": "893f791aee4ba966d32b846d8ceaf7f5d2ccb90dba025dc1f308117cefcaa81a",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/SKILL.md"
+    },
+    "lesson.json": {
+      "sizeBytes": 12134,
+      "sha256": "dac08627e0f5276d8d808ba06a35a68a66d5ab11c372ea40e1f7001d4fd9eb43",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/lesson.json"
+    },
+    "assessment.json": {
+      "sizeBytes": 583,
+      "sha256": "dc02951ddb200e92a6ae0749a64ed29116a1c43277e25a83a27c927912412ae9",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assessment.json"
+    },
+    "bundle.json": {
+      "sizeBytes": 16634,
+      "sha256": "d55617063b5af9bfeaa01208ccb174c77ee53c5e2a1d262957b2c3ab95281bfd",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/bundle.json"
+    },
+    "assets/images/step_1.png": {
+      "sizeBytes": 27985,
+      "sha256": "39fcfab1ec1f0f4d7dbf1dae002f7631cb550cf41e745d89d041424fbd9083d9",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_1.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_2.png": {
+      "sizeBytes": 26185,
+      "sha256": "b99d1277a4305d5e1146f56138de2c1d0aade0c7a0d8da35e4406e3e1d01c2b9",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_2.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_3.png": {
+      "sizeBytes": 28076,
+      "sha256": "7b19fe35bcec38205b60c5871a6a536a11ef99d044f06d68ed7c7482f636cd95",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_3.png",
+      "mimeType": "image/png"
+    },
+    "assets/video/walkthrough.mp4": {
+      "sizeBytes": 285825,
+      "sha256": "c8bfdaad77f6df70a9d0074d7a4997f5d5cd39cabc816c933fe936bccd2e3282",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/video/walkthrough.mp4",
+      "mimeType": "video/mp4"
+    },
+    "assets/board/scene.json": {
+      "sizeBytes": 5947,
+      "sha256": "dca877355c6fca6da3eeafc9fc4b0bc5c20e7348c24a7db6a820788f9cbe5866",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/board/scene.json",
+      "mimeType": "application/json"
+    }
+  }
+}

@@ -1,0 +1,663 @@
+{
+  "schemaVersion": "1.1.0",
+  "bucketName": "bismuth-skills-tunjiax-wallet-482614",
+  "baseUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1",
+  "totalSubjects": 5,
+  "totalTopics": 10,
+  "bundledTopicIds": [
+    "math_linear_equations",
+    "phys_newton_second_law"
+  ],
+  "subjects": [
+    {
+      "subjectId": "mathematics",
+      "title": "Mathematics",
+      "iconEmoji": "📐",
+      "accentHex": "#006874",
+      "tagline": "Symbolic reasoning, algebraic balance, and geometric proofs",
+      "coordinatorPhilosophy": "Guide students through mathematical structures step by step. Never give away the final numerical answer before the student identifies the invariant operation or geometric theorem.",
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/SKILL.md",
+      "chapters": [
+        {
+          "chapterId": "algebra-geometry",
+          "subjectId": "mathematics",
+          "title": "Foundations of Algebra & Geometry",
+          "summary": "Equivalence transformations in linear equations and invariant angle relationships in circles.",
+          "chapterObjectives": [
+            "Solve multi-step single-variable linear equations using inverse operations",
+            "Apply inscribed angle, chord, and tangent theorems to deduce unknown geometric measures"
+          ],
+          "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/SKILL.md",
+          "topics": [
+            {
+              "topicId": "math_linear_equations",
+              "subjectId": "mathematics",
+              "chapterId": "algebra-geometry",
+              "title": "Linear Equations & Balancing Operations",
+              "summary": "Isolating variables using inverse operations while preserving equality across the balance scale.",
+              "version": "1.1.0",
+              "bundledInApk": true,
+              "packageSizeBytes": 344079,
+              "bundleSha256": "9e78247e5a10cd0061b2ecb874110207f6e1e11ff9288e66e5a4395cd81771c7",
+              "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/bundle.json",
+              "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/SKILL.md",
+              "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/lesson.json",
+              "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assessment.json",
+              "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/manifest.json",
+              "mediaFiles": [
+                {
+                  "relativePath": "assets/images/step_1.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_1.png",
+                  "sha256": "292bf764ebbdd2f7bc5f51333c6d60bb1a518e500898b53649d1686590292769",
+                  "sizeBytes": 21689,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_2.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_2.png",
+                  "sha256": "c0721988683d3e11bea6381db79c48b07886e59f9510d76483b669100d157949",
+                  "sizeBytes": 21846,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_3.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_3.png",
+                  "sha256": "3735b8b9fec5abf79eed14d366d93b234349edafcb2dc9fe1a250db67a6861d2",
+                  "sizeBytes": 25552,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/video/walkthrough.mp4",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/video/walkthrough.mp4",
+                  "sha256": "b34db7faa5cc6d1af2e821ff81413d34ab03c280df7fe5a7c34a9db45d1835a3",
+                  "sizeBytes": 250010,
+                  "mimeType": "video/mp4"
+                },
+                {
+                  "relativePath": "assets/board/scene.json",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/board/scene.json",
+                  "sha256": "ddf2c9c25eb868cb124204c67a969d27ab549e5d8c6edc5783ca0f1974d60350",
+                  "sizeBytes": 6921,
+                  "mimeType": "application/json"
+                }
+              ]
+            },
+            {
+              "topicId": "math_circle_theorems",
+              "subjectId": "mathematics",
+              "chapterId": "algebra-geometry",
+              "title": "Circle Geometry: Tangents, Chords & Inscribed Angles",
+              "summary": "Deductive angle relationships between central angles, inscribed angles, and tangent lines.",
+              "version": "1.1.0",
+              "bundledInApk": false,
+              "packageSizeBytes": 490756,
+              "bundleSha256": "016bc986e3c12ba8fe3be4dbfc90e03ffce9aa707787ea852756dc0e4d18e11d",
+              "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/bundle.json",
+              "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/SKILL.md",
+              "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/lesson.json",
+              "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assessment.json",
+              "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/manifest.json",
+              "mediaFiles": [
+                {
+                  "relativePath": "assets/images/step_1.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_1.png",
+                  "sha256": "790f2d2f3f4194d1bdde4d03ef9189406cb89c5289da326f09c873bf7abef768",
+                  "sizeBytes": 38116,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_2.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_2.png",
+                  "sha256": "adb6f40d50e9224162aa623def4ab1c89375f81e51b5037de683b00955eadf66",
+                  "sizeBytes": 34641,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_3.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_3.png",
+                  "sha256": "883df1cecabaf4f3b246b1cefced36ddfe6aef26b93294b4f46368bb740d861c",
+                  "sizeBytes": 33451,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/video/walkthrough.mp4",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/video/walkthrough.mp4",
+                  "sha256": "97580597ac0e0061212aeb646bf3b079824296a061ad540028be8dfb5a82c8b4",
+                  "sizeBytes": 360987,
+                  "mimeType": "video/mp4"
+                },
+                {
+                  "relativePath": "assets/board/scene.json",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/board/scene.json",
+                  "sha256": "ce0cf433635290328fb01029126c73fcbe83d459bb6fd679dffd919fa36ec3b3",
+                  "sizeBytes": 6438,
+                  "mimeType": "application/json"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "subjectId": "physics",
+      "title": "Physics",
+      "iconEmoji": "⚡",
+      "accentHex": "#006874",
+      "tagline": "Classical mechanics, vector dynamics, and conservation laws",
+      "coordinatorPhilosophy": "Anchor every physical law in vector directions, dimensional unit analysis, and conservation principles.",
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/SKILL.md",
+      "chapters": [
+        {
+          "chapterId": "mechanics-energy",
+          "subjectId": "physics",
+          "title": "Classical Mechanics & Energy Conservation",
+          "summary": "Newtonian force dynamics and work-energy transformations in physical systems.",
+          "chapterObjectives": [
+            "Analyze net force vectors and compute acceleration via F_net = m * a",
+            "Apply the Law of Conservation of Mechanical Energy between kinetic and potential forms"
+          ],
+          "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/SKILL.md",
+          "topics": [
+            {
+              "topicId": "phys_newton_second_law",
+              "subjectId": "physics",
+              "chapterId": "mechanics-energy",
+              "title": "Newton's Second Law & Free-Body Force Vectors",
+              "summary": "Relating net external force, inertial mass, and vector acceleration.",
+              "version": "1.1.0",
+              "bundledInApk": true,
+              "packageSizeBytes": 347123,
+              "bundleSha256": "b7143320804907f954974a2185701cc4d6e102249b61bc72690cf289559de43c",
+              "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/bundle.json",
+              "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/SKILL.md",
+              "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/lesson.json",
+              "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assessment.json",
+              "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/manifest.json",
+              "mediaFiles": [
+                {
+                  "relativePath": "assets/images/step_1.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/images/step_1.png",
+                  "sha256": "312d0e566e6eb434596b13e352516ac72bbb9219e36dd45f6ac4b8098d7721ce",
+                  "sizeBytes": 24329,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_2.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/images/step_2.png",
+                  "sha256": "383630104404007b384a44476df7473e56764b199df34a93b1f8faf1dcd0e960",
+                  "sizeBytes": 25050,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_3.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/images/step_3.png",
+                  "sha256": "2bcdda2d7524c163154af6b2bc7a45c04481501d8741fda9dd26e3b07a68d047",
+                  "sizeBytes": 23529,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/video/walkthrough.mp4",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/video/walkthrough.mp4",
+                  "sha256": "ac9cd72ae0f1dc20acc4a054b195d85048a5caed27c5062d80fb32763efcd687",
+                  "sizeBytes": 249870,
+                  "mimeType": "video/mp4"
+                },
+                {
+                  "relativePath": "assets/board/scene.json",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/board/scene.json",
+                  "sha256": "adaacc63dfb3e84c53f35d39c36a5f94c81a77d628aace24fc5faf1d19e1857a",
+                  "sizeBytes": 7095,
+                  "mimeType": "application/json"
+                }
+              ]
+            },
+            {
+              "topicId": "phys_conservation_energy",
+              "subjectId": "physics",
+              "chapterId": "mechanics-energy",
+              "title": "Work, Kinetic Energy & Gravitational Potential Energy",
+              "summary": "Mechanical energy transformations between potential energy (mgh) and kinetic energy (½mv²).",
+              "version": "1.1.0",
+              "bundledInApk": false,
+              "packageSizeBytes": 345862,
+              "bundleSha256": "e222cd85c61b7a0116a5c91b3f7c162a4a5345f1893664aee0c3fe208c514be2",
+              "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/bundle.json",
+              "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/SKILL.md",
+              "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/lesson.json",
+              "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assessment.json",
+              "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/manifest.json",
+              "mediaFiles": [
+                {
+                  "relativePath": "assets/images/step_1.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/images/step_1.png",
+                  "sha256": "1bc5b9891753051473d67af378026fb17ac3d8ac7b93710cba2d3c8a09d167e5",
+                  "sizeBytes": 22048,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_2.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/images/step_2.png",
+                  "sha256": "8fa72737ba56aa176ac5054adece5d874b7b62509890f1d84f3b0fd00fb9b06d",
+                  "sizeBytes": 23741,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_3.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/images/step_3.png",
+                  "sha256": "83aa93445d9bc97f545e8b9c93be1dc22fa5d1846dbea8f5de3847534d88028b",
+                  "sizeBytes": 28181,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/video/walkthrough.mp4",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/video/walkthrough.mp4",
+                  "sha256": "92543603190505acee592c40ef7d46159aa47b8829e492c61c73fc613739b7f9",
+                  "sizeBytes": 250897,
+                  "mimeType": "video/mp4"
+                },
+                {
+                  "relativePath": "assets/board/scene.json",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/board/scene.json",
+                  "sha256": "887804549cc846e2972e89430197802de40db0e9661b15ddb44f8f7abbd6064d",
+                  "sizeBytes": 5431,
+                  "mimeType": "application/json"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "subjectId": "chemistry",
+      "title": "Chemistry",
+      "iconEmoji": "🧪",
+      "accentHex": "#006874",
+      "tagline": "Atomic architecture, periodic trends, and quantitative stoichiometry",
+      "coordinatorPhilosophy": "Connect subatomic particle counts and conservation of mass directly to macroscopic chemical equations.",
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/SKILL.md",
+      "chapters": [
+        {
+          "chapterId": "atomic-reactions",
+          "subjectId": "chemistry",
+          "title": "Atomic Structure & Quantitative Stoichiometry",
+          "summary": "Subatomic composition, isotopes, molar mass conversions, and limiting reagents.",
+          "chapterObjectives": [
+            "Determine proton, neutron, and electron counts from atomic number Z and mass number A",
+            "Balance chemical equations and identify limiting reagents using mole ratios"
+          ],
+          "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/SKILL.md",
+          "topics": [
+            {
+              "topicId": "chem_atomic_orbitals",
+              "subjectId": "chemistry",
+              "chapterId": "atomic-reactions",
+              "title": "Atomic Structure, Isotopes & Electron Shells",
+              "summary": "Nuclear composition (Z, N, A), isotopic mass, and Bohr/orbital valence configurations.",
+              "version": "1.1.0",
+              "bundledInApk": false,
+              "packageSizeBytes": 505133,
+              "bundleSha256": "3b7609bcfa7949f9b869424435f220c67d1be2add1cc0920b05d5e36ad59b54e",
+              "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/bundle.json",
+              "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/SKILL.md",
+              "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/lesson.json",
+              "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assessment.json",
+              "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/manifest.json",
+              "mediaFiles": [
+                {
+                  "relativePath": "assets/images/step_1.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_1.png",
+                  "sha256": "204974f7af8e08a112722cede39825234943115231b18b8e221934c870f4e912",
+                  "sizeBytes": 35558,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_2.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_2.png",
+                  "sha256": "023a15b410cce82bb42d07230dde5936de5bdf6f41eb446b3c2ce760ed24fe6c",
+                  "sizeBytes": 34481,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_3.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_3.png",
+                  "sha256": "a0c02e3b7f330af2e05e4f7aaf5be19f02fada8bac8d42b1302cfc6b0e5be264",
+                  "sizeBytes": 34926,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/video/walkthrough.mp4",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/video/walkthrough.mp4",
+                  "sha256": "944d74eca7a46e8120e5725ba509d35415cec0bbb8af885cd9ed7d65097c77fc",
+                  "sizeBytes": 379346,
+                  "mimeType": "video/mp4"
+                },
+                {
+                  "relativePath": "assets/board/scene.json",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/board/scene.json",
+                  "sha256": "4c200c137767672c213f278a7903866e0bbbd9ea93dbef19ca24d0f38e4c9cd9",
+                  "sizeBytes": 5448,
+                  "mimeType": "application/json"
+                }
+              ]
+            },
+            {
+              "topicId": "chem_stoichiometry_moles",
+              "subjectId": "chemistry",
+              "chapterId": "atomic-reactions",
+              "title": "Stoichiometry, Molar Mass & Limiting Reagents",
+              "summary": "Converting mass to moles (n = m/M) and using balanced coefficients to identify the limiting reactant.",
+              "version": "1.1.0",
+              "bundledInApk": false,
+              "packageSizeBytes": 334636,
+              "bundleSha256": "ba72452702f5c1d1332925ac5d95f470e9f6149ff98b662e18e75bc05c231a9d",
+              "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/bundle.json",
+              "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/SKILL.md",
+              "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/lesson.json",
+              "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assessment.json",
+              "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/manifest.json",
+              "mediaFiles": [
+                {
+                  "relativePath": "assets/images/step_1.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/images/step_1.png",
+                  "sha256": "81057548ded941bdc943ee2745deb6106dcc1289e6eb76b718c412fc5885cfcb",
+                  "sizeBytes": 24965,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_2.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/images/step_2.png",
+                  "sha256": "238928cadc280b38ae7e6bab40315d8030b10e9d7e2e576d754a5d75ca42ecbf",
+                  "sizeBytes": 22639,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_3.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/images/step_3.png",
+                  "sha256": "79381d5542687658082db44dcbd8006e06493fad5673045570f682e5d546be81",
+                  "sizeBytes": 25314,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/video/walkthrough.mp4",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/video/walkthrough.mp4",
+                  "sha256": "630dade01e4789a1e468a44df09128ede565d0fd56721dbf7e4b08e499bf64fa",
+                  "sizeBytes": 240529,
+                  "mimeType": "video/mp4"
+                },
+                {
+                  "relativePath": "assets/board/scene.json",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/board/scene.json",
+                  "sha256": "4e4aee449c93b117fccd46f4df88feaa469ec26b3a3b1cc9b81cdd831aa4ca4a",
+                  "sizeBytes": 5498,
+                  "mimeType": "application/json"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "subjectId": "biology",
+      "title": "Biology",
+      "iconEmoji": "🧬",
+      "accentHex": "#006874",
+      "tagline": "Cellular membranes, bioenergetics, and molecular physiology",
+      "coordinatorPhilosophy": "Link cellular structure and concentration gradients directly to physiological function and energy currency (ATP).",
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/SKILL.md",
+      "chapters": [
+        {
+          "chapterId": "cellular-genetics",
+          "subjectId": "biology",
+          "title": "Cellular Transport & Bioenergetics",
+          "summary": "Membrane transport mechanisms and ATP energy conversion in chloroplasts and mitochondria.",
+          "chapterObjectives": [
+            "Contrast passive transport (diffusion, osmosis) with ATP-driven active transport",
+            "Trace energy flow through photosynthesis and cellular respiration"
+          ],
+          "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/SKILL.md",
+          "topics": [
+            {
+              "topicId": "bio_cell_transport",
+              "subjectId": "biology",
+              "chapterId": "cellular-genetics",
+              "title": "Cell Membrane: Osmosis, Diffusion & Active Transport",
+              "summary": "Selective permeability across the phospholipid bilayer and electrochemical gradient pumping.",
+              "version": "1.1.0",
+              "bundledInApk": false,
+              "packageSizeBytes": 390652,
+              "bundleSha256": "d55617063b5af9bfeaa01208ccb174c77ee53c5e2a1d262957b2c3ab95281bfd",
+              "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/bundle.json",
+              "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/SKILL.md",
+              "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/lesson.json",
+              "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assessment.json",
+              "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/manifest.json",
+              "mediaFiles": [
+                {
+                  "relativePath": "assets/images/step_1.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_1.png",
+                  "sha256": "39fcfab1ec1f0f4d7dbf1dae002f7631cb550cf41e745d89d041424fbd9083d9",
+                  "sizeBytes": 27985,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_2.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_2.png",
+                  "sha256": "b99d1277a4305d5e1146f56138de2c1d0aade0c7a0d8da35e4406e3e1d01c2b9",
+                  "sizeBytes": 26185,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_3.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_3.png",
+                  "sha256": "7b19fe35bcec38205b60c5871a6a536a11ef99d044f06d68ed7c7482f636cd95",
+                  "sizeBytes": 28076,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/video/walkthrough.mp4",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/video/walkthrough.mp4",
+                  "sha256": "c8bfdaad77f6df70a9d0074d7a4997f5d5cd39cabc816c933fe936bccd2e3282",
+                  "sizeBytes": 285825,
+                  "mimeType": "video/mp4"
+                },
+                {
+                  "relativePath": "assets/board/scene.json",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/board/scene.json",
+                  "sha256": "dca877355c6fca6da3eeafc9fc4b0bc5c20e7348c24a7db6a820788f9cbe5866",
+                  "sizeBytes": 5947,
+                  "mimeType": "application/json"
+                }
+              ]
+            },
+            {
+              "topicId": "bio_photosynthesis_atp",
+              "subjectId": "biology",
+              "chapterId": "cellular-genetics",
+              "title": "Photosynthesis & Cellular Respiration Energy Cycles",
+              "summary": "Coupled energy conversion in chloroplasts (light reactions & Calvin cycle) and mitochondria.",
+              "version": "1.1.0",
+              "bundledInApk": false,
+              "packageSizeBytes": 358907,
+              "bundleSha256": "2bd44d92688ec5813d8d1e59b0212c0c9f3018eaf49e721fcf271dcc6d9885e2",
+              "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/bundle.json",
+              "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/SKILL.md",
+              "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/lesson.json",
+              "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assessment.json",
+              "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/manifest.json",
+              "mediaFiles": [
+                {
+                  "relativePath": "assets/images/step_1.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/images/step_1.png",
+                  "sha256": "9ba7011eefbafaec57b967583a36101306f59115c65961c08dad1cc5a8a1c20a",
+                  "sizeBytes": 26555,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_2.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/images/step_2.png",
+                  "sha256": "e5e84704bd2efa0584126425b15e9d3cccc47ba29c79113c9cab930122f3d1a1",
+                  "sizeBytes": 26720,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_3.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/images/step_3.png",
+                  "sha256": "f00e674a7c9a581fbca7ed7cc3d9b965ae5238d3838559b7aa4559871fb8a9e2",
+                  "sizeBytes": 26040,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/video/walkthrough.mp4",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/video/walkthrough.mp4",
+                  "sha256": "dac5ebecd9447980040fee14261e0f9b87790ffabc272ea58911fa46d53e322b",
+                  "sizeBytes": 256633,
+                  "mimeType": "video/mp4"
+                },
+                {
+                  "relativePath": "assets/board/scene.json",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/board/scene.json",
+                  "sha256": "3f8dd7dd8d7c9aa8f66b7007af1a30f903bf5a24f12c245bfffb98bd783f3aca",
+                  "sizeBytes": 6153,
+                  "mimeType": "application/json"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "subjectId": "english",
+      "title": "English",
+      "iconEmoji": "📖",
+      "accentHex": "#006874",
+      "tagline": "Syntactic clause architecture, active rhetoric, and academic precision",
+      "coordinatorPhilosophy": "Teach grammar as logical structural engineering: every clause has a subject-verb core and a clear rhetorical role.",
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/SKILL.md",
+      "chapters": [
+        {
+          "chapterId": "grammar-rhetoric",
+          "subjectId": "english",
+          "title": "Clause Architecture & Rhetorical Voice",
+          "summary": "Constructing compound-complex sentences and controlling agency through active and passive voice.",
+          "chapterObjectives": [
+            "Distinguish independent clauses from subordinate (dependent) clauses and punctuate them accurately",
+            "Transform sentences between active and passive voice and choose the optimal voice for clarity"
+          ],
+          "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/SKILL.md",
+          "topics": [
+            {
+              "topicId": "eng_sentence_clauses",
+              "subjectId": "english",
+              "chapterId": "grammar-rhetoric",
+              "title": "Independent vs. Dependent Clauses & Complex Sentences",
+              "summary": "Coordinating conjunctions (FANBOYS), subordinating conjunctions, and eliminating comma splices.",
+              "version": "1.1.0",
+              "bundledInApk": false,
+              "packageSizeBytes": 346395,
+              "bundleSha256": "3ed9fe316b1d74a28d44ac71448ae779857b829c2b0fe72e1a80c688ab3a2379",
+              "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/bundle.json",
+              "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/SKILL.md",
+              "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/lesson.json",
+              "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assessment.json",
+              "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/manifest.json",
+              "mediaFiles": [
+                {
+                  "relativePath": "assets/images/step_1.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/images/step_1.png",
+                  "sha256": "9e9a9523823469aa53e7d4736ce0e9bdb3d4ae3f4ea255202ef1e7355acb9384",
+                  "sizeBytes": 23746,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_2.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/images/step_2.png",
+                  "sha256": "a8c2ac2dee2c1dde7c0a4acec91e80293e26cba8f762710005cd5768b3fc6a21",
+                  "sizeBytes": 25505,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_3.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/images/step_3.png",
+                  "sha256": "d68db98060dbc6b44e614e4c5654e3722b56a792f2a280bed60cc18554c62716",
+                  "sizeBytes": 25015,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/video/walkthrough.mp4",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/video/walkthrough.mp4",
+                  "sha256": "d231f0c39d89a305311faac7ff41c192bb7e7d7af29593e6c4f7fb83651323b8",
+                  "sizeBytes": 248846,
+                  "mimeType": "video/mp4"
+                },
+                {
+                  "relativePath": "assets/board/scene.json",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/board/scene.json",
+                  "sha256": "427d7d18baf493610881bf64282907d2dc139380bc7025ed3b25e8f9dc331e3b",
+                  "sizeBytes": 6278,
+                  "mimeType": "application/json"
+                }
+              ]
+            },
+            {
+              "topicId": "eng_active_passive_voice",
+              "subjectId": "english",
+              "chapterId": "grammar-rhetoric",
+              "title": "Active vs. Passive Voice & Argumentative Precision",
+              "summary": "Grammatical agency, auxiliary 'be' + past participle transformations, and scientific objectivity.",
+              "version": "1.1.0",
+              "bundledInApk": false,
+              "packageSizeBytes": 352747,
+              "bundleSha256": "1560cd36e8e9c86e414f251964c6b8b084b8cdc9917526eac9a2d17f77185707",
+              "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/bundle.json",
+              "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/SKILL.md",
+              "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/lesson.json",
+              "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assessment.json",
+              "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/manifest.json",
+              "mediaFiles": [
+                {
+                  "relativePath": "assets/images/step_1.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/images/step_1.png",
+                  "sha256": "936f0eb22dec02de269a4f09efd5f9f6336e2367c0cf44cd7bd111e86463e7d0",
+                  "sizeBytes": 25055,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_2.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/images/step_2.png",
+                  "sha256": "9f7b6016fe3a71f6efe8b623fd35e419712314e9679d607d55052d5352627e49",
+                  "sizeBytes": 24113,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/images/step_3.png",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/images/step_3.png",
+                  "sha256": "c546856acd5a00c46a8fa1a6f239eeda91cc932799814011e0fa5591fc3a44ad",
+                  "sizeBytes": 25079,
+                  "mimeType": "image/png"
+                },
+                {
+                  "relativePath": "assets/video/walkthrough.mp4",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/video/walkthrough.mp4",
+                  "sha256": "c3376acc0da9cf887fdcbee1600df25d2c05f3a38c95971e3e36db469b3dc328",
+                  "sizeBytes": 254840,
+                  "mimeType": "video/mp4"
+                },
+                {
+                  "relativePath": "assets/board/scene.json",
+                  "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/board/scene.json",
+                  "sha256": "8424e56c494bdd17b36111746560d5a07ac7f07358fca748a1c1858ff7a04070",
+                  "sizeBytes": 6342,
+                  "mimeType": "application/json"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

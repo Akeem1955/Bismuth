@@ -10,34 +10,29 @@ data class BoardPoint(
 
 @Serializable
 data class BoardSize(
-    val width: Float = 200f,
-    val height: Float = 96f,
+    val width: Float = 180f,
+    val height: Float = 88f,
 )
 
 @Serializable
 data class BoardStyle(
-    val fillColor: String = "#1E293B",
-    val strokeColor: String = "#38BDF8",
-    val textColor: String = "#F8FAFC",
-    val accentColor: String = "#00E5FF",
-    val strokeWidth: Float = 2.5f,
-    val cornerRadius: Float = 18f,
-    val textSize: Float = 22f,
-    val dashed: Boolean = false,
+    val strokeWidth: Float = 2f,
+    val cornerRadius: Float = 16f,
+    val isDashed: Boolean = false,
 )
 
 /**
- * Interactive board object on the teaching whiteboard.
- * Tapping the object on the canvas opens a pop-up explanation card.
+ * Interactive board node on the teaching whiteboard.
+ * Tapping this node on the canvas opens a native Material 3 ModalBottomSheet.
  */
 @Serializable
 data class BoardObject(
     val objectId: String,
-    val objectType: String, // "title", "box", "card", "circle", "formula", "arrow"
+    val objectType: String = "box", // "box", "circle", "formula", "highlight"
     val label: String,
     val subLabel: String = "",
+    val formula: String = "",
     val explanation: String = "",
-    val keyFormulaOrRule: String = "",
     val position: BoardPoint = BoardPoint(),
     val size: BoardSize = BoardSize(),
     val style: BoardStyle = BoardStyle(),
@@ -50,24 +45,17 @@ data class BoardArrow(
     val toObjectId: String,
     val label: String = "",
     val stepId: String? = null,
-    val colorHex: String = "#38BDF8",
 )
 
 /**
- * Model-tier aware inline quiz presented before advancing to the next whiteboard step.
- * - Foundational prompt/options used on low-end tier (Gemma 3n Lite / E2B).
- * - Deep conceptual prompt/options used on high-end tier (Gemma 4 E2B / E4B).
+ * Socratic inline checkpoint presented to verify comprehension before advancing to the next step.
  */
 @Serializable
 data class StepInlineQuiz(
-    val basicQuestion: String,
-    val basicOptions: List<String>,
-    val basicCorrectIndex: Int,
-    val basicExplanation: String,
-    val advancedQuestion: String,
-    val advancedOptions: List<String>,
-    val advancedCorrectIndex: Int,
-    val advancedExplanation: String,
+    val question: String,
+    val options: List<String>,
+    val correctIndex: Int,
+    val explanation: String,
 )
 
 @Serializable
@@ -79,15 +67,18 @@ data class BoardStep(
     val tutorTip: String = "",
     val focusObjectIds: List<String> = emptyList(),
     val inlineQuiz: StepInlineQuiz? = null,
+    val diagramResourceId: String = "",
+    val diagramRelativePath: String = "",
+    val videoResourceId: String = "",
+    val videoRelativePath: String = "",
 )
 
 @Serializable
 data class TeachingBoardScene(
     val sceneId: String,
-    val subjectId: String,
+    val subjectTitle: String,
     val chapterTitle: String,
     val topicTitle: String,
-    val theme: String = "neon_lab",
     val objects: List<BoardObject>,
     val arrows: List<BoardArrow> = emptyList(),
     val steps: List<BoardStep>,
@@ -103,12 +94,4 @@ data class TeachingBoardScene(
         val allowedStepIds = steps.take(stepIndex + 1).map { it.stepId }.toSet()
         return arrows.filter { it.stepId == null || it.stepId in allowedStepIds }
     }
-}
-
-enum class TutorRiveEmotion(val label: String, val emoji: String, val riveInput: String) {
-    IDLE("Ready", "🤖", "isIdle"),
-    EXPLAINING("Explaining", "🗣️", "isSpeaking"),
-    THINKING("Thinking", "🧠", "isThinking"),
-    CELEBRATING("Correct!", "🎉", "isExcited"),
-    ENCOURAGING("Try Again", "💡", "isListening")
 }

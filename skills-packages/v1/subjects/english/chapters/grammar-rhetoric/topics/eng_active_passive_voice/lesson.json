@@ -1,0 +1,252 @@
+{
+  "topicId": "eng_active_passive_voice",
+  "subjectId": "english",
+  "chapterId": "grammar-rhetoric",
+  "title": "Active vs. Passive Voice & Argumentative Precision",
+  "summary": "Grammatical agency, auxiliary 'be' + past participle transformations, and scientific objectivity.",
+  "instructions": {
+    "skillId": "eng_active_passive_voice",
+    "learningObjectives": [
+      "Distinguish Active Voice (Agent performs Verb on Object) from Passive Voice (Recipient becomes Subject)",
+      "Construct passive verb phrases accurately using [form of 'be' + past participle]",
+      "Choose active voice for directness/clarity and passive voice when the actor is unknown or secondary"
+    ],
+    "explanationSequence": [
+      "Step 1: Active Voice (Agent → Action → Recipient)",
+      "Step 2: Passive Transformation (Recipient → be + Past Participle → by Agent)",
+      "Step 3: Rhetorical Strategy: Directness vs. Process Focus"
+    ],
+    "commonMisconceptions": [
+      "Confusing past tense ('she wrote') with passive voice ('it was written')",
+      "Calling any sentence containing the verb 'to be' passive (e.g., 'He is tired' or 'She was running' is NOT passive)"
+    ],
+    "socraticSystemPrompt": "You are orchestrating the Active vs. Passive Voice lesson. Always ask the student: 'Who is performing the action, and is that actor in the grammatical subject slot?'"
+  },
+  "resources": [
+    {
+      "id": "res_eng_voice",
+      "title": "Voice Transformation Formula",
+      "type": "formula_sheet",
+      "summary": "Syntactic mapping between active and passive.",
+      "bodyText": "• Active: [Agent Subject] + [Transitive Verb] + [Direct Object]\n• Passive: [Object promoted to Subject] + [Auxiliary 'be' (in original tense) + Past Participle] + (by [Agent])",
+      "stepId": "all",
+      "relativePath": "",
+      "url": "",
+      "sha256": "",
+      "sizeBytes": 0
+    },
+    {
+      "id": "img_step_1",
+      "title": "Step 1 Visual Diagram: Active Voice: Agent in the Subject Slot",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 1 (Active Voice: Agent in the Subject Slot).",
+      "bodyText": "In the active voice, the grammatical subject is the agent performing the verb's action upon a direct object: 'Fleming discovered penicillin in 1928.'",
+      "stepId": "step_1",
+      "relativePath": "assets/images/step_1.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/images/step_1.png",
+      "sha256": "936f0eb22dec02de269a4f09efd5f9f6336e2367c0cf44cd7bd111e86463e7d0",
+      "sizeBytes": 25055
+    },
+    {
+      "id": "img_step_2",
+      "title": "Step 2 Visual Diagram: Passive Transformation: [be + Past Participle]",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 2 (Passive Transformation: [be + Past Participle]).",
+      "bodyText": "To convert an active sentence to passive, promote the direct object to the subject slot and use a form of 'to be' (is, was, were, has been) plus the past participle: 'Penicillin was discovered by Fleming.'",
+      "stepId": "step_2",
+      "relativePath": "assets/images/step_2.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/images/step_2.png",
+      "sha256": "9f7b6016fe3a71f6efe8b623fd35e419712314e9679d607d55052d5352627e49",
+      "sizeBytes": 24113
+    },
+    {
+      "id": "img_step_3",
+      "title": "Step 3 Visual Diagram: Rhetorical Precision: Choosing Active vs. Passive",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 3 (Rhetorical Precision: Choosing Active vs. Passive).",
+      "bodyText": "Active voice is stronger and clearer for general and persuasive writing. Passive voice is appropriate when emphasizing the receiver of the action or describing an objective laboratory procedure ('The solution was heated to 80°C').",
+      "stepId": "step_3",
+      "relativePath": "assets/images/step_3.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/images/step_3.png",
+      "sha256": "c546856acd5a00c46a8fa1a6f239eeda91cc932799814011e0fa5591fc3a44ad",
+      "sizeBytes": 25079
+    },
+    {
+      "id": "vid_walkthrough",
+      "title": "Animated Concept Walkthrough: Active vs. Passive Voice & Argumentative Precision",
+      "type": "instructional_video",
+      "summary": "12-second teacher-curated animated walkthrough covering Steps 1–3 of Active vs. Passive Voice & Argumentative Precision.",
+      "bodyText": "Step 1 (Active Voice: Agent in the Subject Slot): In the active voice, the grammatical subject is the agent performing the verb's action upon a direct object: 'Fleming discovered penicillin in 1928.'\n\nStep 2 (Passive Transformation: [be + Past Participle]): To convert an active sentence to passive, promote the direct object to the subject slot and use a form of 'to be' (is, was, were, has been) plus the past participle: 'Penicillin was discovered by Fleming.'\n\nStep 3 (Rhetorical Precision: Choosing Active vs. Passive): Active voice is stronger and clearer for general and persuasive writing. Passive voice is appropriate when emphasizing the receiver of the action or describing an objective laboratory procedure ('The solution was heated to 80°C').",
+      "stepId": "all",
+      "relativePath": "assets/video/walkthrough.mp4",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/video/walkthrough.mp4",
+      "sha256": "c3376acc0da9cf887fdcbee1600df25d2c05f3a38c95971e3e36db469b3dc328",
+      "sizeBytes": 254840
+    }
+  ],
+  "whiteboardScene": {
+    "sceneId": "scene_eng_active_passive_voice",
+    "subjectTitle": "English",
+    "chapterTitle": "Clause Architecture & Rhetorical Voice",
+    "topicTitle": "Active vs. Passive Voice & Argumentative Precision",
+    "objects": [
+      {
+        "objectId": "node_active",
+        "objectType": "formula",
+        "label": "Active Voice Structure",
+        "subLabel": "Subject Performs Action",
+        "formula": "Agent (S) → Verb → Object (O)",
+        "explanation": "'The researcher analyzed the samples.' Direct, concise, and immediately names the responsible agent.",
+        "position": {
+          "x": 60,
+          "y": 80
+        },
+        "size": {
+          "width": 225,
+          "height": 90
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_1"
+      },
+      {
+        "objectId": "node_passive_form",
+        "objectType": "formula",
+        "label": "Passive Voice Formula",
+        "subLabel": "Subject Receives Action",
+        "formula": "Recipient (S) + [be + V₃] + (by Agent)",
+        "explanation": "'The samples were analyzed by the researcher.' Uses a conjugated form of 'be' plus the past participle (V₃).",
+        "position": {
+          "x": 330,
+          "y": 80
+        },
+        "size": {
+          "width": 225,
+          "height": 90
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_2"
+      },
+      {
+        "objectId": "node_rhetoric_choice",
+        "objectType": "highlight",
+        "label": "Rhetorical Selection",
+        "subLabel": "When to Use Each Voice",
+        "formula": "Active = Clarity | Passive = Process",
+        "explanation": "Use active voice for clear accountability; use passive voice in lab methods or when the actor is unknown ('The glass was shattered').",
+        "position": {
+          "x": 180,
+          "y": 250
+        },
+        "size": {
+          "width": 255,
+          "height": 94
+        },
+        "style": {
+          "strokeWidth": 2.5,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_3"
+      }
+    ],
+    "arrows": [
+      {
+        "fromObjectId": "node_active",
+        "toObjectId": "node_passive_form",
+        "label": "promote Object to Subject",
+        "stepId": "step_2"
+      },
+      {
+        "fromObjectId": "node_passive_form",
+        "toObjectId": "node_rhetoric_choice",
+        "label": "stylistic fit",
+        "stepId": "step_3"
+      }
+    ],
+    "steps": [
+      {
+        "stepId": "step_1",
+        "stepNumber": 1,
+        "title": "Active Voice: Agent in the Subject Slot",
+        "narration": "In the active voice, the grammatical subject is the agent performing the verb's action upon a direct object: 'Fleming discovered penicillin in 1928.'",
+        "tutorTip": "Tap 'Active Voice Structure' to inspect the Agent → Verb → Object flow.",
+        "focusObjectIds": [
+          "node_active"
+        ],
+        "inlineQuiz": {
+          "question": "Which of the following sentences is written in the active voice?",
+          "options": [
+            "The engineer calibrated the solar inverter.",
+            "The solar inverter was calibrated by the engineer.",
+            "The circuit had been tested before installation.",
+            "Mistakes were made during the calibration."
+          ],
+          "correctIndex": 0,
+          "explanation": "'The engineer' (the actor) is the grammatical subject directly performing the verb 'calibrated'."
+        },
+        "diagramResourceId": "img_step_1",
+        "diagramRelativePath": "assets/images/step_1.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      },
+      {
+        "stepId": "step_2",
+        "stepNumber": 2,
+        "title": "Passive Transformation: [be + Past Participle]",
+        "narration": "To convert an active sentence to passive, promote the direct object to the subject slot and use a form of 'to be' (is, was, were, has been) plus the past participle: 'Penicillin was discovered by Fleming.'",
+        "tutorTip": "Watch out: past progressive ('was descubrir/discovering') is active, NOT passive!",
+        "focusObjectIds": [
+          "node_passive_form"
+        ],
+        "inlineQuiz": {
+          "question": "Convert 'The committee will approve the budget tomorrow' into the passive voice:",
+          "options": [
+            "The budget will be approved by the committee tomorrow.",
+            "The budget was approved by the committee tomorrow.",
+            "The committee has approved the budget tomorrow.",
+            "The budget is approving by the committee tomorrow."
+          ],
+          "correctIndex": 0,
+          "explanation": "Future active ('will approve') transforms to future passive ('will be approved') with 'The budget' as subject."
+        },
+        "diagramResourceId": "img_step_2",
+        "diagramRelativePath": "assets/images/step_2.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      },
+      {
+        "stepId": "step_3",
+        "stepNumber": 3,
+        "title": "Rhetorical Precision: Choosing Active vs. Passive",
+        "narration": "Active voice is stronger and clearer for general and persuasive writing. Passive voice is appropriate when emphasizing the receiver of the action or describing an objective laboratory procedure ('The solution was heated to 80°C').",
+        "tutorTip": "Avoid vague agentless passive ('Errors were found') when accountability matters.",
+        "focusObjectIds": [
+          "node_rhetoric_choice"
+        ],
+        "inlineQuiz": {
+          "question": "Why is passive voice preferred in the sentence: 'The rare manuscript was stolen from the archive overnight'?",
+          "options": [
+            "The perpetrator is unknown, and focus belongs on the stolen manuscript",
+            "Passive voice is always shorter than active voice",
+            "Active voice is grammatically incorrect in past tense",
+            "The verb 'steal' cannot be used in the active voice"
+          ],
+          "correctIndex": 0,
+          "explanation": "When the actor is unknown or the object is the true topic of focus, passive voice places the important noun first."
+        },
+        "diagramResourceId": "img_step_3",
+        "diagramRelativePath": "assets/images/step_3.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      }
+    ]
+  }
+}

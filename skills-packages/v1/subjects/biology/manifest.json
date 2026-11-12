@@ -1,0 +1,130 @@
+{
+  "subjectId": "biology",
+  "title": "Biology",
+  "iconEmoji": "🧬",
+  "accentHex": "#006874",
+  "tagline": "Cellular membranes, bioenergetics, and molecular physiology",
+  "coordinatorPhilosophy": "Link cellular structure and concentration gradients directly to physiological function and energy currency (ATP).",
+  "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/SKILL.md",
+  "chapters": [
+    {
+      "chapterId": "cellular-genetics",
+      "subjectId": "biology",
+      "title": "Cellular Transport & Bioenergetics",
+      "summary": "Membrane transport mechanisms and ATP energy conversion in chloroplasts and mitochondria.",
+      "chapterObjectives": [
+        "Contrast passive transport (diffusion, osmosis) with ATP-driven active transport",
+        "Trace energy flow through photosynthesis and cellular respiration"
+      ],
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/SKILL.md",
+      "topics": [
+        {
+          "topicId": "bio_cell_transport",
+          "subjectId": "biology",
+          "chapterId": "cellular-genetics",
+          "title": "Cell Membrane: Osmosis, Diffusion & Active Transport",
+          "summary": "Selective permeability across the phospholipid bilayer and electrochemical gradient pumping.",
+          "version": "1.1.0",
+          "bundledInApk": false,
+          "packageSizeBytes": 390652,
+          "bundleSha256": "d55617063b5af9bfeaa01208ccb174c77ee53c5e2a1d262957b2c3ab95281bfd",
+          "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/bundle.json",
+          "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/SKILL.md",
+          "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/lesson.json",
+          "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assessment.json",
+          "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/manifest.json",
+          "mediaFiles": [
+            {
+              "relativePath": "assets/images/step_1.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_1.png",
+              "sha256": "39fcfab1ec1f0f4d7dbf1dae002f7631cb550cf41e745d89d041424fbd9083d9",
+              "sizeBytes": 27985,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/images/step_2.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_2.png",
+              "sha256": "b99d1277a4305d5e1146f56138de2c1d0aade0c7a0d8da35e4406e3e1d01c2b9",
+              "sizeBytes": 26185,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/images/step_3.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_3.png",
+              "sha256": "7b19fe35bcec38205b60c5871a6a536a11ef99d044f06d68ed7c7482f636cd95",
+              "sizeBytes": 28076,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/video/walkthrough.mp4",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/video/walkthrough.mp4",
+              "sha256": "c8bfdaad77f6df70a9d0074d7a4997f5d5cd39cabc816c933fe936bccd2e3282",
+              "sizeBytes": 285825,
+              "mimeType": "video/mp4"
+            },
+            {
+              "relativePath": "assets/board/scene.json",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/board/scene.json",
+              "sha256": "dca877355c6fca6da3eeafc9fc4b0bc5c20e7348c24a7db6a820788f9cbe5866",
+              "sizeBytes": 5947,
+              "mimeType": "application/json"
+            }
+          ]
+        },
+        {
+          "topicId": "bio_photosynthesis_atp",
+          "subjectId": "biology",
+          "chapterId": "cellular-genetics",
+          "title": "Photosynthesis & Cellular Respiration Energy Cycles",
+          "summary": "Coupled energy conversion in chloroplasts (light reactions & Calvin cycle) and mitochondria.",
+          "version": "1.1.0",
+          "bundledInApk": false,
+          "packageSizeBytes": 358907,
+          "bundleSha256": "2bd44d92688ec5813d8d1e59b0212c0c9f3018eaf49e721fcf271dcc6d9885e2",
+          "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/bundle.json",
+          "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/SKILL.md",
+          "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/lesson.json",
+          "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assessment.json",
+          "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/manifest.json",
+          "mediaFiles": [
+            {
+              "relativePath": "assets/images/step_1.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/images/step_1.png",
+              "sha256": "9ba7011eefbafaec57b967583a36101306f59115c65961c08dad1cc5a8a1c20a",
+              "sizeBytes": 26555,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/images/step_2.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/images/step_2.png",
+              "sha256": "e5e84704bd2efa0584126425b15e9d3cccc47ba29c79113c9cab930122f3d1a1",
+              "sizeBytes": 26720,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/images/step_3.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/images/step_3.png",
+              "sha256": "f00e674a7c9a581fbca7ed7cc3d9b965ae5238d3838559b7aa4559871fb8a9e2",
+              "sizeBytes": 26040,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/video/walkthrough.mp4",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/video/walkthrough.mp4",
+              "sha256": "dac5ebecd9447980040fee14261e0f9b87790ffabc272ea58911fa46d53e322b",
+              "sizeBytes": 256633,
+              "mimeType": "video/mp4"
+            },
+            {
+              "relativePath": "assets/board/scene.json",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/board/scene.json",
+              "sha256": "3f8dd7dd8d7c9aa8f66b7007af1a30f903bf5a24f12c245bfffb98bd783f3aca",
+              "sizeBytes": 6153,
+              "mimeType": "application/json"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

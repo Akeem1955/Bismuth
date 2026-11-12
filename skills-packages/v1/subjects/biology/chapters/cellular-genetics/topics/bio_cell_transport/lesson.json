@@ -1,0 +1,252 @@
+{
+  "topicId": "bio_cell_transport",
+  "subjectId": "biology",
+  "chapterId": "cellular-genetics",
+  "title": "Cell Membrane: Osmosis, Diffusion & Active Transport",
+  "summary": "Selective permeability across the phospholipid bilayer and electrochemical gradient pumping.",
+  "instructions": {
+    "skillId": "bio_cell_transport",
+    "learningObjectives": [
+      "Distinguish simple/facilitated diffusion from active transport based on gradient direction and ATP use",
+      "Predict cell volume changes in hypertonic, hypotonic, and isotonic solutions via osmosis",
+      "Explain how the Na⁺/K⁺ pump maintains membrane potential using ATP"
+    ],
+    "explanationSequence": [
+      "Step 1: Passive Diffusion Down the Concentration Gradient",
+      "Step 2: Osmosis & Tonicity Across Semi-Permeable Membranes",
+      "Step 3: Active Transport Against the Gradient (ATP Pumps)"
+    ],
+    "commonMisconceptions": [
+      "Thinking osmosis is the movement of solute salt rather than water across a semi-permeable membrane",
+      "Assuming facilitated diffusion requires ATP because it uses a channel or carrier protein"
+    ],
+    "socraticSystemPrompt": "You are orchestrating the Cell Membrane Transport lesson. Always ask the student which way the concentration gradient points before deciding whether ATP is required."
+  },
+  "resources": [
+    {
+      "id": "res_bio_transport",
+      "title": "Membrane Transport Comparison Table",
+      "type": "formula_sheet",
+      "summary": "Gradient direction and energy requirements.",
+      "bodyText": "• Simple Diffusion: High → Low concentration | No ATP | Nonpolar molecules (O₂, CO₂)\n• Facilitated Diffusion: High → Low | No ATP | Protein channel/carrier (Glucose, ions)\n• Osmosis: Water moves from Low solute (high water) → High solute (low water) | No ATP\n• Active Transport: Low → High (against gradient) | Requires ATP | Pump protein (Na⁺/K⁺ pump)",
+      "stepId": "all",
+      "relativePath": "",
+      "url": "",
+      "sha256": "",
+      "sizeBytes": 0
+    },
+    {
+      "id": "img_step_1",
+      "title": "Step 1 Visual Diagram: Passive Transport: Moving Down the Gradient",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 1 (Passive Transport: Moving Down the Gradient).",
+      "bodyText": "In simple and facilitated diffusion, molecules move spontaneously from higher concentration to lower concentration without using metabolic ATP energy.",
+      "stepId": "step_1",
+      "relativePath": "assets/images/step_1.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_1.png",
+      "sha256": "39fcfab1ec1f0f4d7dbf1dae002f7631cb550cf41e745d89d041424fbd9083d9",
+      "sizeBytes": 27985
+    },
+    {
+      "id": "img_step_2",
+      "title": "Step 2 Visual Diagram: Osmosis & Solution Tonicity",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 2 (Osmosis & Solution Tonicity).",
+      "bodyText": "Osmosis is the diffusion of water across a selectively permeable membrane from a hypotonic (lower solute) region to a hypertonic (higher solute) region.",
+      "stepId": "step_2",
+      "relativePath": "assets/images/step_2.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_2.png",
+      "sha256": "b99d1277a4305d5e1146f56138de2c1d0aade0c7a0d8da35e4406e3e1d01c2b9",
+      "sizeBytes": 26185
+    },
+    {
+      "id": "img_step_3",
+      "title": "Step 3 Visual Diagram: Active Transport: Pumping Against the Gradient",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 3 (Active Transport: Pumping Against the Gradient).",
+      "bodyText": "When a cell must concentrate ions against their gradient (from low to high), transmembrane pumps hydrolyze ATP—such as the Na⁺/K⁺-ATPase pumping 3 Na⁺ out and 2 K⁺ in.",
+      "stepId": "step_3",
+      "relativePath": "assets/images/step_3.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/images/step_3.png",
+      "sha256": "7b19fe35bcec38205b60c5871a6a536a11ef99d044f06d68ed7c7482f636cd95",
+      "sizeBytes": 28076
+    },
+    {
+      "id": "vid_walkthrough",
+      "title": "Animated Concept Walkthrough: Cell Membrane: Osmosis, Diffusion & Active Transport",
+      "type": "instructional_video",
+      "summary": "12-second teacher-curated animated walkthrough covering Steps 1–3 of Cell Membrane: Osmosis, Diffusion & Active Transport.",
+      "bodyText": "Step 1 (Passive Transport: Moving Down the Gradient): In simple and facilitated diffusion, molecules move spontaneously from higher concentration to lower concentration without using metabolic ATP energy.\n\nStep 2 (Osmosis & Solution Tonicity): Osmosis is the diffusion of water across a selectively permeable membrane from a hypotonic (lower solute) region to a hypertonic (higher solute) region.\n\nStep 3 (Active Transport: Pumping Against the Gradient): When a cell must concentrate ions against their gradient (from low to high), transmembrane pumps hydrolyze ATP—such as the Na⁺/K⁺-ATPase pumping 3 Na⁺ out and 2 K⁺ in.",
+      "stepId": "all",
+      "relativePath": "assets/video/walkthrough.mp4",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_cell_transport/assets/video/walkthrough.mp4",
+      "sha256": "c8bfdaad77f6df70a9d0074d7a4997f5d5cd39cabc816c933fe936bccd2e3282",
+      "sizeBytes": 285825
+    }
+  ],
+  "whiteboardScene": {
+    "sceneId": "scene_bio_cell_transport",
+    "subjectTitle": "Biology",
+    "chapterTitle": "Cellular Transport & Bioenergetics",
+    "topicTitle": "Cell Membrane: Osmosis, Diffusion & Active Transport",
+    "objects": [
+      {
+        "objectId": "node_passive",
+        "objectType": "box",
+        "label": "Passive Diffusion",
+        "subLabel": "Down Gradient (High → Low)",
+        "formula": "ΔC < 0  |  0 ATP",
+        "explanation": "Solutes move spontaneously down their concentration gradient from high to low concentration without expending cellular ATP.",
+        "position": {
+          "x": 60,
+          "y": 80
+        },
+        "size": {
+          "width": 220,
+          "height": 90
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_1"
+      },
+      {
+        "objectId": "node_osmosis",
+        "objectType": "formula",
+        "label": "Osmosis (Water Flow)",
+        "subLabel": "Hypotonic → Hypertonic",
+        "formula": "H₂O → Higher Solute",
+        "explanation": "Water diffuses across a selectively permeable membrane toward the side with higher solute concentration.",
+        "position": {
+          "x": 330,
+          "y": 80
+        },
+        "size": {
+          "width": 220,
+          "height": 90
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_2"
+      },
+      {
+        "objectId": "node_active_pump",
+        "objectType": "highlight",
+        "label": "Active Transport Pump",
+        "subLabel": "Against Gradient (Low → High)",
+        "formula": "ATP → ADP + Pᵢ (3 Na⁺ out, 2 K⁺ in)",
+        "explanation": "Carrier pumps hydrolyze ATP to force ions uphill against their electrochemical gradient.",
+        "position": {
+          "x": 180,
+          "y": 250
+        },
+        "size": {
+          "width": 250,
+          "height": 94
+        },
+        "style": {
+          "strokeWidth": 2.5,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_3"
+      }
+    ],
+    "arrows": [
+      {
+        "fromObjectId": "node_passive",
+        "toObjectId": "node_osmosis",
+        "label": "water-specific",
+        "stepId": "step_2"
+      },
+      {
+        "fromObjectId": "node_passive",
+        "toObjectId": "node_active_pump",
+        "label": "contrast uphill",
+        "stepId": "step_3"
+      }
+    ],
+    "steps": [
+      {
+        "stepId": "step_1",
+        "stepNumber": 1,
+        "title": "Passive Transport: Moving Down the Gradient",
+        "narration": "In simple and facilitated diffusion, molecules move spontaneously from higher concentration to lower concentration without using metabolic ATP energy.",
+        "tutorTip": "Tap 'Passive Diffusion' to review why facilitated channel proteins still count as passive.",
+        "focusObjectIds": [
+          "node_passive"
+        ],
+        "inlineQuiz": {
+          "question": "Glucose enters a cell down its concentration gradient through a membrane carrier protein without using ATP. What process is this?",
+          "options": [
+            "Facilitated diffusion",
+            "Active transport",
+            "Osmosis",
+            "Endocytosis"
+          ],
+          "correctIndex": 0,
+          "explanation": "Moving down a concentration gradient via a transport protein with zero ATP cost is facilitated diffusion."
+        },
+        "diagramResourceId": "img_step_1",
+        "diagramRelativePath": "assets/images/step_1.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      },
+      {
+        "stepId": "step_2",
+        "stepNumber": 2,
+        "title": "Osmosis & Solution Tonicity",
+        "narration": "Osmosis is the diffusion of water across a selectively permeable membrane from a hypotonic (lower solute) region to a hypertonic (higher solute) region.",
+        "tutorTip": "Remember: 'Salt sucks'—water flows toward the higher solute concentration.",
+        "focusObjectIds": [
+          "node_osmosis"
+        ],
+        "inlineQuiz": {
+          "question": "What happens to a red blood cell placed in a strongly hypertonic salt solution?",
+          "options": [
+            "Water leaves the cell and it shrivels (crenates)",
+            "Water rushes into the cell and it bursts (lyses)",
+            "Salt is pumped out using ATP",
+            "No net movement of water occurs"
+          ],
+          "correctIndex": 0,
+          "explanation": "Because the outside solution is hypertonic (higher solute), water moves out of the cell by osmosis, causing it to shrivel."
+        },
+        "diagramResourceId": "img_step_2",
+        "diagramRelativePath": "assets/images/step_2.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      },
+      {
+        "stepId": "step_3",
+        "stepNumber": 3,
+        "title": "Active Transport: Pumping Against the Gradient",
+        "narration": "When a cell must concentrate ions against their gradient (from low to high), transmembrane pumps hydrolyze ATP—such as the Na⁺/K⁺-ATPase pumping 3 Na⁺ out and 2 K⁺ in.",
+        "tutorTip": "Tap 'Active Transport Pump' to inspect the stoichiometry of the sodium-potassium pump.",
+        "focusObjectIds": [
+          "node_active_pump"
+        ],
+        "inlineQuiz": {
+          "question": "Which feature distinguishes active transport from facilitated diffusion?",
+          "options": [
+            "It moves solutes against their concentration gradient using ATP",
+            "It uses membrane proteins",
+            "It moves water molecules down a gradient",
+            "It occurs without a cell membrane"
+          ],
+          "correctIndex": 0,
+          "explanation": "Both use membrane proteins, but only active transport moves solutes uphill against their gradient using ATP."
+        },
+        "diagramResourceId": "img_step_3",
+        "diagramRelativePath": "assets/images/step_3.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      }
+    ]
+  }
+}

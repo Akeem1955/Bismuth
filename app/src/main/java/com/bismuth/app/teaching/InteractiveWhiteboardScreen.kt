@@ -1,15 +1,34 @@
 package com.bismuth.app.teaching
 
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
+import android.speech.tts.Voice
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.horizontalScroll
@@ -18,51 +37,57 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.CenterFocusStrong
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.CloudDone
 import androidx.compose.material.icons.filled.CloudDownload
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Psychology
-import androidx.compose.material.icons.filled.Quiz
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Functions
+import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.filled.RestartAlt
+import androidx.compose.material.icons.filled.School
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -73,37 +98,43 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bismuth.app.engine.BismuthEngine
+import com.bismuth.app.ui.animation.bouncyClickable
 import com.bismuth.app.engine.BismuthModelConfig
-import com.bismuth.app.skills.ChapterSkillNode
-import com.bismuth.app.skills.SkillInstallPrefs
+import com.bismuth.app.profile.LessonProgressStore
+import com.bismuth.app.profile.StudentProfilePrefs
+import com.bismuth.app.skills.ChapterCatalogNode
+import com.bismuth.app.skills.CuratedResource
+import com.bismuth.app.skills.SkillsCatalogRoot
+import com.bismuth.app.skills.SubjectCatalogCoordinator
 import com.bismuth.app.skills.SubjectSkillCatalog
-import com.bismuth.app.skills.SubjectSkillCoordinator
-import com.bismuth.app.skills.TopicSkillPackage
-import com.bismuth.app.ui.animation.LottieEffectView
-import com.bismuth.app.ui.animation.RiveCharacterView
-import kotlinx.coroutines.delay
+import com.bismuth.app.skills.TopicCatalogEntry
+import com.bismuth.app.skills.TopicSkillBundle
+import com.bismuth.app.ui.animation.AIThinkingOrb
+import com.bismuth.app.ui.animation.AudioPulseVisualizer
+import com.bismuth.app.ui.animation.CelebrationBurstOverlay
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-private data class CanvasHitTarget(
+private data class HitTarget(
     val obj: BoardObject,
     val left: Float,
     val top: Float,
@@ -111,1433 +142,1851 @@ private data class CanvasHitTarget(
     val bottom: Float
 )
 
-private fun parseColorHex(hex: String, fallback: Color = Color(0xFF38BDF8)): Color {
-    return try {
-        Color(android.graphics.Color.parseColor(hex))
-    } catch (_: Exception) {
-        fallback
+private enum class LessonVisualStageMode(val label: String) {
+    WHITEBOARD("Board"),
+    STEP_DIAGRAM("Diagram"),
+    WALKTHROUGH_VIDEO("Video"),
+    FORMULA_GUIDE("Formulas"),
+}
+
+enum class SocraticTeachingScreenStage {
+    FULL_SCREEN_BOARD,
+    FULL_SCREEN_QUIZ,
+    LESSON_MASTERED
+}
+
+private enum class QuizCheckState {
+    UNCHECKED,
+    CORRECT,
+    INCORRECT
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InteractiveWhiteboardScreen(
+    initialTopic: TopicCatalogEntry? = null,
+    selectedModel: BismuthModelConfig? = null,
+    onNavigateBack: () -> Unit,
+    onQuickLearnTopic: ((String) -> Unit)? = null,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val density = LocalDensity.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val studentProfile = remember { StudentProfilePrefs.getProfile(context) }
+
+    // Catalog & Active Topic State
+    var catalog by remember { mutableStateOf<SkillsCatalogRoot?>(null) }
+    var selectedSubject by remember { mutableStateOf<SubjectCatalogCoordinator?>(null) }
+    var selectedChapter by remember { mutableStateOf<ChapterCatalogNode?>(null) }
+    var selectedTopicEntry by remember(initialTopic?.topicId) { mutableStateOf<TopicCatalogEntry?>(initialTopic) }
+    var activeBundle by remember(initialTopic?.topicId) { mutableStateOf<TopicSkillBundle?>(null) }
+    var isLoadingBundle by remember { mutableStateOf(false) }
+    var isDownloadingPack by remember { mutableStateOf(false) }
+    var openedFromCatalog by remember(initialTopic?.topicId) { mutableStateOf(initialTopic == null) }
+
+    // Full-screen mode switcher: Whiteboard vs. Quiz (not split!)
+    var screenStage by remember(initialTopic?.topicId) { mutableStateOf(SocraticTeachingScreenStage.FULL_SCREEN_BOARD) }
+
+    // Bottom Sheets & Dialogs
+    var showSkillInspectorSheet by remember { mutableStateOf(false) }
+    var inspectedNode by remember { mutableStateOf<BoardObject?>(null) }
+    val nodeSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+    val inspectorSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+
+    // Load initial catalog & sync active topic when initialTopic changes
+    LaunchedEffect(initialTopic?.topicId) {
+        val cat = catalog ?: SubjectSkillCatalog.loadCatalog(context)
+        catalog = cat
+        selectedTopicEntry = initialTopic
+        if (initialTopic != null) {
+            selectedSubject = cat.subjects.find { s ->
+                s.chapters.any { c -> c.topics.any { t -> t.topicId == initialTopic.topicId } }
+            } ?: cat.subjects.firstOrNull()
+            selectedChapter = selectedSubject?.chapters?.find { c ->
+                c.topics.any { t -> t.topicId == initialTopic.topicId }
+            } ?: selectedSubject?.chapters?.firstOrNull()
+        }
+    }
+
+    LaunchedEffect(selectedTopicEntry?.topicId) {
+        val entry = selectedTopicEntry
+        if (entry == null) {
+            activeBundle = null
+            isLoadingBundle = false
+            return@LaunchedEffect
+        }
+        val cat = catalog ?: SubjectSkillCatalog.loadCatalog(context).also { catalog = it }
+        selectedSubject = cat.subjects.find { s ->
+            s.chapters.any { c -> c.topics.any { t -> t.topicId == entry.topicId } }
+        } ?: selectedSubject ?: cat.subjects.firstOrNull()
+        selectedChapter = selectedSubject?.chapters?.find { c ->
+            c.topics.any { t -> t.topicId == entry.topicId }
+        } ?: selectedChapter ?: selectedSubject?.chapters?.firstOrNull()
+
+        isLoadingBundle = true
+        activeBundle = SubjectSkillCatalog.loadTopicBundleOffline(context, entry)
+        isLoadingBundle = false
+    }
+
+    val scene = activeBundle?.whiteboardScene
+
+    // Socratic Stepper State
+    var currentStepIndex by remember(activeBundle?.topicId) { mutableIntStateOf(0) }
+    val totalSteps = (scene?.steps?.size ?: 3).coerceAtLeast(1)
+    val currentStep = scene?.steps?.getOrElse(currentStepIndex) { scene.steps.firstOrNull() }
+    var stageMode by remember(activeBundle?.topicId) { mutableStateOf(LessonVisualStageMode.WHITEBOARD) }
+
+    // Dynamic AI-Generated Quiz State
+    var activeDynamicQuiz by remember(activeBundle?.topicId, currentStepIndex) { mutableStateOf<DynamicStepQuiz?>(null) }
+    var isLoadingQuiz by remember(activeBundle?.topicId, currentStepIndex) { mutableStateOf(false) }
+    var selectedQuizOption by remember(activeBundle?.topicId, currentStepIndex) { mutableStateOf<Int?>(null) }
+    var quizCheckState by remember(activeBundle?.topicId, currentStepIndex) { mutableStateOf(QuizCheckState.UNCHECKED) }
+
+    // Fetch or generate dynamic quiz for this step
+    LaunchedEffect(activeBundle?.topicId, currentStepIndex) {
+        val bundle = activeBundle ?: return@LaunchedEffect
+        val step = currentStep ?: return@LaunchedEffect
+        isLoadingQuiz = true
+        activeDynamicQuiz = DynamicQuizOrchestrator.generateStepQuiz(
+            context = context,
+            bundle = bundle,
+            step = step,
+            profile = studentProfile,
+            selectedModel = selectedModel
+        )
+        isLoadingQuiz = false
+    }
+
+    // Canvas Pan & Zoom State
+    var zoomScale by remember(activeBundle?.topicId) { mutableFloatStateOf(1.0f) }
+    var panOffset by remember(activeBundle?.topicId) { mutableStateOf(Offset.Zero) }
+
+    // TTS & Tutor Voice Engine (prefers natural high-quality English voice when installed)
+    var isTtsSpeaking by remember { mutableStateOf(false) }
+    var tutorState by remember { mutableStateOf(TutorState.IDLE) }
+    var ttsEngine by remember { mutableStateOf<TextToSpeech?>(null) }
+
+    DisposableEffect(context) {
+        var engine: TextToSpeech? = null
+        engine = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val ngLocale = Locale.forLanguageTag("en-NG")
+                val res = engine?.setLanguage(ngLocale)
+                if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    engine?.language = Locale.US
+                }
+                runCatching {
+                    val bestVoice = engine?.voices
+                        ?.filter { it.locale?.language == "en" && !it.isNetworkConnectionRequired }
+                        ?.sortedWith(
+                            compareByDescending<Voice> { it.locale?.country == "NG" }
+                                .thenByDescending { it.quality }
+                                .thenByDescending { it.name.contains("neural", ignoreCase = true) || it.name.contains("local", ignoreCase = true) }
+                        )
+                        ?.firstOrNull()
+                    if (bestVoice != null) {
+                        engine?.voice = bestVoice
+                    }
+                    engine?.setSpeechRate(0.97f)
+                }
+                engine?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                    override fun onStart(utteranceId: String?) {
+                        isTtsSpeaking = true
+                        tutorState = TutorState.SPEAKING
+                    }
+
+                    override fun onDone(utteranceId: String?) {
+                        isTtsSpeaking = false
+                        tutorState = if (quizCheckState == QuizCheckState.CORRECT) TutorState.CELEBRATING else TutorState.IDLE
+                    }
+
+                    @Deprecated("Deprecated in Java")
+                    override fun onError(utteranceId: String?) {
+                        isTtsSpeaking = false
+                        tutorState = TutorState.IDLE
+                    }
+                })
+                ttsEngine = engine
+            }
+        }
+
+        onDispose {
+            engine?.stop()
+            engine?.shutdown()
+            ttsEngine = null
+        }
+    }
+
+    fun speakNarration(text: String) {
+        ttsEngine?.let { engine ->
+            if (engine.isSpeaking) {
+                engine.stop()
+                isTtsSpeaking = false
+                tutorState = TutorState.IDLE
+            } else {
+                engine.speak(text, TextToSpeech.QUEUE_FLUSH, null, "bismuth_tts_speech")
+            }
+        }
+    }
+
+    fun handleLessonBack() {
+        ttsEngine?.stop()
+        isTtsSpeaking = false
+        tutorState = TutorState.IDLE
+        if (openedFromCatalog) {
+            selectedTopicEntry = null
+            activeBundle = null
+            screenStage = SocraticTeachingScreenStage.FULL_SCREEN_BOARD
+        } else {
+            onNavigateBack()
+        }
+    }
+
+    BackHandler(enabled = selectedTopicEntry != null) {
+        if (screenStage == SocraticTeachingScreenStage.FULL_SCREEN_QUIZ) {
+            screenStage = SocraticTeachingScreenStage.FULL_SCREEN_BOARD
+        } else {
+            handleLessonBack()
+        }
+    }
+
+    BackHandler(enabled = selectedTopicEntry == null) {
+        onNavigateBack()
+    }
+
+    // Auto-narrate on step change when a lesson bundle is active in Whiteboard view
+    LaunchedEffect(activeBundle?.topicId, currentStepIndex, screenStage) {
+        if (selectedTopicEntry != null && activeBundle != null && screenStage == SocraticTeachingScreenStage.FULL_SCREEN_BOARD) {
+            val narration = currentStep?.narration
+            if (!narration.isNullOrBlank()) {
+                tutorState = TutorState.SPEAKING
+                speakNarration(narration)
+            }
+        }
+    }
+
+    val currentCatalog = catalog
+    if (selectedTopicEntry == null) {
+        if (currentCatalog != null) {
+            TeachCourseCatalogScreen(
+                catalog = currentCatalog,
+                onCatalogUpdated = { catalog = it },
+                onSelectTopic = { chosenTopic ->
+                    openedFromCatalog = true
+                    screenStage = SocraticTeachingScreenStage.FULL_SCREEN_BOARD
+                    selectedTopicEntry = chosenTopic
+                },
+                onNavigateBack = onNavigateBack,
+                onQuickLearnTopic = onQuickLearnTopic,
+                modifier = modifier
+            )
+        } else {
+            Box(
+                modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+        return
+    }
+
+    Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+        AnimatedContent(
+            targetState = screenStage,
+            transitionSpec = {
+                if (targetState == SocraticTeachingScreenStage.FULL_SCREEN_QUIZ) {
+                    (slideInHorizontally { it } + fadeIn()).togetherWith(slideOutHorizontally { -it } + fadeOut())
+                } else {
+                    (slideInHorizontally { -it } + fadeIn()).togetherWith(slideOutHorizontally { it } + fadeOut())
+                }
+            },
+            label = "screenStageTransition"
+        ) { stage ->
+            when (stage) {
+                SocraticTeachingScreenStage.FULL_SCREEN_BOARD -> {
+                    // ─────────────────────────────────────────────────────────────
+                    // STAGE 1: FULL-SCREEN SOCRATIC WHITEBOARD & INTERACTIVE MODEL
+                    // ─────────────────────────────────────────────────────────────
+                    val subjectAccent = subjectBrandColor(selectedSubject?.subjectId.orEmpty())
+                    val entrySnapshot = selectedTopicEntry
+
+                    fun triggerPackDownload() {
+                        val target = entrySnapshot ?: return
+                        if (isDownloadingPack) return
+                        scope.launch {
+                            isDownloadingPack = true
+                            val res = SubjectSkillCatalog.downloadAndInstallTopicFromGcs(context, target)
+                            isDownloadingPack = false
+                            res.onSuccess { downloaded ->
+                                activeBundle = downloaded
+                                snackbarHostState.showSnackbar("Saved ${target.title} offline")
+                            }.onFailure { err ->
+                                snackbarHostState.showSnackbar("Download failed: ${err.message ?: "Check internet"}")
+                            }
+                        }
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .statusBarsPadding()
+                    ) {
+                        // Top Navigation Bar
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            IconButton(
+                                onClick = { handleLessonBack() },
+                                modifier = Modifier.size(40.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = if (openedFromCatalog) "Back to Courses" else "Back to Dashboard",
+                                    tint = MaterialTheme.colorScheme.onBackground
+                                )
+                            }
+
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(horizontal = 4.dp)
+                            ) {
+                                Text(
+                                    text = selectedTopicEntry?.title ?: "Socratic Whiteboard",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Text(
+                                    text = "${selectedSubject?.iconEmoji.orEmpty()} ${selectedSubject?.title ?: "STEM"} • Step ${currentStepIndex + 1}/$totalSteps",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = subjectAccent,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                IconButton(
+                                    onClick = {
+                                        ttsEngine?.stop()
+                                        openedFromCatalog = true
+                                        selectedTopicEntry = null
+                                        activeBundle = null
+                                    },
+                                    modifier = Modifier.size(36.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.MenuBook,
+                                        contentDescription = "Browse Subjects & Modules",
+                                        tint = subjectAccent,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                                if (onQuickLearnTopic != null && entrySnapshot != null) {
+                                    IconButton(
+                                        onClick = { onQuickLearnTopic(entrySnapshot.title) },
+                                        modifier = Modifier.size(36.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.AutoAwesome,
+                                            contentDescription = "Quick Learn this topic",
+                                            tint = MaterialTheme.colorScheme.primary,
+                                            modifier = Modifier.size(18.dp)
+                                        )
+                                    }
+                                }
+                                IconButton(
+                                    onClick = { showSkillInspectorSheet = true },
+                                    modifier = Modifier.size(36.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Description,
+                                        contentDescription = "Inspect SKILL.md",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        currentStepIndex = 0
+                                        selectedQuizOption = null
+                                        quizCheckState = QuizCheckState.UNCHECKED
+                                        zoomScale = 1.0f
+                                        panOffset = Offset.Zero
+                                    },
+                                    modifier = Modifier.size(36.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.RestartAlt,
+                                        contentDescription = "Restart Lesson",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                            }
+                        }
+
+                        if (activeBundle == null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .padding(24.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (isLoadingBundle) {
+                                    CircularProgressIndicator()
+                                } else if (entrySnapshot != null) {
+                                    Card(
+                                        shape = RoundedCornerShape(22.dp),
+                                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
+                                        border = BorderStroke(1.dp, subjectAccent.copy(alpha = 0.45f)),
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Column(
+                                            modifier = Modifier.padding(22.dp),
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.CloudDownload,
+                                                contentDescription = null,
+                                                tint = subjectAccent,
+                                                modifier = Modifier.size(40.dp)
+                                            )
+                                            Text(
+                                                text = entrySnapshot.title,
+                                                style = MaterialTheme.typography.titleMedium,
+                                                fontWeight = FontWeight.Bold,
+                                                textAlign = TextAlign.Center,
+                                                color = MaterialTheme.colorScheme.onSurface
+                                            )
+                                            Text(
+                                                text = "Download this ${(entrySnapshot.packageSizeBytes / 1024).coerceAtLeast(1)} KB multimedia module pack (diagrams, walkthrough video, board & quiz) to study offline.",
+                                                style = MaterialTheme.typography.bodySmall,
+                                                textAlign = TextAlign.Center,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                            Button(
+                                                onClick = { triggerPackDownload() },
+                                                enabled = !isDownloadingPack,
+                                                shape = RoundedCornerShape(14.dp),
+                                                modifier = Modifier.fillMaxWidth()
+                                            ) {
+                                                if (isDownloadingPack) {
+                                                    CircularProgressIndicator(
+                                                        modifier = Modifier.size(18.dp),
+                                                        strokeWidth = 2.dp,
+                                                        color = MaterialTheme.colorScheme.onPrimary
+                                                    )
+                                                    Spacer(modifier = Modifier.width(8.dp))
+                                                    Text("Downloading Multimedia Pack…")
+                                                } else {
+                                                    Text("Download & Start Module")
+                                                }
+                                            }
+                                            if (onQuickLearnTopic != null) {
+                                                OutlinedButton(
+                                                    onClick = { onQuickLearnTopic(entrySnapshot.title) },
+                                                    shape = RoundedCornerShape(14.dp),
+                                                    modifier = Modifier.fillMaxWidth()
+                                                ) {
+                                                    Icon(imageVector = Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(16.dp))
+                                                    Spacer(modifier = Modifier.width(6.dp))
+                                                    Text("Learn via Quick AI Instead")
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                        val bundleLoaded = activeBundle!!
+
+                        // Segmented Progress Bar + Step Selector
+                        BrilliantSegmentedProgressBar(
+                            currentStepIndex = currentStepIndex,
+                            totalSteps = totalSteps,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        // Socratic Voice Speech Bubble
+                        currentStep?.let { step ->
+                            Surface(
+                                shape = RoundedCornerShape(16.dp),
+                                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                border = BorderStroke(1.dp, subjectAccent.copy(alpha = 0.25f)),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 4.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                ) {
+                                    if (isTtsSpeaking) {
+                                        AudioPulseVisualizer(size = 26.dp)
+                                    } else {
+                                        AIThinkingOrb(size = 26.dp)
+                                    }
+
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(
+                                            text = step.title,
+                                            style = MaterialTheme.typography.labelMedium,
+                                            fontWeight = FontWeight.Bold,
+                                            color = subjectAccent,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                        Text(
+                                            text = step.narration,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            lineHeight = 17.sp,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
+
+                                    IconButton(
+                                        onClick = { speakNarration(step.narration) },
+                                        modifier = Modifier.size(30.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.AutoMirrored.Filled.VolumeUp,
+                                            contentDescription = "Listen",
+                                            tint = subjectAccent,
+                                            modifier = Modifier.size(18.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        // Dedicated Clean Multimedia Mode Switcher Bar (Zero overlap with canvas media pills)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 4.dp)
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                                .padding(4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            LessonVisualStageMode.entries.forEach { mode ->
+                                val isSelected = stageMode == mode
+                                Box(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(if (isSelected) subjectAccent else Color.Transparent)
+                                        .clickable { stageMode = mode }
+                                        .padding(vertical = 7.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = mode.label,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium,
+                                        color = if (isSelected) Color(0xFF061618) else MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 1
+                                    )
+                                }
+                            }
+                        }
+
+                        // Full-Screen Interactive Visual Canvas Area
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .padding(horizontal = 16.dp, vertical = 4.dp)
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                                .border(
+                                    BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)),
+                                    RoundedCornerShape(20.dp)
+                                )
+                        ) {
+                            when (stageMode) {
+                                LessonVisualStageMode.STEP_DIAGRAM -> {
+                                    OfflineStepDiagramView(
+                                        topicId = bundleLoaded.topicId,
+                                        bundledInApk = entrySnapshot?.bundledInApk == true,
+                                        step = currentStep ?: scene!!.steps.first(),
+                                        onRequestDownloadPack = { triggerPackDownload() },
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                }
+                                LessonVisualStageMode.WALKTHROUGH_VIDEO -> {
+                                    OfflineWalkthroughVideoPlayer(
+                                        topicId = bundleLoaded.topicId,
+                                        bundledInApk = entrySnapshot?.bundledInApk == true,
+                                        currentStep = currentStep ?: scene!!.steps.first(),
+                                        totalSteps = totalSteps,
+                                        onStepSelectedFromVideo = { currentStepIndex = it },
+                                        onNarrateStep = { speakNarration(it) },
+                                        onRequestDownloadPack = { triggerPackDownload() },
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                }
+                                LessonVisualStageMode.FORMULA_GUIDE -> {
+                                    SkillFormulaAndObjectivesPanel(
+                                        bundle = bundleLoaded,
+                                        accentColor = subjectAccent,
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                }
+                                LessonVisualStageMode.WHITEBOARD -> {
+                                    val visibleObjects = remember(currentStepIndex, scene) {
+                                        scene?.visibleObjectsForStep(currentStepIndex).orEmpty()
+                                    }
+                                    val visibleArrows = remember(currentStepIndex, scene) {
+                                        scene?.visibleArrowsForStep(currentStepIndex).orEmpty()
+                                    }
+                                    val focusIds = remember(currentStepIndex, scene) {
+                                        currentStep?.focusObjectIds.orEmpty().toSet()
+                                    }
+
+                                    val focusPulseTransition = rememberInfiniteTransition(label = "nodeFocusPulse")
+                                    val focusPulseAlpha by focusPulseTransition.animateFloat(
+                                        initialValue = 0.25f,
+                                        targetValue = 0.85f,
+                                        animationSpec = infiniteRepeatable(tween(950, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+                                        label = "focusAlpha"
+                                    )
+
+                                    val onPrimaryContainer = MaterialTheme.colorScheme.onPrimaryContainer
+                                    val primaryContainer = MaterialTheme.colorScheme.primaryContainer
+                                    val surfaceContainerHigh = MaterialTheme.colorScheme.surfaceContainerHigh
+                                    val onSurface = MaterialTheme.colorScheme.onSurface
+                                    val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+                                    val outline = MaterialTheme.colorScheme.outline
+                                    val outlineVariant = MaterialTheme.colorScheme.outlineVariant
+                                    val pillBgColor = MaterialTheme.colorScheme.surfaceContainerHighest
+
+                                    val hitTargets = remember { mutableListOf<HitTarget>() }
+
+                                    Column(modifier = Modifier.fillMaxSize()) {
+                                        // Topic-specific animated interactive lab across ALL 10 modules
+                                        if (currentStep != null) {
+                                            TopicInteractiveSimulationCard(
+                                                topicId = bundleLoaded.topicId,
+                                                stepNumber = currentStep.stepNumber,
+                                                stepTitle = currentStep.title,
+                                                accentColor = subjectAccent,
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
+
+                                        // Whiteboard Canvas
+                                        Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+                                            Canvas(
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .pointerInput(currentStepIndex, scene?.sceneId) {
+                                                        detectTransformGestures { _, pan, zoom, _ ->
+                                                            zoomScale = (zoomScale * zoom).coerceIn(0.7f, 2.5f)
+                                                            panOffset += pan
+                                                        }
+                                                    }
+                                                    .pointerInput(currentStepIndex, scene?.sceneId, zoomScale, panOffset) {
+                                                        detectTapGestures { tapOffset ->
+                                                            val hit = hitTargets.lastOrNull { target ->
+                                                                tapOffset.x in target.left..target.right &&
+                                                                        tapOffset.y in target.top..target.bottom
+                                                            }
+                                                            if (hit != null) {
+                                                                inspectedNode = hit.obj
+                                                                speakNarration(hit.obj.explanation.ifBlank { hit.obj.label })
+                                                            }
+                                                        }
+                                                    }
+                                            ) {
+                                                hitTargets.clear()
+                                                drawWhiteboardGrid(gridColor = outlineVariant.copy(alpha = 0.15f))
+
+                                                val minX = visibleObjects.minOfOrNull { it.position.x } ?: 0f
+                                                val maxX = visibleObjects.maxOfOrNull { it.position.x + it.size.width } ?: 500f
+                                                val minY = visibleObjects.minOfOrNull { it.position.y } ?: 0f
+                                                val maxY = visibleObjects.maxOfOrNull { it.position.y + it.size.height } ?: 400f
+                                                val sceneW = (maxX - minX).coerceAtLeast(240f)
+                                                val sceneH = (maxY - minY).coerceAtLeast(180f)
+
+                                                val availableW = size.width - 28.dp.toPx()
+                                                val availableH = size.height - 28.dp.toPx()
+                                                val autoFitScale = minOf(availableW / sceneW, availableH / sceneH).coerceIn(0.7f, 2.0f)
+                                                val fitZoom = zoomScale * autoFitScale
+                                                val centerOffsetX = (size.width - sceneW * fitZoom) / 2f - minX * fitZoom + panOffset.x
+                                                val centerOffsetY = (size.height - sceneH * fitZoom) / 2f - minY * fitZoom + panOffset.y
+
+                                                val nodeCenters = mutableMapOf<String, Offset>()
+                                                visibleObjects.forEach { obj ->
+                                                    val nodeX = obj.position.x * fitZoom + centerOffsetX
+                                                    val nodeY = obj.position.y * fitZoom + centerOffsetY
+                                                    val nodeWidth = obj.size.width * fitZoom
+                                                    val nodeHeight = obj.size.height * fitZoom
+                                                    nodeCenters[obj.objectId] = Offset(nodeX + nodeWidth / 2f, nodeY + nodeHeight / 2f)
+                                                }
+
+                                                // Draw arrows UNDERNEATH cards + edge labels
+                                                visibleArrows.forEach { arrow ->
+                                                    val fromCenter = nodeCenters[arrow.fromObjectId]
+                                                    val toCenter = nodeCenters[arrow.toObjectId]
+                                                    if (fromCenter != null && toCenter != null) {
+                                                        drawArrow(
+                                                            from = fromCenter,
+                                                            to = toCenter,
+                                                            color = subjectAccent.copy(alpha = 0.85f),
+                                                            strokeWidth = 2.4f * fitZoom,
+                                                            zoom = fitZoom
+                                                        )
+                                                        if (arrow.label.isNotBlank()) {
+                                                            val midX = (fromCenter.x + toCenter.x) / 2f
+                                                            val midY = (fromCenter.y + toCenter.y) / 2f
+                                                            val edgeTextPaint = TextPaint().apply {
+                                                                color = onSurface.toArgb()
+                                                                textSize = (9.5f * density.density * fitZoom).coerceIn(8f, 22f)
+                                                                isAntiAlias = true
+                                                            }
+                                                            val textW = edgeTextPaint.measureText(arrow.label) + 16f
+                                                            val pillH = edgeTextPaint.textSize + 10f
+                                                            drawRoundRect(
+                                                                color = pillBgColor.copy(alpha = 0.94f),
+                                                                topLeft = Offset(midX - textW / 2f, midY - pillH / 2f),
+                                                                size = Size(textW, pillH),
+                                                                cornerRadius = CornerRadius(pillH / 2f, pillH / 2f)
+                                                            )
+                                                            drawContext.canvas.nativeCanvas.drawText(
+                                                                arrow.label,
+                                                                midX - (textW - 16f) / 2f,
+                                                                midY + edgeTextPaint.textSize * 0.35f,
+                                                                edgeTextPaint
+                                                            )
+                                                        }
+                                                    }
+                                                }
+
+                                                // Draw concept blocks on top with wrapped text & animated focus glow
+                                                visibleObjects.forEach { obj ->
+                                                    val isFocused = obj.objectId in focusIds
+                                                    val nodeX = obj.position.x * fitZoom + centerOffsetX
+                                                    val nodeY = obj.position.y * fitZoom + centerOffsetY
+                                                    val nodeWidth = obj.size.width * fitZoom
+                                                    val nodeHeight = obj.size.height * fitZoom
+
+                                                    val cornerRad = CornerRadius(16f * fitZoom, 16f * fitZoom)
+                                                    val boxTopLeft = Offset(nodeX, nodeY)
+                                                    val boxSize = Size(nodeWidth, nodeHeight)
+
+                                                    hitTargets.add(
+                                                        HitTarget(
+                                                            obj = obj,
+                                                            left = nodeX,
+                                                            top = nodeY,
+                                                            right = nodeX + nodeWidth,
+                                                            bottom = nodeY + nodeHeight
+                                                        )
+                                                    )
+
+                                                    if (isFocused) {
+                                                        drawRoundRect(
+                                                            color = subjectAccent.copy(alpha = 0.25f * focusPulseAlpha),
+                                                            topLeft = Offset(nodeX - 4f * fitZoom, nodeY - 4f * fitZoom),
+                                                            size = Size(nodeWidth + 8f * fitZoom, nodeHeight + 8f * fitZoom),
+                                                            cornerRadius = CornerRadius(20f * fitZoom, 20f * fitZoom)
+                                                        )
+                                                    }
+
+                                                    drawRoundRect(
+                                                        color = if (isFocused) primaryContainer else surfaceContainerHigh,
+                                                        topLeft = boxTopLeft,
+                                                        size = boxSize,
+                                                        cornerRadius = cornerRad
+                                                    )
+
+                                                    drawRoundRect(
+                                                        color = if (isFocused) subjectAccent else outlineVariant.copy(alpha = 0.7f),
+                                                        topLeft = boxTopLeft,
+                                                        size = boxSize,
+                                                        cornerRadius = cornerRad,
+                                                        style = Stroke(width = if (isFocused) 2.5f * fitZoom else 1.2f * fitZoom)
+                                                    )
+
+                                                    drawContext.canvas.nativeCanvas.apply {
+                                                        val padX = 11f * fitZoom
+                                                        val availTextWidth = (nodeWidth - padX * 2f).toInt().coerceAtLeast(36)
+
+                                                        val titlePaint = TextPaint().apply {
+                                                            color = if (isFocused) onPrimaryContainer.toArgb() else onSurface.toArgb()
+                                                            textSize = (11.5f * density.density * fitZoom).coerceIn(10f, 30f)
+                                                            isFakeBoldText = true
+                                                            isAntiAlias = true
+                                                        }
+                                                        val formulaPaint = TextPaint().apply {
+                                                            color = if (isFocused) subjectAccent.toArgb() else onSurface.toArgb()
+                                                            textSize = (10.5f * density.density * fitZoom).coerceIn(9f, 26f)
+                                                            typeface = android.graphics.Typeface.MONOSPACE
+                                                            isFakeBoldText = true
+                                                            isAntiAlias = true
+                                                        }
+                                                        val subPaint = TextPaint().apply {
+                                                            color = if (isFocused) onPrimaryContainer.copy(alpha = 0.8f).toArgb() else onSurfaceVariant.toArgb()
+                                                            textSize = (9f * density.density * fitZoom).coerceIn(8f, 22f)
+                                                            isAntiAlias = true
+                                                        }
+
+                                                        save()
+                                                        clipRect(nodeX, nodeY, nodeX + nodeWidth, nodeY + nodeHeight)
+                                                        var cursorY = nodeY + (7f * fitZoom)
+
+                                                        val titleLayout = StaticLayout.Builder
+                                                            .obtain(obj.label, 0, obj.label.length, titlePaint, availTextWidth)
+                                                            .setMaxLines(2)
+                                                            .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                                                            .build()
+                                                        save()
+                                                        translate(nodeX + padX, cursorY)
+                                                        titleLayout.draw(this)
+                                                        restore()
+                                                        cursorY += titleLayout.height + (3f * fitZoom)
+
+                                                        if (obj.formula.isNotBlank() && cursorY < nodeY + nodeHeight - 8f) {
+                                                            val formulaLayout = StaticLayout.Builder
+                                                                .obtain(obj.formula, 0, obj.formula.length, formulaPaint, availTextWidth)
+                                                                .setMaxLines(2)
+                                                                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                                                                .build()
+                                                            save()
+                                                            translate(nodeX + padX, cursorY)
+                                                            formulaLayout.draw(this)
+                                                            restore()
+                                                            cursorY += formulaLayout.height + (2f * fitZoom)
+                                                        }
+
+                                                        if (obj.subLabel.isNotBlank() && cursorY < nodeY + nodeHeight - 6f) {
+                                                            val subLayout = StaticLayout.Builder
+                                                                .obtain(obj.subLabel, 0, obj.subLabel.length, subPaint, availTextWidth)
+                                                                .setMaxLines(2)
+                                                                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                                                                .build()
+                                                            save()
+                                                            translate(nodeX + padX, cursorY)
+                                                            subLayout.draw(this)
+                                                            restore()
+                                                        }
+                                                        restore()
+                                                    }
+                                                }
+                                            }
+
+                                            // Helpful hint badge
+                                            Surface(
+                                                shape = RoundedCornerShape(10.dp),
+                                                color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.85f),
+                                                modifier = Modifier
+                                                    .align(Alignment.BottomStart)
+                                                    .padding(8.dp)
+                                            ) {
+                                                Text(
+                                                    text = "Tap any card to inspect • Drag or pinch",
+                                                    style = MaterialTheme.typography.labelSmall,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                                )
+                                            }
+
+                                            IconButton(
+                                                onClick = {
+                                                    zoomScale = 1.0f
+                                                    panOffset = Offset.Zero
+                                                },
+                                                modifier = Modifier
+                                                    .align(Alignment.BottomEnd)
+                                                    .padding(6.dp)
+                                                    .size(32.dp)
+                                            ) {
+                                                Icon(
+                                                    imageVector = Icons.Default.CenterFocusStrong,
+                                                    contentDescription = "Reset Canvas",
+                                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    modifier = Modifier.size(16.dp)
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Full Screen Bottom Action Bar to Switch to Quiz Stage
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .navigationBarsPadding(),
+                            color = MaterialTheme.colorScheme.surface,
+                            tonalElevation = 6.dp
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = "Understood Step ${currentStepIndex + 1}?",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    Text(
+                                        text = "Take Skill Checkpoint",
+                                        style = MaterialTheme.typography.titleSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+
+                                Button(
+                                    onClick = {
+                                        screenStage = SocraticTeachingScreenStage.FULL_SCREEN_QUIZ
+                                    },
+                                    shape = RoundedCornerShape(16.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.primary
+                                    ),
+                                    modifier = Modifier.height(46.dp)
+                                ) {
+                                    Text("TEST UNDERSTANDING", fontWeight = FontWeight.Bold)
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
+                        }
+                        }
+                    }
+                }
+
+                SocraticTeachingScreenStage.FULL_SCREEN_QUIZ -> {
+                    // ─────────────────────────────────────────────────────────────
+                    // STAGE 2: FULL-SCREEN DYNAMIC SOCRATIC CHECKPOINT QUIZ
+                    // ─────────────────────────────────────────────────────────────
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .statusBarsPadding()
+                    ) {
+                        // Top Nav Bar
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 14.dp, vertical = 8.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            OutlinedButton(
+                                onClick = {
+                                    screenStage = SocraticTeachingScreenStage.FULL_SCREEN_BOARD
+                                },
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("Visual Board")
+                            }
+
+                            Surface(
+                                shape = RoundedCornerShape(10.dp),
+                                color = if (activeDynamicQuiz?.isAiGenerated == true)
+                                    MaterialTheme.colorScheme.primaryContainer
+                                else MaterialTheme.colorScheme.surfaceContainerHighest
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.AutoAwesome,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(14.dp)
+                                    )
+                                    Text(
+                                        text = if (activeDynamicQuiz?.isAiGenerated == true) "AI-Driven Checkpoint" else "Skill Invariant Checkpoint",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            }
+                        }
+
+                        // Segmented Progress Bar
+                        BrilliantSegmentedProgressBar(
+                            currentStepIndex = currentStepIndex,
+                            totalSteps = totalSteps,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        // Quiz Content
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .verticalScroll(rememberScrollState())
+                                .padding(horizontal = 20.dp, vertical = 12.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            Text(
+                                text = "Step ${currentStepIndex + 1} Checkpoint",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+
+                            if (isLoadingQuiz) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(180.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        CircularProgressIndicator(modifier = Modifier.size(28.dp))
+                                        Text(
+                                            text = "Synthesizing dynamic Socratic challenge…",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                            } else {
+                                val quiz = activeDynamicQuiz
+                                if (quiz != null) {
+                                    Text(
+                                        text = quiz.question,
+                                        style = MaterialTheme.typography.titleLarge,
+                                        fontWeight = FontWeight.Bold,
+                                        lineHeight = 28.sp,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+
+                                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                        quiz.options.forEachIndexed { optIndex, optionText ->
+                                            val isSelected = selectedQuizOption == optIndex
+
+                                            val containerColor by animateColorAsState(
+                                                targetValue = when {
+                                                    quizCheckState == QuizCheckState.CORRECT && isSelected ->
+                                                        Color(0xFF00C853).copy(alpha = 0.12f)
+                                                    quizCheckState == QuizCheckState.INCORRECT && isSelected ->
+                                                        Color(0xFFFF5252).copy(alpha = 0.12f)
+                                                    isSelected ->
+                                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                                                    else ->
+                                                        MaterialTheme.colorScheme.surfaceContainerLow
+                                                },
+                                                label = "quiz_opt_bg_$optIndex"
+                                            )
+
+                                            val borderColor by animateColorAsState(
+                                                targetValue = when {
+                                                    quizCheckState == QuizCheckState.CORRECT && isSelected ->
+                                                        Color(0xFF00C853)
+                                                    quizCheckState == QuizCheckState.INCORRECT && isSelected ->
+                                                        Color(0xFFFF5252)
+                                                    isSelected ->
+                                                        MaterialTheme.colorScheme.primary
+                                                    else ->
+                                                        MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+                                                },
+                                                label = "quiz_opt_border_$optIndex"
+                                            )
+
+                                            Surface(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .bouncyClickable {
+                                                        selectedQuizOption = optIndex
+                                                        if (quizCheckState == QuizCheckState.INCORRECT) {
+                                                            quizCheckState = QuizCheckState.UNCHECKED
+                                                        }
+                                                    },
+                                                shape = RoundedCornerShape(18.dp),
+                                                color = containerColor,
+                                                border = BorderStroke(if (isSelected) 2.dp else 1.2.dp, borderColor)
+                                            ) {
+                                                Row(
+                                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+                                                    verticalAlignment = Alignment.CenterVertically,
+                                                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                                                ) {
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .size(34.dp)
+                                                            .clip(RoundedCornerShape(8.dp))
+                                                            .background(
+                                                                if (isSelected) borderColor.copy(alpha = 0.2f)
+                                                                else MaterialTheme.colorScheme.surfaceContainerHighest
+                                                            )
+                                                            .border(
+                                                                1.dp,
+                                                                if (isSelected) borderColor else MaterialTheme.colorScheme.outlineVariant,
+                                                                RoundedCornerShape(8.dp)
+                                                            ),
+                                                        contentAlignment = Alignment.Center
+                                                    ) {
+                                                        Text(
+                                                            text = "${('A' + optIndex)}",
+                                                            fontWeight = FontWeight.ExtraBold,
+                                                            fontSize = 15.sp,
+                                                            color = if (isSelected) borderColor else MaterialTheme.colorScheme.onSurface
+                                                        )
+                                                    }
+
+                                                    Text(
+                                                        text = optionText,
+                                                        style = MaterialTheme.typography.bodyLarge,
+                                                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                                        color = MaterialTheme.colorScheme.onSurface,
+                                                        modifier = Modifier.weight(1f)
+                                                    )
+
+                                                    if (isSelected) {
+                                                        Icon(
+                                                            imageVector = when (quizCheckState) {
+                                                                QuizCheckState.CORRECT -> Icons.Default.CheckCircle
+                                                                QuizCheckState.INCORRECT -> Icons.Default.Close
+                                                                QuizCheckState.UNCHECKED -> Icons.Default.Check
+                                                            },
+                                                            contentDescription = null,
+                                                            tint = borderColor,
+                                                            modifier = Modifier.size(22.dp)
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(20.dp))
+                        }
+
+                        // Pinned Duolingo Action Tray
+                        val stepMisconceptionHint = activeDynamicQuiz?.misconceptionRationale?.ifBlank {
+                            currentStep?.tutorTip?.ifBlank { "Review Step ${currentStepIndex + 1} intuition and try another option." }
+                        } ?: "Review Step ${currentStepIndex + 1} intuition and try another option."
+
+                        DuolingoBottomActionTray(
+                            checkState = quizCheckState,
+                            isOptionSelected = selectedQuizOption != null,
+                            explanation = activeDynamicQuiz?.explanation ?: "",
+                            incorrectHint = stepMisconceptionHint,
+                            isFinalStep = currentStepIndex >= totalSteps - 1,
+                            onCheck = {
+                                val quiz = activeDynamicQuiz ?: return@DuolingoBottomActionTray
+                                val isCorrect = selectedQuizOption == quiz.correctIndex
+                                if (isCorrect) {
+                                    quizCheckState = QuizCheckState.CORRECT
+                                    tutorState = TutorState.CELEBRATING
+                                    speakNarration("Correct! ${quiz.explanation}")
+                                } else {
+                                    quizCheckState = QuizCheckState.INCORRECT
+                                    tutorState = TutorState.HINT
+                                    speakNarration("Not quite. $stepMisconceptionHint")
+                                }
+                            },
+                            onContinue = {
+                                LessonProgressStore.recordStepCompletion(
+                                    context = context,
+                                    topicId = activeBundle?.topicId ?: selectedTopicEntry?.topicId.orEmpty(),
+                                    completedStepIndex = currentStepIndex,
+                                    totalSteps = totalSteps
+                                )
+                                if (currentStepIndex < totalSteps - 1) {
+                                    currentStepIndex++
+                                    selectedQuizOption = null
+                                    quizCheckState = QuizCheckState.UNCHECKED
+                                    screenStage = SocraticTeachingScreenStage.FULL_SCREEN_BOARD
+                                } else {
+                                    screenStage = SocraticTeachingScreenStage.LESSON_MASTERED
+                                }
+                            },
+                            onTryAgain = {
+                                quizCheckState = QuizCheckState.UNCHECKED
+                            }
+                        )
+                    }
+                }
+
+                SocraticTeachingScreenStage.LESSON_MASTERED -> {
+                    // ─────────────────────────────────────────────────────────────
+                    // STAGE 3: FULL CELEBRATION MASTERY CARD
+                    // ─────────────────────────────────────────────────────────────
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(24.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(24.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                            ),
+                            border = BorderStroke(2.dp, Color(0xFF00C853))
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(24.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(14.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(64.dp)
+                                        .clip(CircleShape)
+                                        .background(Color(0xFF00C853).copy(alpha = 0.15f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.CheckCircle,
+                                        contentDescription = "Completed",
+                                        tint = Color(0xFF00C853),
+                                        modifier = Modifier.size(36.dp)
+                                    )
+                                }
+
+                                Text(
+                                    text = "Concept Mastered!",
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+
+                                Text(
+                                    text = "Brilliant job, ${studentProfile.name}! You've demonstrated full mastery across all $totalSteps steps of ${selectedTopicEntry?.title ?: "this module"}.",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    textAlign = TextAlign.Center,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+
+                                Button(
+                                    onClick = { handleLessonBack() },
+                                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                                    shape = RoundedCornerShape(14.dp),
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        if (openedFromCatalog) "BACK TO ALL COURSES" else "RETURN TO LEARNING DASHBOARD"
+                                    )
+                                }
+
+                                OutlinedButton(
+                                    onClick = {
+                                        currentStepIndex = 0
+                                        selectedQuizOption = null
+                                        quizCheckState = QuizCheckState.UNCHECKED
+                                        screenStage = SocraticTeachingScreenStage.FULL_SCREEN_BOARD
+                                    },
+                                    shape = RoundedCornerShape(14.dp),
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Replay This Socratic Lesson")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Lottie Celebration Burst Overlay
+        CelebrationBurstOverlay(
+            visible = tutorState == TutorState.CELEBRATING || screenStage == SocraticTeachingScreenStage.LESSON_MASTERED,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Node Inspector Bottom Sheet
+    // ─────────────────────────────────────────────────────────────
+    inspectedNode?.let { node ->
+        ModalBottomSheet(
+            onDismissRequest = { inspectedNode = null },
+            sheetState = nodeSheetState,
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 12.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = node.label,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        if (node.subLabel.isNotBlank()) {
+                            Text(
+                                text = node.subLabel,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                    IconButton(onClick = { inspectedNode = null }) {
+                        Icon(imageVector = Icons.Default.Close, contentDescription = "Close")
+                    }
+                }
+
+                if (node.formula.isNotBlank()) {
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = node.formula,
+                            style = MaterialTheme.typography.titleMedium.copy(fontFamily = FontFamily.Monospace),
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.padding(14.dp)
+                        )
+                    }
+                }
+
+                Text(
+                    text = node.explanation,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Button(
+                    onClick = { speakNarration(node.explanation) },
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Hear Tutor Explanation")
+                }
+
+                Spacer(modifier = Modifier.height(18.dp))
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // SKILL.md & Context Inspector Sheet
+    // ─────────────────────────────────────────────────────────────
+    val bundleForInspector = activeBundle
+    val subjForInspector = selectedSubject
+    val chapForInspector = selectedChapter
+    val stepForInspector = currentStep
+
+    if (showSkillInspectorSheet && bundleForInspector != null && subjForInspector != null && chapForInspector != null && stepForInspector != null) {
+        ModalBottomSheet(
+            onDismissRequest = { showSkillInspectorSheet = false },
+            sheetState = inspectorSheetState,
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 10.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "3-Layer Skill Package & Step Context",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "Module ID: ${bundleForInspector.topicId}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text(
+                            text = "Step-Scoped Prompt (Step ${stepForInspector.stepNumber})",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = SubjectSkillCatalog.buildStepScopedPrompt(
+                                subject = subjForInspector,
+                                chapter = chapForInspector,
+                                bundle = bundleForInspector,
+                                step = stepForInspector,
+                                studentQuestion = "Explain the invariant for this step."
+                            ),
+                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+
+                if (bundleForInspector.skillMarkdown.isNotBlank()) {
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                text = "SKILL.md Orchestrator Rules",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = bundleForInspector.skillMarkdown,
+                                style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+        }
     }
 }
 
 @Composable
-fun InteractiveWhiteboardScreen(
-    selectedModel: BismuthModelConfig,
+private fun BrilliantSegmentedProgressBar(
+    currentStepIndex: Int,
+    totalSteps: Int,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
+    Row(
+        modifier = modifier
+            .padding(horizontal = 16.dp, vertical = 6.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        for (i in 0 until totalSteps) {
+            val isCurrentOrCompleted = i <= currentStepIndex
+            val progressTarget = if (isCurrentOrCompleted) 1f else 0f
+            val animatedProgress by animateFloatAsState(
+                targetValue = progressTarget,
+                animationSpec = tween(durationMillis = 350, easing = FastOutSlowInEasing),
+                label = "seg_progress_$i"
+            )
 
-    val subjects = remember { SubjectSkillCatalog.ALL_SUBJECTS }
-    var activeSubject by remember { mutableStateOf(subjects.first()) }
-    var activeChapter by remember(activeSubject) { mutableStateOf(activeSubject.chapters.first()) }
-    var activeTopic by remember(activeChapter) { mutableStateOf(activeChapter.topics.first()) }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(6.dp)
+                    .clip(RoundedCornerShape(3.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(animatedProgress)
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(3.dp))
+                        .background(
+                            if (i == currentStepIndex) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
+                        )
+                )
+            }
+        }
+    }
+}
 
-    val installedState = remember {
-        mutableStateMapOf<String, Boolean>().apply {
-            subjects.forEach { subj ->
-                subj.chapters.forEach { ch ->
-                    ch.topics.forEach { topic ->
-                        put(topic.topicId, SkillInstallPrefs.isTopicInstalled(context, topic))
+@Composable
+private fun DuolingoBottomActionTray(
+    checkState: QuizCheckState,
+    isOptionSelected: Boolean,
+    explanation: String,
+    incorrectHint: String,
+    isFinalStep: Boolean,
+    onCheck: () -> Unit,
+    onContinue: () -> Unit,
+    onTryAgain: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .navigationBarsPadding(),
+        color = when (checkState) {
+            QuizCheckState.CORRECT -> Color(0xFF00C853).copy(alpha = 0.12f)
+            QuizCheckState.INCORRECT -> Color(0xFFFF5252).copy(alpha = 0.12f)
+            QuizCheckState.UNCHECKED -> MaterialTheme.colorScheme.surface
+        },
+        tonalElevation = 8.dp,
+        border = BorderStroke(
+            1.dp,
+            when (checkState) {
+                QuizCheckState.CORRECT -> Color(0xFF00C853).copy(alpha = 0.5f)
+                QuizCheckState.INCORRECT -> Color(0xFFFF5252).copy(alpha = 0.5f)
+                QuizCheckState.UNCHECKED -> MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+            }
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            AnimatedVisibility(
+                visible = checkState != QuizCheckState.UNCHECKED,
+                enter = fadeIn() + slideInVertically { it / 2 },
+                exit = fadeOut() + slideOutVertically { it / 2 }
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Icon(
+                        imageVector = if (checkState == QuizCheckState.CORRECT) Icons.Default.CheckCircle
+                        else Icons.Default.Cancel,
+                        contentDescription = null,
+                        tint = if (checkState == QuizCheckState.CORRECT) Color(0xFF00C853) else Color(0xFFFF5252),
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Column {
+                        Text(
+                            text = if (checkState == QuizCheckState.CORRECT) "Brilliant! You got it right."
+                            else "Not quite yet",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = if (checkState == QuizCheckState.CORRECT) Color(0xFF00C853) else Color(0xFFFF5252)
+                        )
+                        if (explanation.isNotBlank() && checkState == QuizCheckState.CORRECT) {
+                            Text(
+                                text = explanation,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        } else if (checkState == QuizCheckState.INCORRECT) {
+                            Text(
+                                text = incorrectHint,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
+            }
+
+            when (checkState) {
+                QuizCheckState.UNCHECKED -> {
+                    Button(
+                        onClick = onCheck,
+                        enabled = isOptionSelected,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                        )
+                    ) {
+                        Text(
+                            text = "CHECK ANSWER",
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 15.sp,
+                            letterSpacing = 0.5.sp
+                        )
+                    }
+                }
+                QuizCheckState.CORRECT -> {
+                    Button(
+                        onClick = onContinue,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF00C853)
+                        )
+                    ) {
+                        Text(
+                            text = if (isFinalStep) "COMPLETE LESSON ➔" else "CONTINUE TO NEXT STEP ➔",
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 15.sp,
+                            color = Color.White
+                        )
+                    }
+                }
+                QuizCheckState.INCORRECT -> {
+                    Button(
+                        onClick = onTryAgain,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFFFF5252)
+                        )
+                    ) {
+                        Text(
+                            text = "TRY AGAIN",
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 15.sp,
+                            color = Color.White
+                        )
                     }
                 }
             }
         }
     }
-    var downloadingTopicId by remember { mutableStateOf<String?>(null) }
+}
 
-    val boardScene = activeTopic.whiteboardScene
-    var currentStepIndex by remember(activeTopic) { mutableIntStateOf(0) }
-    val currentStep = boardScene.steps.getOrElse(currentStepIndex) { boardScene.steps.first() }
+private fun DrawScope.drawWhiteboardGrid(gridColor: Color) {
+    val step = 32.dp.toPx()
+    val width = size.width
+    val height = size.height
 
-    // Canvas pan & zoom
-    var scale by remember(activeTopic) { mutableFloatStateOf(1f) }
-    var offset by remember(activeTopic) { mutableStateOf(Offset.Zero) }
-
-    // Selected node for tap-to-explain popup
-    var tappedObject by remember(currentStepIndex, activeTopic) { mutableStateOf<BoardObject?>(null) }
-
-    // Inline step quiz state (gated before advancing to next step)
-    var showStepQuizModal by remember(currentStepIndex, activeTopic) { mutableStateOf(false) }
-    var selectedQuizOptionIndex by remember(currentStepIndex, activeTopic) { mutableIntStateOf(-1) }
-    var quizSubmitted by remember(currentStepIndex, activeTopic) { mutableStateOf(false) }
-    val completedSteps = remember(activeTopic) { mutableStateMapOf<Int, Boolean>() }
-
-    // Rive character emotion & Lottie celebration trigger
-    var tutorEmotion by remember(currentStepIndex, activeTopic) {
-        mutableStateOf(TutorRiveEmotion.IDLE)
-    }
-    var showCelebrationBurst by remember { mutableStateOf(false) }
-
-    // Skill Inspector tab (0 = Live Whiteboard, 1 = Skill Architecture & Resources)
-    var viewTab by remember { mutableIntStateOf(0) }
-
-    // Follow-up tutor Q&A grounded in current step skill
-    var studentQuestion by remember { mutableStateOf("") }
-    var tutorReply by remember(currentStepIndex, activeTopic) { mutableStateOf<String?>(null) }
-    var isAskingTutor by remember { mutableStateOf(false) }
-
-    // Offline Android TTS
-    var ttsEngine by remember { mutableStateOf<TextToSpeech?>(null) }
-    var ttsReady by remember { mutableStateOf(false) }
-
-    DisposableEffect(context) {
-        var instance: TextToSpeech? = null
-        instance = TextToSpeech(context) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                instance?.language = Locale.US
-                ttsReady = true
-            }
-        }
-        ttsEngine = instance
-        onDispose {
-            instance?.stop()
-            instance?.shutdown()
-        }
+    var x = 0f
+    while (x < width) {
+        drawLine(
+            color = gridColor,
+            start = Offset(x, 0f),
+            end = Offset(x, height),
+            strokeWidth = 0.8f
+        )
+        x += step
     }
 
-    LaunchedEffect(showCelebrationBurst) {
-        if (showCelebrationBurst) {
-            delay(2200)
-            showCelebrationBurst = false
-        }
+    var y = 0f
+    while (y < height) {
+        drawLine(
+            color = gridColor,
+            start = Offset(0f, y),
+            end = Offset(width, y),
+            strokeWidth = 0.8f
+        )
+        y += step
     }
+}
 
-    fun speakOut(text: String) {
-        if (ttsReady) {
-            tutorEmotion = TutorRiveEmotion.EXPLAINING
-            ttsEngine?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "bismuth_whiteboard_tts")
-        }
+private fun DrawScope.drawArrow(
+    from: Offset,
+    to: Offset,
+    color: Color,
+    strokeWidth: Float,
+    zoom: Float
+) {
+    drawLine(
+        color = color,
+        start = from,
+        end = to,
+        strokeWidth = strokeWidth,
+        cap = StrokeCap.Round
+    )
+
+    val angle = atan2(to.y - from.y, to.x - from.x)
+    val headLen = 14f * zoom
+    val arrowAngle = Math.PI / 6.0
+
+    val p1 = Offset(
+        x = (to.x - headLen * cos(angle - arrowAngle)).toFloat(),
+        y = (to.y - headLen * sin(angle - arrowAngle)).toFloat()
+    )
+    val p2 = Offset(
+        x = (to.x - headLen * cos(angle + arrowAngle)).toFloat(),
+        y = (to.y - headLen * sin(angle + arrowAngle)).toFloat()
+    )
+
+    val path = Path().apply {
+        moveTo(to.x, to.y)
+        lineTo(p1.x, p1.y)
+        lineTo(p2.x, p2.y)
+        close()
+    }
+    drawPath(path = path, color = color)
+}
+
+@Composable
+private fun SkillFormulaAndObjectivesPanel(
+    bundle: TopicSkillBundle,
+    accentColor: Color,
+    modifier: Modifier = Modifier
+) {
+    val formulaResources: List<CuratedResource> = remember(bundle.topicId) {
+        bundle.resources.filter { it.type == "formula_sheet" }
     }
 
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .background(Color(0xFF0A0F1D))
-            .padding(12.dp)
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // 1. Subject Coordinator Bar (Mathematics, Physics, Chemistry, Biology, English)
-        SubjectSelectorBar(
-            subjects = subjects,
-            selectedSubject = activeSubject,
-            onSelectSubject = { subj ->
-                activeSubject = subj
-                activeChapter = subj.chapters.first()
-                activeTopic = activeChapter.topics.first()
-            }
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 2. Chapter & Topic Skill Selector + GCS Package Status
-        ChapterAndTopicBar(
-            subject = activeSubject,
-            selectedChapter = activeChapter,
-            selectedTopic = activeTopic,
-            isInstalled = installedState[activeTopic.topicId] == true,
-            isDownloading = downloadingTopicId == activeTopic.topicId,
-            viewTab = viewTab,
-            onSelectChapter = { ch ->
-                activeChapter = ch
-                activeTopic = ch.topics.first()
-            },
-            onSelectTopic = { topic ->
-                activeTopic = topic
-            },
-            onToggleInstallGcsSkill = {
-                val id = activeTopic.topicId
-                val currentlyInstalled = installedState[id] == true
-                if (!currentlyInstalled) {
-                    scope.launch {
-                        downloadingTopicId = id
-                        delay(750)
-                        SkillInstallPrefs.setTopicInstalled(context, id, true)
-                        installedState[id] = true
-                        downloadingTopicId = null
-                    }
-                } else {
-                    SkillInstallPrefs.setTopicInstalled(context, id, false)
-                    installedState[id] = false
-                }
-            },
-            onChangeViewTab = { viewTab = it }
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        if (viewTab == 1) {
-            SkillThreeLayerInspector(
-                subject = activeSubject,
-                chapter = activeChapter,
-                topic = activeTopic,
-                currentStep = currentStep,
-                modifier = Modifier.weight(1f)
-            )
-        } else {
-            // 3. Interactive Whiteboard Canvas + Tap-on-Node Popup + Inline Quiz + Rive Dock
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                // Interactive Canvas Container
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(315.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(
-                            Brush.verticalGradient(
-                                listOf(Color(0xFF0F172A), Color(0xFF131D35))
-                            )
-                        )
-                        .border(1.dp, Color(0xFF1E293B), RoundedCornerShape(16.dp))
-                ) {
-                    val visibleObjects = remember(currentStepIndex, activeTopic) {
-                        boardScene.visibleObjectsForStep(currentStepIndex)
-                    }
-                    val visibleArrows = remember(currentStepIndex, activeTopic) {
-                        boardScene.visibleArrowsForStep(currentStepIndex)
-                    }
-                    val currentStepObjectIds = remember(currentStepIndex, activeTopic) {
-                        currentStep.focusObjectIds.toSet()
-                    }
-                    val hitTargets = remember { mutableListOf<CanvasHitTarget>() }
-
-                    Canvas(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .pointerInput(currentStepIndex, activeTopic) {
-                                detectTransformGestures { _, pan, zoom, _ ->
-                                    scale = (scale * zoom).coerceIn(0.75f, 2.5f)
-                                    offset += pan
-                                }
-                            }
-                            .pointerInput(currentStepIndex, activeTopic, scale, offset) {
-                                detectTapGestures { tapOffset ->
-                                    val hit = hitTargets.lastOrNull { target ->
-                                        tapOffset.x in target.left..target.right &&
-                                            tapOffset.y in target.top..target.bottom
-                                    }
-                                    if (hit != null) {
-                                        tappedObject = hit.obj
-                                        tutorEmotion = TutorRiveEmotion.EXPLAINING
-                                    } else {
-                                        tappedObject = null
-                                    }
-                                }
-                            }
-                    ) {
-                        drawWhiteboardGrid()
-                        hitTargets.clear()
-
-                        val objectBounds = mutableMapOf<String, CanvasHitTarget>()
-                        visibleObjects.forEachIndexed { idx, obj ->
-                            val isHighlighted = obj.objectId in currentStepObjectIds || tappedObject?.objectId == obj.objectId
-                            val bounds = drawBoardNode(
-                                obj = obj,
-                                index = idx,
-                                totalCount = visibleObjects.size,
-                                scale = scale,
-                                pan = offset,
-                                isHighlighted = isHighlighted,
-                                isSelected = tappedObject?.objectId == obj.objectId
-                            )
-                            hitTargets.add(bounds)
-                            objectBounds[obj.objectId] = bounds
-                        }
-
-                        visibleArrows.forEach { arrow ->
-                            val from = objectBounds[arrow.fromObjectId]
-                            val to = objectBounds[arrow.toObjectId]
-                            if (from != null && to != null) {
-                                drawConnectorArrow(from, to, arrow)
-                            }
-                        }
-                    }
-
-                    // Top-left badge: Step indicator & Tap-a-node instruction
-                    Row(
-                        modifier = Modifier
-                            .align(Alignment.TopStart)
-                            .padding(10.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Color(0xCC0F172A))
-                            .padding(horizontal = 10.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Info,
-                            contentDescription = null,
-                            tint = Color(0xFF38BDF8),
-                            modifier = Modifier.size(14.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "Step ${currentStepIndex + 1}/${boardScene.steps.size} • Tap any node for detailed explanation",
-                            color = Color(0xFFE2E8F0),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
-
-                    // Top-right reset zoom button
-                    IconButton(
-                        onClick = {
-                            scale = 1f
-                            offset = Offset.Zero
-                            tappedObject = null
-                        },
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(6.dp)
-                            .size(32.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xAA1E293B))
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Refresh,
-                            contentDescription = "Reset Canvas Zoom",
-                            tint = Color.White,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    }
-
-                    // Lottie Micro-Celebration Overlay when student passes inline step quiz
-                    if (showCelebrationBurst) {
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .size(180.dp)
-                        ) {
-                            LottieEffectView(
-                                assetName = "celebrate.json",
-                                iterations = 1,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
-                    }
-
-                    // Pop-up explanation card when user taps a diagram node
-                    tappedObject?.let { selectedNode ->
-                        NodeExplanationPopup(
-                            node = selectedNode,
-                            onSpeak = {
-                                speakOut("${selectedNode.label}. ${selectedNode.explanation}")
-                            },
-                            onDismiss = { tappedObject = null },
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(10.dp)
-                        )
-                    }
-                }
-
-                // 4. Docked Rive Character + Step Narration + Step Navigation Controls
-                RiveTutorDockCard(
-                    step = currentStep,
-                    stepIndex = currentStepIndex,
-                    totalSteps = boardScene.steps.size,
-                    tutorEmotion = tutorEmotion,
-                    isStepQuizCompleted = completedSteps[currentStepIndex] == true,
-                    onSpeakStep = { speakOut(currentStep.narration) },
-                    onPreviousStep = {
-                        if (currentStepIndex > 0) {
-                            currentStepIndex--
-                        }
-                    },
-                    onNextOrQuizStep = {
-                        val quiz = currentStep.inlineQuiz
-                        if (quiz != null && completedSteps[currentStepIndex] != true) {
-                            showStepQuizModal = true
-                            tutorEmotion = TutorRiveEmotion.THINKING
-                        } else if (currentStepIndex < boardScene.steps.lastIndex) {
-                            currentStepIndex++
-                        }
-                    }
-                )
-
-                // 5. Inline Step Quiz Card (Gated before advancing, adapted to Model Tier)
-                AnimatedVisibility(visible = showStepQuizModal && currentStep.inlineQuiz != null) {
-                    currentStep.inlineQuiz?.let { inlineQuiz ->
-                        val isHighTier = selectedModel.tier.isHighCapability
-                        InlineStepQuizCard(
-                            quiz = inlineQuiz,
-                            modelDisplayName = selectedModel.displayName,
-                            isHighCapabilityTier = isHighTier,
-                            selectedOptionIndex = selectedQuizOptionIndex,
-                            isSubmitted = quizSubmitted,
-                            onSelectOption = { idx ->
-                                selectedQuizOptionIndex = idx
-                                quizSubmitted = false
-                            },
-                            onSubmitAnswer = {
-                                val targetCorrect = if (isHighTier) {
-                                    inlineQuiz.advancedCorrectIndex
-                                } else {
-                                    inlineQuiz.basicCorrectIndex
-                                }
-                                if (selectedQuizOptionIndex >= 0) {
-                                    quizSubmitted = true
-                                    if (selectedQuizOptionIndex == targetCorrect) {
-                                        completedSteps[currentStepIndex] = true
-                                        tutorEmotion = TutorRiveEmotion.CELEBRATING
-                                        showCelebrationBurst = true
-                                    } else {
-                                        tutorEmotion = TutorRiveEmotion.ENCOURAGING
-                                    }
-                                }
-                            },
-                            onContinueToNextStep = {
-                                showStepQuizModal = false
-                                if (currentStepIndex < boardScene.steps.lastIndex) {
-                                    currentStepIndex++
-                                }
-                            }
-                        )
-                    }
-                }
-
-                // 6. Ask AI Tutor About This Step (Step-Scoped Prompting)
-                AskStepTutorBar(
-                    question = studentQuestion,
-                    onQuestionChange = { studentQuestion = it },
-                    isAsking = isAskingTutor,
-                    tutorReply = tutorReply,
-                    onAsk = {
-                        val q = studentQuestion.trim()
-                        if (q.isEmpty() || isAskingTutor) return@AskStepTutorBar
-                        scope.launch {
-                            isAskingTutor = true
-                            tutorEmotion = TutorRiveEmotion.THINKING
-                            val scopedPrompt = SubjectSkillCatalog.buildStepScopedPrompt(
-                                subject = activeSubject,
-                                chapter = activeChapter,
-                                topic = activeTopic,
-                                step = currentStep,
-                                studentQuestion = q
-                            )
-                            val modelAnswer = BismuthEngine.generateTextOrNull(
-                                context = context,
-                                prompt = scopedPrompt,
-                                config = selectedModel
-                            )
-                            tutorReply = modelAnswer ?: buildDeterministicStepAnswer(
-                                topic = activeTopic,
-                                step = currentStep,
-                                question = q
-                            )
-                            tutorEmotion = TutorRiveEmotion.EXPLAINING
-                            isAskingTutor = false
-                        }
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SubjectSelectorBar(
-    subjects: List<SubjectSkillCoordinator>,
-    selectedSubject: SubjectSkillCoordinator,
-    onSelectSubject: (SubjectSkillCoordinator) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        subjects.forEach { subject ->
-            val selected = subject.subjectId == selectedSubject.subjectId
-            val accent = parseColorHex(subject.accentHex)
+        formulaResources.forEach { sheet ->
             Surface(
-                onClick = { onSelectSubject(subject) },
-                shape = RoundedCornerShape(12.dp),
-                color = if (selected) accent.copy(alpha = 0.22f) else Color(0xFF151F32),
-                border = androidx.compose.foundation.BorderStroke(
-                    width = if (selected) 1.5.dp else 1.dp,
-                    color = if (selected) accent else Color(0xFF26334D)
-                )
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                border = BorderStroke(1.dp, accentColor.copy(alpha = 0.4f)),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
+                    modifier = Modifier.padding(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Text(
-                        text = "${subject.iconEmoji} ${subject.title}",
-                        color = if (selected) Color.White else Color(0xFFCBD5E1),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 13.sp
-                    )
-                    Text(
-                        text = subject.tagline,
-                        color = Color(0xFF94A3B8),
-                        fontSize = 10.sp
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ChapterAndTopicBar(
-    subject: SubjectSkillCoordinator,
-    selectedChapter: ChapterSkillNode,
-    selectedTopic: TopicSkillPackage,
-    isInstalled: Boolean,
-    isDownloading: Boolean,
-    viewTab: Int,
-    onSelectChapter: (ChapterSkillNode) -> Unit,
-    onSelectTopic: (TopicSkillPackage) -> Unit,
-    onToggleInstallGcsSkill: () -> Unit,
-    onChangeViewTab: (Int) -> Unit
-) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-        shape = RoundedCornerShape(14.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(10.dp)) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Chapters:",
-                    color = Color(0xFF94A3B8),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                subject.chapters.forEach { chapter ->
-                    FilterChip(
-                        selected = chapter.chapterId == selectedChapter.chapterId,
-                        onClick = { onSelectChapter(chapter) },
-                        label = { Text(chapter.title, fontSize = 11.sp) },
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color(0xFF1E3A8A),
-                            selectedLabelColor = Color.White
-                        )
-                    )
-                }
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Topic Skill:",
-                    color = Color(0xFF94A3B8),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                selectedChapter.topics.forEach { topic ->
-                    FilterChip(
-                        selected = topic.topicId == selectedTopic.topicId,
-                        onClick = { onSelectTopic(topic) },
-                        label = { Text(topic.title, fontSize = 11.sp) },
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color(0xFF0284C7),
-                            selectedLabelColor = Color.White
-                        )
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // GCS Offline Skill Package Status
-                Surface(
-                    onClick = onToggleInstallGcsSkill,
-                    shape = RoundedCornerShape(8.dp),
-                    color = if (isInstalled) Color(0xFF064E3B) else Color(0xFF1E293B)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        if (isDownloading) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(14.dp),
-                                strokeWidth = 2.dp,
-                                color = Color(0xFF38BDF8)
-                            )
-                        } else {
-                            Icon(
-                                imageVector = if (isInstalled) Icons.Default.CloudDone else Icons.Default.CloudDownload,
-                                contentDescription = null,
-                                tint = if (isInstalled) Color(0xFF34D399) else Color(0xFF38BDF8),
-                                modifier = Modifier.size(14.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = if (isDownloading) {
-                                "Syncing GCS Skill..."
-                            } else if (isInstalled) {
-                                "Installed Offline (${selectedTopic.packageSizeKb} KB)"
-                            } else {
-                                "Download Skill (${selectedTopic.packageSizeKb} KB)"
-                            },
-                            color = Color.White,
-                            fontSize = 11.sp
-                        )
-                    }
-                }
-
-                // Switch between Interactive Board and 3-Layer Skill Package Architecture
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    FilterChip(
-                        selected = viewTab == 0,
-                        onClick = { onChangeViewTab(0) },
-                        label = { Text("Whiteboard", fontSize = 11.sp) }
-                    )
-                    FilterChip(
-                        selected = viewTab == 1,
-                        onClick = { onChangeViewTab(1) },
-                        label = { Text("Skill Package (3 Layers)", fontSize = 11.sp) }
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun NodeExplanationPopup(
-    node: BoardObject,
-    onSpeak: () -> Unit,
-    onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val nodeAccent = parseColorHex(node.style.strokeColor)
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xF21E293B)),
-        border = androidx.compose.foundation.BorderStroke(1.5.dp, nodeAccent)
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(10.dp)
-                            .clip(CircleShape)
-                            .background(nodeAccent)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = node.label,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
-                    )
-                    if (node.subLabel.isNotBlank()) {
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "(${node.subLabel})",
-                            color = Color(0xFF94A3B8),
-                            fontSize = 12.sp
-                        )
-                    }
-                }
-                Row {
-                    IconButton(onClick = onSpeak, modifier = Modifier.size(28.dp)) {
-                        Icon(
-                            imageVector = Icons.Default.VolumeUp,
-                            contentDescription = "Speak Node Explanation",
-                            tint = Color(0xFF38BDF8),
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                    IconButton(onClick = onDismiss, modifier = Modifier.size(28.dp)) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Close Node Explanation",
-                            tint = Color(0xFF94A3B8),
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = node.explanation,
-                color = Color(0xFFE2E8F0),
-                fontSize = 12.sp,
-                lineHeight = 17.sp
-            )
-
-            if (node.keyFormulaOrRule.isNotBlank()) {
-                Spacer(modifier = Modifier.height(6.dp))
-                Surface(
-                    shape = RoundedCornerShape(8.dp),
-                    color = Color(0xFF0F172A)
-                ) {
-                    Text(
-                        text = "Key Rule / Formula: ${node.keyFormulaOrRule}",
-                        color = Color(0xFF38BDF8),
-                        fontSize = 11.sp,
-                        fontFamily = FontFamily.Monospace,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun RiveTutorDockCard(
-    step: BoardStep,
-    stepIndex: Int,
-    totalSteps: Int,
-    tutorEmotion: TutorRiveEmotion,
-    isStepQuizCompleted: Boolean,
-    onSpeakStep: () -> Unit,
-    onPreviousStep: () -> Unit,
-    onNextOrQuizStep: () -> Unit
-) {
-    val infiniteTransition = rememberInfiniteTransition(label = "rive_tutor_pulse")
-    val pulseScale by infiniteTransition.animateFloat(
-        initialValue = 0.94f,
-        targetValue = 1.06f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(900),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "pulse_scale"
-    )
-
-    val emotionAccent = when (tutorEmotion) {
-        TutorRiveEmotion.IDLE -> Color(0xFF38BDF8)
-        TutorRiveEmotion.EXPLAINING -> Color(0xFF22C55E)
-        TutorRiveEmotion.THINKING -> Color(0xFFF59E0B)
-        TutorRiveEmotion.CELEBRATING -> Color(0xFFA855F7)
-        TutorRiveEmotion.ENCOURAGING -> Color(0xFFEC4899)
-    }
-
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-        border = androidx.compose.foundation.BorderStroke(1.dp, emotionAccent.copy(alpha = 0.5f)),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // Docked Rive Character Avatar Box
-                Box(
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(Color(0xFF0F172A))
-                        .border(2.dp, emotionAccent, RoundedCornerShape(14.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    RiveCharacterView(
-                        modifier = Modifier.fillMaxSize(),
-                        stateMachineName = "TutorStateMachine",
-                        booleanInputs = mapOf(
-                            "isSpeaking" to (tutorEmotion == TutorRiveEmotion.EXPLAINING),
-                            "isThinking" to (tutorEmotion == TutorRiveEmotion.THINKING),
-                            "isCelebrating" to (tutorEmotion == TutorRiveEmotion.CELEBRATING)
-                        )
-                    )
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(
-                            modifier = Modifier
-                                .size((26 * pulseScale).dp)
-                                .clip(CircleShape)
-                                .background(emotionAccent.copy(alpha = 0.25f)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Psychology,
-                                contentDescription = "Docked Rive AI Tutor",
-                                tint = emotionAccent,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                        Text(
-                            text = tutorEmotion.label,
-                            color = emotionAccent,
-                            fontSize = 8.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Column(modifier = Modifier.weight(1f)) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Functions,
+                            contentDescription = null,
+                            tint = accentColor,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Text(
+                            text = sheet.title,
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    if (sheet.summary.isNotBlank()) {
+                        Text(
+                            text = sheet.summary,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerLow,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = step.title,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f)
+                            text = sheet.bodyText,
+                            style = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
+                            lineHeight = 20.sp,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(12.dp)
                         )
-                        IconButton(onClick = onSpeakStep, modifier = Modifier.size(28.dp)) {
+                    }
+                }
+            }
+        }
+
+        if (bundle.instructions.learningObjectives.isNotEmpty()) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "Module Learning Objectives",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = accentColor
+                    )
+                    bundle.instructions.learningObjectives.forEach { obj ->
+                        Row(
+                            verticalAlignment = Alignment.Top,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
                             Icon(
-                                imageVector = Icons.Default.VolumeUp,
-                                contentDescription = "Narrate Step",
-                                tint = Color(0xFF38BDF8),
-                                modifier = Modifier.size(18.dp)
+                                imageVector = Icons.Default.CheckCircle,
+                                contentDescription = null,
+                                tint = Color(0xFF00C853),
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Text(
+                                text = obj,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
-                    Text(
-                        text = step.narration,
-                        color = Color(0xFFCBD5E1),
-                        fontSize = 12.sp,
-                        lineHeight = 17.sp
-                    )
                 }
             }
+        }
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+        if (bundle.instructions.commonMisconceptions.isNotEmpty()) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.25f),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                OutlinedButton(
-                    onClick = onPreviousStep,
-                    enabled = stepIndex > 0
+                Column(
+                    modifier = Modifier.padding(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Prev Step", fontSize = 12.sp)
-                }
-
-                if (isStepQuizCompleted) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.CheckCircle,
-                            contentDescription = null,
-                            tint = Color(0xFF10B981),
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "Common Pitfalls to Avoid",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFFF8A65)
+                    )
+                    bundle.instructions.commonMisconceptions.forEach { pitfall ->
                         Text(
-                            text = "Checkpoint Passed",
-                            color = Color(0xFF10B981),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
-
-                Button(
-                    onClick = onNextOrQuizStep,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (step.inlineQuiz != null && !isStepQuizCompleted) {
-                            Color(0xFF7C3AED)
-                        } else {
-                            Color(0xFF0284C7)
-                        }
-                    )
-                ) {
-                    val needsQuiz = step.inlineQuiz != null && !isStepQuizCompleted
-                    Icon(
-                        imageVector = if (needsQuiz) Icons.Default.Quiz else Icons.Default.ArrowForward,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = when {
-                            needsQuiz -> "Step Check Quiz"
-                            stepIndex < totalSteps - 1 -> "Next Step"
-                            else -> "Lesson Complete"
-                        },
-                        fontSize = 12.sp
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun InlineStepQuizCard(
-    quiz: StepInlineQuiz,
-    modelDisplayName: String,
-    isHighCapabilityTier: Boolean,
-    selectedOptionIndex: Int,
-    isSubmitted: Boolean,
-    onSelectOption: (Int) -> Unit,
-    onSubmitAnswer: () -> Unit,
-    onContinueToNextStep: () -> Unit
-) {
-    val prompt = if (isHighCapabilityTier) quiz.advancedQuestion else quiz.basicQuestion
-    val options = if (isHighCapabilityTier) quiz.advancedOptions else quiz.basicOptions
-    val correctIndex = if (isHighCapabilityTier) quiz.advancedCorrectIndex else quiz.basicCorrectIndex
-    val explanation = if (isHighCapabilityTier) quiz.advancedExplanation else quiz.basicExplanation
-    val isCorrect = isSubmitted && selectedOptionIndex == correctIndex
-
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF181830)),
-        border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFF8B5CF6)),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(14.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Inline Step Checkpoint",
-                    color = Color(0xFFC4B5FD),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 13.sp
-                )
-                Surface(
-                    shape = RoundedCornerShape(6.dp),
-                    color = if (isHighCapabilityTier) Color(0xFF312E81) else Color(0xFF1E293B)
-                ) {
-                    Text(
-                        text = if (isHighCapabilityTier) {
-                            "Analytical Mode ($modelDisplayName)"
-                        } else {
-                            "Foundational Mode ($modelDisplayName)"
-                        },
-                        color = Color(0xFF93C5FD),
-                        fontSize = 10.sp,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = prompt,
-                color = Color.White,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            options.forEachIndexed { idx, option ->
-                val isSelected = selectedOptionIndex == idx
-                val borderColor = when {
-                    isSubmitted && idx == correctIndex -> Color(0xFF10B981)
-                    isSubmitted && isSelected && idx != correctIndex -> Color(0xFFEF4444)
-                    isSelected -> Color(0xFF38BDF8)
-                    else -> Color(0xFF334155)
-                }
-                Surface(
-                    onClick = { onSelectOption(idx) },
-                    shape = RoundedCornerShape(10.dp),
-                    color = if (isSelected) Color(0xFF1E293B) else Color(0xFF0F172A),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, borderColor),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 3.dp)
-                ) {
-                    Text(
-                        text = "${('A' + idx)}. $option",
-                        color = Color.White,
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(10.dp)
-                    )
-                }
-            }
-
-            if (isSubmitted) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = if (isCorrect) {
-                        "Correct! $explanation"
-                    } else {
-                        "Not quite: $explanation"
-                    },
-                    color = if (isCorrect) Color(0xFF34D399) else Color(0xFFFCA5A5),
-                    fontSize = 12.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (!isCorrect) {
-                    Button(
-                        onClick = onSubmitAnswer,
-                        enabled = selectedOptionIndex >= 0
-                    ) {
-                        Text("Check Answer", fontSize = 12.sp)
-                    }
-                } else {
-                    Button(
-                        onClick = onContinueToNextStep,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981))
-                    ) {
-                        Text("Continue to Next Step", fontSize = 12.sp)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun AskStepTutorBar(
-    question: String,
-    onQuestionChange: (String) -> Unit,
-    isAsking: Boolean,
-    tutorReply: String?,
-    onAsk: () -> Unit
-) {
-    Card(
-        shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                text = "Ask AI Tutor About This Step (Grounded in Topic Skill)",
-                color = Color(0xFF94A3B8),
-                fontSize = 11.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                OutlinedTextField(
-                    value = question,
-                    onValueChange = onQuestionChange,
-                    placeholder = {
-                        Text(
-                            "e.g., Why does this step work that way?",
-                            fontSize = 12.sp,
-                            color = Color(0xFF64748B)
-                        )
-                    },
-                    singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF38BDF8),
-                        unfocusedBorderColor = Color(0xFF334155)
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(
-                    onClick = onAsk,
-                    enabled = !isAsking && question.isNotBlank(),
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Color(0xFF0284C7))
-                ) {
-                    if (isAsking) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(18.dp),
-                            strokeWidth = 2.dp,
-                            color = Color.White
-                        )
-                    } else {
-                        Icon(
-                            imageVector = Icons.Default.Send,
-                            contentDescription = "Ask Step Tutor",
-                            tint = Color.White
-                        )
-                    }
-                }
-            }
-
-            if (!tutorReply.isNullOrBlank()) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Surface(
-                    shape = RoundedCornerShape(10.dp),
-                    color = Color(0xFF0F172A),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = tutorReply,
-                        color = Color(0xFFE2E8F0),
-                        fontSize = 12.sp,
-                        lineHeight = 18.sp,
-                        modifier = Modifier.padding(10.dp)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun SkillThreeLayerInspector(
-    subject: SubjectSkillCoordinator,
-    chapter: ChapterSkillNode,
-    topic: TopicSkillPackage,
-    currentStep: BoardStep,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        item {
-            Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-                shape = RoundedCornerShape(14.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.padding(14.dp)) {
-                    Text(
-                        text = "Subject Skill Coordinator • ${subject.title}",
-                        color = Color(0xFF38BDF8),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
-                    )
-                    Text(
-                        text = subject.coordinatorPhilosophy,
-                        color = Color(0xFFE2E8F0),
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = "GCS Package Path: ${topic.gcsObjectPath}",
-                        color = Color(0xFF94A3B8),
-                        fontSize = 11.sp,
-                        fontFamily = FontFamily.Monospace
-                    )
-                }
-            }
-        }
-
-        item {
-            Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-                shape = RoundedCornerShape(14.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.padding(14.dp)) {
-                    Text(
-                        text = "Layer 1 • Skill Instructions (How to Teach)",
-                        color = Color(0xFF34D399),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 13.sp
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = "Learning Objectives:",
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 12.sp
-                    )
-                    topic.instructions.learningObjectives.forEach { obj ->
-                        Text("• $obj", color = Color(0xFFCBD5E1), fontSize = 12.sp)
-                    }
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = "Common Misconceptions to Address:",
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 12.sp
-                    )
-                    topic.instructions.commonMisconceptions.forEach { misc ->
-                        Text("• $misc", color = Color(0xFFFCA5A5), fontSize = 12.sp)
-                    }
-                }
-            }
-        }
-
-        item {
-            Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-                shape = RoundedCornerShape(14.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.padding(14.dp)) {
-                    Text(
-                        text = "Layer 2 • Curated Learning Resources (Offline Knowledge)",
-                        color = Color(0xFFFBBF24),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 13.sp
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    topic.resources.forEach { res ->
-                        Surface(
-                            shape = RoundedCornerShape(10.dp),
-                            color = Color(0xFF0F172A),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 4.dp)
-                        ) {
-                            Column(modifier = Modifier.padding(10.dp)) {
-                                Text(res.title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
-                                Text(res.summary, color = Color(0xFF93C5FD), fontSize = 11.sp)
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(res.bodyText, color = Color(0xFFCBD5E1), fontSize = 11.sp)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        item {
-            Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-                shape = RoundedCornerShape(14.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.padding(14.dp)) {
-                    Text(
-                        text = "Layer 3 • Interactive Components & Step-Scoped Prompt Preview",
-                        color = Color(0xFFC084FC),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 13.sp
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    val previewPrompt = SubjectSkillCatalog.buildStepScopedPrompt(
-                        subject = subject,
-                        chapter = chapter,
-                        topic = topic,
-                        step = currentStep,
-                        studentQuestion = "Explain the core principle of this step."
-                    )
-                    Surface(
-                        shape = RoundedCornerShape(8.dp),
-                        color = Color(0xFF0F172A),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = previewPrompt,
-                            color = Color(0xFF94A3B8),
-                            fontSize = 10.sp,
-                            fontFamily = FontFamily.Monospace,
-                            modifier = Modifier.padding(10.dp)
+                            text = "• $pitfall",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
             }
         }
     }
-}
-
-private fun DrawScope.drawWhiteboardGrid() {
-    val gridSpacing = 28.dp.toPx()
-    val gridColor = Color(0xFF1E293B).copy(alpha = 0.55f)
-    var x = 0f
-    while (x < size.width) {
-        drawLine(
-            color = gridColor,
-            start = Offset(x, 0f),
-            end = Offset(x, size.height),
-            strokeWidth = 1f
-        )
-        x += gridSpacing
-    }
-    var y = 0f
-    while (y < size.height) {
-        drawLine(
-            color = gridColor,
-            start = Offset(0f, y),
-            end = Offset(size.width, y),
-            strokeWidth = 1f
-        )
-        y += gridSpacing
-    }
-}
-
-private fun DrawScope.drawBoardNode(
-    obj: BoardObject,
-    index: Int,
-    totalCount: Int,
-    scale: Float,
-    pan: Offset,
-    isHighlighted: Boolean,
-    isSelected: Boolean
-): CanvasHitTarget {
-    // Normalize virtual 720x520 board coordinates onto the canvas viewport
-    val normX = (obj.position.x / 700f).coerceIn(0.08f, 0.72f)
-    val normY = (obj.position.y / 520f).coerceIn(0.12f, 0.78f)
-    val boxWidth = (158.dp.toPx() * scale).coerceIn(110f, 300f)
-    val boxHeight = (62.dp.toPx() * scale).coerceIn(48f, 125f)
-
-    val centerX = ((normX * (size.width - boxWidth)) + boxWidth / 2f) * scale + pan.x
-    val centerY = ((normY * (size.height - boxHeight)) + boxHeight / 2f) * scale + pan.y
-
-    val left = centerX - boxWidth / 2f
-    val top = centerY - boxHeight / 2f
-    val right = centerX + boxWidth / 2f
-    val bottom = centerY + boxHeight / 2f
-
-    val nodeColor = parseColorHex(obj.style.strokeColor)
-    val fillBrush = Brush.verticalGradient(
-        colors = listOf(
-            nodeColor.copy(alpha = if (isSelected) 0.38f else 0.22f),
-            Color(0xFF0F172A).copy(alpha = 0.94f)
-        ),
-        startY = top,
-        endY = bottom
-    )
-
-    drawRoundRect(
-        brush = fillBrush,
-        topLeft = Offset(left, top),
-        size = Size(boxWidth, boxHeight),
-        cornerRadius = CornerRadius(14.dp.toPx(), 14.dp.toPx())
-    )
-
-    drawRoundRect(
-        color = if (isSelected) Color.White else nodeColor,
-        topLeft = Offset(left, top),
-        size = Size(boxWidth, boxHeight),
-        cornerRadius = CornerRadius(14.dp.toPx(), 14.dp.toPx()),
-        style = Stroke(width = if (isSelected) 3.dp.toPx() else if (isHighlighted) 2.dp.toPx() else 1.2.dp.toPx())
-    )
-
-    drawContext.canvas.nativeCanvas.apply {
-        val titlePaint = android.graphics.Paint().apply {
-            color = android.graphics.Color.WHITE
-            textSize = (12.5f * scale).sp.toPx()
-            isAntiAlias = true
-            typeface = android.graphics.Typeface.create(
-                android.graphics.Typeface.DEFAULT,
-                android.graphics.Typeface.BOLD
-            )
-            textAlign = android.graphics.Paint.Align.CENTER
-        }
-        val subPaint = android.graphics.Paint().apply {
-            color = android.graphics.Color.rgb(186, 230, 253)
-            textSize = (10.5f * scale).sp.toPx()
-            isAntiAlias = true
-            textAlign = android.graphics.Paint.Align.CENTER
-        }
-
-        val labelText = if (obj.label.length > 22) obj.label.take(21) + "…" else obj.label
-        drawText(labelText, centerX, centerY - (4.dp.toPx() * scale), titlePaint)
-
-        if (obj.subLabel.isNotBlank()) {
-            val subText = if (obj.subLabel.length > 24) obj.subLabel.take(23) + "…" else obj.subLabel
-            drawText(subText, centerX, centerY + (13.dp.toPx() * scale), subPaint)
-        }
-    }
-
-    return CanvasHitTarget(obj = obj, left = left, top = top, right = right, bottom = bottom)
-}
-
-private fun DrawScope.drawConnectorArrow(
-    from: CanvasHitTarget,
-    to: CanvasHitTarget,
-    arrow: BoardArrow
-) {
-    val start = Offset((from.left + from.right) / 2f, (from.top + from.bottom) / 2f)
-    val end = Offset((to.left + to.right) / 2f, (to.top + to.bottom) / 2f)
-
-    val angle = atan2(end.y - start.y, end.x - start.x)
-    val startPad = 34.dp.toPx()
-    val endPad = 38.dp.toPx()
-
-    val clippedStart = Offset(
-        start.x + cos(angle) * startPad,
-        start.y + sin(angle) * startPad
-    )
-    val clippedEnd = Offset(
-        end.x - cos(angle) * endPad,
-        end.y - sin(angle) * endPad
-    )
-
-    val arrowColor = parseColorHex(arrow.colorHex)
-    drawLine(
-        color = arrowColor,
-        start = clippedStart,
-        end = clippedEnd,
-        strokeWidth = 2.2.dp.toPx(),
-        cap = StrokeCap.Round
-    )
-
-    val headLength = 10.dp.toPx()
-    val headAngle = Math.toRadians(28.0).toFloat()
-    val path = Path().apply {
-        moveTo(clippedEnd.x, clippedEnd.y)
-        lineTo(
-            clippedEnd.x - headLength * cos(angle - headAngle),
-            clippedEnd.y - headLength * sin(angle - headAngle)
-        )
-        lineTo(
-            clippedEnd.x - headLength * cos(angle + headAngle),
-            clippedEnd.y - headLength * sin(angle + headAngle)
-        )
-        close()
-    }
-    drawPath(path = path, color = arrowColor)
-
-    if (arrow.label.isNotBlank()) {
-        val midX = (clippedStart.x + clippedEnd.x) / 2f
-        val midY = (clippedStart.y + clippedEnd.y) / 2f - 6.dp.toPx()
-        drawContext.canvas.nativeCanvas.apply {
-            val paint = android.graphics.Paint().apply {
-                color = android.graphics.Color.rgb(226, 232, 240)
-                textSize = 10.sp.toPx()
-                isAntiAlias = true
-                textAlign = android.graphics.Paint.Align.CENTER
-            }
-            drawText(arrow.label, midX, midY, paint)
-        }
-    }
-}
-
-private fun buildDeterministicStepAnswer(
-    topic: TopicSkillPackage,
-    step: BoardStep,
-    question: String
-): String {
-    val focusedNodes = topic.whiteboardScene.objects.filter { it.objectId in step.focusObjectIds }
-    val nodeHighlights = focusedNodes.joinToString("; ") { obj ->
-        "${obj.label}: ${obj.explanation} (${obj.keyFormulaOrRule})"
-    }
-    return "Step Grounded Answer (${topic.title} — ${step.title}):\n" +
-        "• Core Principle: ${step.narration}\n" +
-        "• Diagram Breakdown: $nodeHighlights\n" +
-        "• Direct Takeaway for \"$question\": ${topic.resources.firstOrNull()?.summary ?: topic.summary}"
 }

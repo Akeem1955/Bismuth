@@ -1,0 +1,223 @@
+{
+  "sceneId": "scene_math_linear_equations",
+  "subjectTitle": "Mathematics",
+  "chapterTitle": "Foundations of Algebra & Geometry",
+  "topicTitle": "Linear Equations & Balancing Operations",
+  "objects": [
+    {
+      "objectId": "node_eq_initial",
+      "objectType": "formula",
+      "label": "Target Equation",
+      "subLabel": "Two-Step Linear Form",
+      "formula": "3x + 5 = 20",
+      "explanation": "A linear equation where the unknown x is scaled by 3 and shifted up by 5 to equal 20.",
+      "position": {
+        "x": 190,
+        "y": 50
+      },
+      "size": {
+        "width": 220,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_1"
+    },
+    {
+      "objectId": "node_balance_law",
+      "objectType": "box",
+      "label": "Balance Invariant",
+      "subLabel": "Left Side = Right Side",
+      "formula": "LHS ⇔ RHS",
+      "explanation": "The equals sign guarantees both sides have identical value. Every operation must be applied equally to both sides.",
+      "position": {
+        "x": 190,
+        "y": 175
+      },
+      "size": {
+        "width": 220,
+        "height": 88
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_1"
+    },
+    {
+      "objectId": "node_sub_inverse",
+      "objectType": "highlight",
+      "label": "Additive Inverse",
+      "subLabel": "Subtract 5 from Both Sides",
+      "formula": "(3x + 5) - 5 = 20 - 5",
+      "explanation": "To undo +5 attached to the 3x term, we apply its inverse (-5) to both sides, simplifying to 3x = 15.",
+      "position": {
+        "x": 60,
+        "y": 310
+      },
+      "size": {
+        "width": 230,
+        "height": 92
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_2"
+    },
+    {
+      "objectId": "node_simplified",
+      "objectType": "formula",
+      "label": "Isolated Term",
+      "subLabel": "Constant Cleared",
+      "formula": "3x = 15",
+      "explanation": "Now the variable term 3x stands alone on the left side, ready for coefficient division.",
+      "position": {
+        "x": 330,
+        "y": 310
+      },
+      "size": {
+        "width": 210,
+        "height": 92
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_2"
+    },
+    {
+      "objectId": "node_div_inverse",
+      "objectType": "formula",
+      "label": "Multiplicative Inverse",
+      "subLabel": "Divide Both Sides by 3",
+      "formula": "3x / 3 = 15 / 3  ⇒  x = 5",
+      "explanation": "Dividing by the coefficient 3 isolates x = 5. Check: 3(5) + 5 = 15 + 5 = 20.",
+      "position": {
+        "x": 180,
+        "y": 445
+      },
+      "size": {
+        "width": 250,
+        "height": 94
+      },
+      "style": {
+        "strokeWidth": 2.5,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_3"
+    }
+  ],
+  "arrows": [
+    {
+      "fromObjectId": "node_eq_initial",
+      "toObjectId": "node_balance_law",
+      "label": "governed by",
+      "stepId": "step_1"
+    },
+    {
+      "fromObjectId": "node_balance_law",
+      "toObjectId": "node_sub_inverse",
+      "label": "undo +5",
+      "stepId": "step_2"
+    },
+    {
+      "fromObjectId": "node_sub_inverse",
+      "toObjectId": "node_simplified",
+      "label": "yields",
+      "stepId": "step_2"
+    },
+    {
+      "fromObjectId": "node_simplified",
+      "toObjectId": "node_div_inverse",
+      "label": "divide by 3",
+      "stepId": "step_3"
+    }
+  ],
+  "steps": [
+    {
+      "stepId": "step_1",
+      "stepNumber": 1,
+      "title": "The Equality Balance Invariant",
+      "narration": "Consider the linear equation 3x + 5 = 20. Think of the equals sign as a rigid balance beam: whatever operation we perform on the left side must be performed identically on the right side.",
+      "tutorTip": "Tap 'Target Equation' or 'Balance Invariant' on the canvas to inspect the algebraic structure.",
+      "focusObjectIds": [
+        "node_eq_initial",
+        "node_balance_law"
+      ],
+      "inlineQuiz": {
+        "question": "In the equation 3x + 5 = 20, which operation should we undo FIRST to isolate the variable term 3x?",
+        "options": [
+          "Subtract 5 from both sides",
+          "Divide only 3x by 3",
+          "Add 20 to both sides",
+          "Multiply 3x by 5"
+        ],
+        "correctIndex": 0,
+        "explanation": "We undo addition/subtraction before multiplication/division: subtracting 5 from both sides cleanly isolates 3x."
+      },
+      "diagramResourceId": "img_step_1",
+      "diagramRelativePath": "assets/images/step_1.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_2",
+      "stepNumber": 2,
+      "title": "Clearing the Constant via Additive Inverse",
+      "narration": "By subtracting 5 from both sides, +5 and -5 cancel to zero on the left, leaving 3x = 15.",
+      "tutorTip": "Always apply the subtraction to both sides so the equation remains balanced.",
+      "focusObjectIds": [
+        "node_sub_inverse",
+        "node_simplified"
+      ],
+      "inlineQuiz": {
+        "question": "If you are solving 4x - 7 = 21, what is the resulting equation after clearing the constant term?",
+        "options": [
+          "4x = 28",
+          "4x = 14",
+          "x = 28",
+          "4x = -28"
+        ],
+        "correctIndex": 0,
+        "explanation": "The inverse of -7 is +7. Adding 7 to both sides gives 4x = 21 + 7 = 28."
+      },
+      "diagramResourceId": "img_step_2",
+      "diagramRelativePath": "assets/images/step_2.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_3",
+      "stepNumber": 3,
+      "title": "Isolating x & Substitution Verification",
+      "narration": "Finally, since x is multiplied by 3 in 3x = 15, we divide both sides by 3 to obtain x = 5. Substituting x = 5 back into 3(5) + 5 confirms 15 + 5 = 20.",
+      "tutorTip": "Always verify your root by plugging it back into the original left-hand expression.",
+      "focusObjectIds": [
+        "node_div_inverse"
+      ],
+      "inlineQuiz": {
+        "question": "Solve for x: 5x - 8 = 17.",
+        "options": [
+          "x = 5",
+          "x = 9/5",
+          "x = 3",
+          "x = 25"
+        ],
+        "correctIndex": 0,
+        "explanation": "Add 8 to both sides to get 5x = 25, then divide both sides by 5 to get x = 5."
+      },
+      "diagramResourceId": "img_step_3",
+      "diagramRelativePath": "assets/images/step_3.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    }
+  ]
+}

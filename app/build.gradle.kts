@@ -66,13 +66,13 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
 
-    // Animation Tooling: Rive & Lottie
-    implementation(libs.rive.android)
+    // Animation Tooling: Lottie
     implementation(libs.lottie.compose)
 
-    // AI Edge Engine & Offline Voice
+    // AI Edge Engine & Offline Voice / PDF
     implementation(libs.litertlm)
     implementation(libs.vosk.android)
+    implementation(libs.pdfbox.android)
 
     // Room Local Persistence
     implementation(libs.androidx.room.runtime)

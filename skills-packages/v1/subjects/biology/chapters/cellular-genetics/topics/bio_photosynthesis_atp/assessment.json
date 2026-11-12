@@ -1,0 +1,17 @@
+{
+  "topicId": "bio_photosynthesis_atp",
+  "questions": [
+    {
+      "questionId": "bio_photo_q1",
+      "question": "In which specific compartment of the chloroplast does the Calvin cycle take place?",
+      "options": [
+        "Stroma",
+        "Thylakoid lumen",
+        "Mitochondrial matrix",
+        "Cristae"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Calvin cycle enzymes (including RuBisCO) are dissolved in the chloroplast stroma."
+    }
+  ]
+}

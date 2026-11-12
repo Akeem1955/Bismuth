@@ -1,0 +1,17 @@
+{
+  "topicId": "math_circle_theorems",
+  "questions": [
+    {
+      "questionId": "math_circ_q1",
+      "question": "Two inscribed angles ∠ADB and ∠ACB subtend the same minor arc AB. If ∠ADB = 42°, what is ∠ACB?",
+      "options": [
+        "42°",
+        "84°",
+        "21°",
+        "138°"
+      ],
+      "correctIndex": 0,
+      "explanation": "Inscribed angles subtended by the same arc are equal (both equal half the central angle)."
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "topicId": "chem_atomic_orbitals",
+  "subjectId": "chemistry",
+  "chapterId": "atomic-reactions",
+  "version": "1.1.0",
+  "files": {
+    "SKILL.md": {
+      "sizeBytes": 1643,
+      "sha256": "28cb563d113bb2d3962ecad9df49924b0451326314cf77ab346e6a34b955e43e",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/SKILL.md"
+    },
+    "lesson.json": {
+      "sizeBytes": 11096,
+      "sha256": "d208ddfdea1a33745c017d662034a9e832aadc4217b760443bac901889eae305",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/lesson.json"
+    },
+    "assessment.json": {
+      "sizeBytes": 520,
+      "sha256": "e6e4cf8b65e01a47b415c7a259c563be63e5dbc22d6b275e06598afb04630964",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assessment.json"
+    },
+    "bundle.json": {
+      "sizeBytes": 15374,
+      "sha256": "3b7609bcfa7949f9b869424435f220c67d1be2add1cc0920b05d5e36ad59b54e",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/bundle.json"
+    },
+    "assets/images/step_1.png": {
+      "sizeBytes": 35558,
+      "sha256": "204974f7af8e08a112722cede39825234943115231b18b8e221934c870f4e912",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_1.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_2.png": {
+      "sizeBytes": 34481,
+      "sha256": "023a15b410cce82bb42d07230dde5936de5bdf6f41eb446b3c2ce760ed24fe6c",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_2.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_3.png": {
+      "sizeBytes": 34926,
+      "sha256": "a0c02e3b7f330af2e05e4f7aaf5be19f02fada8bac8d42b1302cfc6b0e5be264",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/images/step_3.png",
+      "mimeType": "image/png"
+    },
+    "assets/video/walkthrough.mp4": {
+      "sizeBytes": 379346,
+      "sha256": "944d74eca7a46e8120e5725ba509d35415cec0bbb8af885cd9ed7d65097c77fc",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/video/walkthrough.mp4",
+      "mimeType": "video/mp4"
+    },
+    "assets/board/scene.json": {
+      "sizeBytes": 5448,
+      "sha256": "4c200c137767672c213f278a7903866e0bbbd9ea93dbef19ca24d0f38e4c9cd9",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_atomic_orbitals/assets/board/scene.json",
+      "mimeType": "application/json"
+    }
+  }
+}

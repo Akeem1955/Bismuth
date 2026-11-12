@@ -1,0 +1,171 @@
+{
+  "sceneId": "scene_phys_conservation_energy",
+  "subjectTitle": "Physics",
+  "chapterTitle": "Classical Mechanics & Energy Conservation",
+  "topicTitle": "Work, Kinetic Energy & Gravitational Potential Energy",
+  "objects": [
+    {
+      "objectId": "node_pe",
+      "objectType": "formula",
+      "label": "Potential Energy (PE)",
+      "subLabel": "Stored Energy of Position",
+      "formula": "PE = m · g · h  (J)",
+      "explanation": "Energy stored by virtue of height h in a gravitational field g. Measured in Joules (1 J = 1 N·m).",
+      "position": {
+        "x": 60,
+        "y": 80
+      },
+      "size": {
+        "width": 220,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_1"
+    },
+    {
+      "objectId": "node_ke",
+      "objectType": "formula",
+      "label": "Kinetic Energy (KE)",
+      "subLabel": "Energy of Motion",
+      "formula": "KE = ½ m · v²  (J)",
+      "explanation": "Energy possessed by a moving mass. Because v is squared, doubling speed quadruples kinetic energy.",
+      "position": {
+        "x": 330,
+        "y": 80
+      },
+      "size": {
+        "width": 220,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_2"
+    },
+    {
+      "objectId": "node_conservation",
+      "objectType": "highlight",
+      "label": "Mechanical Conservation",
+      "subLabel": "Zero Friction Transfer",
+      "formula": "mgh = ½mv² ⇒ v = √(2gh)",
+      "explanation": "As an object falls by height h, all lost PE converts into KE. Mass cancels out on both sides.",
+      "position": {
+        "x": 180,
+        "y": 250
+      },
+      "size": {
+        "width": 250,
+        "height": 95
+      },
+      "style": {
+        "strokeWidth": 2.5,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_3"
+    }
+  ],
+  "arrows": [
+    {
+      "fromObjectId": "node_pe",
+      "toObjectId": "node_ke",
+      "label": "converts during fall",
+      "stepId": "step_2"
+    },
+    {
+      "fromObjectId": "node_pe",
+      "toObjectId": "node_conservation",
+      "label": "equate PE = KE",
+      "stepId": "step_3"
+    },
+    {
+      "fromObjectId": "node_ke",
+      "toObjectId": "node_conservation",
+      "label": "mass cancels",
+      "stepId": "step_3"
+    }
+  ],
+  "steps": [
+    {
+      "stepId": "step_1",
+      "stepNumber": 1,
+      "title": "Gravitational Potential Energy (PE = mgh)",
+      "narration": "Lifting an object of mass m to a height h stores gravitational potential energy PE = mgh, measured in Joules.",
+      "tutorTip": "Tap 'Potential Energy' to inspect how height scales stored energy.",
+      "focusObjectIds": [
+        "node_pe"
+      ],
+      "inlineQuiz": {
+        "question": "Using g = 10 m/s², how much gravitational potential energy does a 2 kg book have on a shelf 3 meters high?",
+        "options": [
+          "60 J",
+          "30 J",
+          "6 J",
+          "15 J"
+        ],
+        "correctIndex": 0,
+        "explanation": "PE = m * g * h = 2 kg * 10 m/s² * 3 m = 60 J."
+      },
+      "diagramResourceId": "img_step_1",
+      "diagramRelativePath": "assets/images/step_1.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_2",
+      "stepNumber": 2,
+      "title": "Kinetic Energy & Velocity Squared (KE = ½mv²)",
+      "narration": "Kinetic energy depends linearly on mass m but quadratically on speed v. Doubling an object's speed increases its kinetic energy by a factor of four.",
+      "tutorTip": "Watch the exponent on v: speed is squared before multiplying by ½m.",
+      "focusObjectIds": [
+        "node_ke"
+      ],
+      "inlineQuiz": {
+        "question": "What is the kinetic energy of a 4 kg ball moving at 3 m/s?",
+        "options": [
+          "18 J",
+          "12 J",
+          "36 J",
+          "6 J"
+        ],
+        "correctIndex": 0,
+        "explanation": "KE = ½ * 4 kg * (3 m/s)² = 2 * 9 = 18 J."
+      },
+      "diagramResourceId": "img_step_2",
+      "diagramRelativePath": "assets/images/step_2.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_3",
+      "stepNumber": 3,
+      "title": "Conservation of Mechanical Energy",
+      "narration": "In a frictionless drop from rest, initial potential energy mgh equals final kinetic energy ½mv². Canceling mass gives v = √(2gh).",
+      "tutorTip": "Notice that mass m cancels out: heavy and light objects hit the bottom at the same speed.",
+      "focusObjectIds": [
+        "node_conservation"
+      ],
+      "inlineQuiz": {
+        "question": "A roller coaster starts from rest at a height of 20 m (take g = 10 m/s²). Neglecting friction, what is its speed at the bottom (h = 0)?",
+        "options": [
+          "20 m/s",
+          "10 m/s",
+          "400 m/s",
+          "14.1 m/s"
+        ],
+        "correctIndex": 0,
+        "explanation": "v = √(2 * g * h) = √(2 * 10 * 20) = √400 = 20 m/s."
+      },
+      "diagramResourceId": "img_step_3",
+      "diagramRelativePath": "assets/images/step_3.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    }
+  ]
+}

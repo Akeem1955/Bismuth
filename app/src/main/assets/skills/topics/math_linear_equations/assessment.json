@@ -1,0 +1,29 @@
+{
+  "topicId": "math_linear_equations",
+  "questions": [
+    {
+      "questionId": "math_lin_q1",
+      "question": "What is the solution to 2(x - 3) = 14?",
+      "options": [
+        "x = 10",
+        "x = 4",
+        "x = 7",
+        "x = 8.5"
+      ],
+      "correctIndex": 0,
+      "explanation": "Divide by 2 (or expand 2x - 6 = 14): x - 3 = 7, then add 3 to get x = 10."
+    },
+    {
+      "questionId": "math_lin_q2",
+      "question": "Solve for y: 7 - 2y = 1.",
+      "options": [
+        "y = 3",
+        "y = -3",
+        "y = 4",
+        "y = -4"
+      ],
+      "correctIndex": 0,
+      "explanation": "Subtract 7 from both sides: -2y = -6. Divide by -2: y = 3."
+    }
+  ]
+}

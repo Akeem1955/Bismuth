@@ -1,0 +1,223 @@
+{
+  "sceneId": "scene_phys_newton_second_law",
+  "subjectTitle": "Physics",
+  "chapterTitle": "Classical Mechanics & Energy Conservation",
+  "topicTitle": "Newton's Second Law & Free-Body Force Vectors",
+  "objects": [
+    {
+      "objectId": "node_force",
+      "objectType": "formula",
+      "label": "Net Force (F_net)",
+      "subLabel": "Vector Sum of External Forces",
+      "formula": "F_net = Σ F",
+      "explanation": "A net external force causes a mass to change its velocity over time. Without net force, velocity remains constant.",
+      "position": {
+        "x": 60,
+        "y": 75
+      },
+      "size": {
+        "width": 205,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_1"
+    },
+    {
+      "objectId": "node_mass",
+      "objectType": "box",
+      "label": "Inertial Mass (m)",
+      "subLabel": "Resistance to Acceleration",
+      "formula": "m = F_net / a  (kg)",
+      "explanation": "Mass measures inertia. Greater mass requires greater net force to achieve the same acceleration.",
+      "position": {
+        "x": 335,
+        "y": 75
+      },
+      "size": {
+        "width": 205,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_1"
+    },
+    {
+      "objectId": "node_accel",
+      "objectType": "circle",
+      "label": "Acceleration (a)",
+      "subLabel": "Rate of Velocity Change",
+      "formula": "a = F_net / m  (m/s²)",
+      "explanation": "Acceleration is directly proportional to net force and inversely proportional to mass.",
+      "position": {
+        "x": 195,
+        "y": 220
+      },
+      "size": {
+        "width": 215,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_1"
+    },
+    {
+      "objectId": "node_units",
+      "objectType": "box",
+      "label": "SI Units & Vectors",
+      "subLabel": "1 Newton = 1 kg·m/s²",
+      "formula": "F⃗ = m · a⃗",
+      "explanation": "1 Newton accelerates 1 kg at 1 m/s². Acceleration always points in the exact direction of F_net.",
+      "position": {
+        "x": 190,
+        "y": 355
+      },
+      "size": {
+        "width": 225,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_2"
+    },
+    {
+      "objectId": "node_fbd_example",
+      "objectType": "formula",
+      "label": "Free-Body Calculation",
+      "subLabel": "F_pull = 35 N, f_k = 15 N, m = 4 kg",
+      "formula": "a = (35 - 15) / 4 = 5 m/s²",
+      "explanation": "Subtract opposing kinetic friction (15 N) from applied pull (35 N) to get F_net = 20 N, then divide by 4 kg.",
+      "position": {
+        "x": 170,
+        "y": 490
+      },
+      "size": {
+        "width": 265,
+        "height": 94
+      },
+      "style": {
+        "strokeWidth": 2.5,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_3"
+    }
+  ],
+  "arrows": [
+    {
+      "fromObjectId": "node_force",
+      "toObjectId": "node_accel",
+      "label": "proportional",
+      "stepId": "step_1"
+    },
+    {
+      "fromObjectId": "node_mass",
+      "toObjectId": "node_accel",
+      "label": "inverse",
+      "stepId": "step_1"
+    },
+    {
+      "fromObjectId": "node_accel",
+      "toObjectId": "node_units",
+      "label": "vector & units",
+      "stepId": "step_2"
+    },
+    {
+      "fromObjectId": "node_units",
+      "toObjectId": "node_fbd_example",
+      "label": "apply with friction",
+      "stepId": "step_3"
+    }
+  ],
+  "steps": [
+    {
+      "stepId": "step_1",
+      "stepNumber": 1,
+      "title": "The Law of Acceleration: F_net = ma",
+      "narration": "Newton's Second Law states that acceleration equals net external force divided by inertial mass. Doubling net force doubles acceleration; doubling mass halves acceleration.",
+      "tutorTip": "Tap 'Net Force' or 'Inertial Mass' to inspect their mathematical relationship.",
+      "focusObjectIds": [
+        "node_force",
+        "node_mass",
+        "node_accel"
+      ],
+      "inlineQuiz": {
+        "question": "If the net force on an object is doubled while its mass is also doubled, what happens to its acceleration?",
+        "options": [
+          "It remains unchanged",
+          "It quadruples",
+          "It doubles",
+          "It halves"
+        ],
+        "correctIndex": 0,
+        "explanation": "a' = (2F) / (2m) = F / m = a. The factor of 2 cancels out."
+      },
+      "diagramResourceId": "img_step_1",
+      "diagramRelativePath": "assets/images/step_1.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_2",
+      "stepNumber": 2,
+      "title": "SI Units and Vector Alignment",
+      "narration": "One Newton (1 N) is defined as 1 kg·m/s². Because mass is a positive scalar, the acceleration vector always points in the direction of the net force.",
+      "tutorTip": "Never confuse velocity direction with acceleration direction: F_net dictates acceleration direction.",
+      "focusObjectIds": [
+        "node_units"
+      ],
+      "inlineQuiz": {
+        "question": "A car moves eastward while braking to a stop. In which direction do the net force and acceleration vectors point?",
+        "options": [
+          "Westward (opposite to motion)",
+          "Eastward (same as motion)",
+          "Downward",
+          "Zero net force"
+        ],
+        "correctIndex": 0,
+        "explanation": "Braking decelerates the eastward velocity, meaning both acceleration and net force point westward."
+      },
+      "diagramResourceId": "img_step_2",
+      "diagramRelativePath": "assets/images/step_2.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_3",
+      "stepNumber": 3,
+      "title": "Free-Body Diagrams with Friction",
+      "narration": "When multiple horizontal forces act on a block, first compute F_net = F_applied - f_friction. For a 35 N pull opposed by 15 N friction on a 4 kg block, F_net = 20 N and a = 5 m/s².",
+      "tutorTip": "Tap 'Free-Body Calculation' to review the step-by-step substitution.",
+      "focusObjectIds": [
+        "node_fbd_example"
+      ],
+      "inlineQuiz": {
+        "question": "A 50 N horizontal pull acts on a 5 kg crate against a 10 N friction force. What is the crate's acceleration?",
+        "options": [
+          "8 m/s²",
+          "10 m/s²",
+          "12 m/s²",
+          "2 m/s²"
+        ],
+        "correctIndex": 0,
+        "explanation": "F_net = 50 N - 10 N = 40 N. Then a = 40 N / 5 kg = 8 m/s²."
+      },
+      "diagramResourceId": "img_step_3",
+      "diagramRelativePath": "assets/images/step_3.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "topicId": "eng_sentence_clauses",
+  "subjectId": "english",
+  "chapterId": "grammar-rhetoric",
+  "version": "1.1.0",
+  "files": {
+    "SKILL.md": {
+      "sizeBytes": 1801,
+      "sha256": "00dbad41a847096916dac5c26b9881a0ad9fb9ebe068bd3da34d11f5ea711f6f",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/SKILL.md"
+    },
+    "lesson.json": {
+      "sizeBytes": 12556,
+      "sha256": "b7fd65930a7763467df022a5d60f0e94f801d486207d4c337c5f1c2cc78ffd9c",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/lesson.json"
+    },
+    "assessment.json": {
+      "sizeBytes": 552,
+      "sha256": "76be979dcfbdfbafa9573489f2cf797c114c7ed974f2bd7cb93ef4e87c26d82a",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assessment.json"
+    },
+    "bundle.json": {
+      "sizeBytes": 17005,
+      "sha256": "3ed9fe316b1d74a28d44ac71448ae779857b829c2b0fe72e1a80c688ab3a2379",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/bundle.json"
+    },
+    "assets/images/step_1.png": {
+      "sizeBytes": 23746,
+      "sha256": "9e9a9523823469aa53e7d4736ce0e9bdb3d4ae3f4ea255202ef1e7355acb9384",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/images/step_1.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_2.png": {
+      "sizeBytes": 25505,
+      "sha256": "a8c2ac2dee2c1dde7c0a4acec91e80293e26cba8f762710005cd5768b3fc6a21",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/images/step_2.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_3.png": {
+      "sizeBytes": 25015,
+      "sha256": "d68db98060dbc6b44e614e4c5654e3722b56a792f2a280bed60cc18554c62716",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/images/step_3.png",
+      "mimeType": "image/png"
+    },
+    "assets/video/walkthrough.mp4": {
+      "sizeBytes": 248846,
+      "sha256": "d231f0c39d89a305311faac7ff41c192bb7e7d7af29593e6c4f7fb83651323b8",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/video/walkthrough.mp4",
+      "mimeType": "video/mp4"
+    },
+    "assets/board/scene.json": {
+      "sizeBytes": 6278,
+      "sha256": "427d7d18baf493610881bf64282907d2dc139380bc7025ed3b25e8f9dc331e3b",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/board/scene.json",
+      "mimeType": "application/json"
+    }
+  }
+}

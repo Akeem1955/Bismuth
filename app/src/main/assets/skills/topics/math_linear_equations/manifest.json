@@ -1,0 +1,58 @@
+{
+  "topicId": "math_linear_equations",
+  "subjectId": "mathematics",
+  "chapterId": "algebra-geometry",
+  "version": "1.1.0",
+  "files": {
+    "SKILL.md": {
+      "sizeBytes": 2036,
+      "sha256": "391a4cc735cb83a976bf718052563d1ac13764e033b700f36096c13274c6a188",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/SKILL.md"
+    },
+    "lesson.json": {
+      "sizeBytes": 13218,
+      "sha256": "daeac035e7666000e3a782ce6fcfbd6eebf2f5be0cf42aa8e673a07a06986b9d",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/lesson.json"
+    },
+    "assessment.json": {
+      "sizeBytes": 687,
+      "sha256": "10cee704d6c0932a9b98b4d6f90ab9e98479d3f47f99a1cb6e1b7c3b63eb354c",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assessment.json"
+    },
+    "bundle.json": {
+      "sizeBytes": 18061,
+      "sha256": "9e78247e5a10cd0061b2ecb874110207f6e1e11ff9288e66e5a4395cd81771c7",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/bundle.json"
+    },
+    "assets/images/step_1.png": {
+      "sizeBytes": 21689,
+      "sha256": "292bf764ebbdd2f7bc5f51333c6d60bb1a518e500898b53649d1686590292769",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_1.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_2.png": {
+      "sizeBytes": 21846,
+      "sha256": "c0721988683d3e11bea6381db79c48b07886e59f9510d76483b669100d157949",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_2.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_3.png": {
+      "sizeBytes": 25552,
+      "sha256": "3735b8b9fec5abf79eed14d366d93b234349edafcb2dc9fe1a250db67a6861d2",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_3.png",
+      "mimeType": "image/png"
+    },
+    "assets/video/walkthrough.mp4": {
+      "sizeBytes": 250010,
+      "sha256": "b34db7faa5cc6d1af2e821ff81413d34ab03c280df7fe5a7c34a9db45d1835a3",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/video/walkthrough.mp4",
+      "mimeType": "video/mp4"
+    },
+    "assets/board/scene.json": {
+      "sizeBytes": 6921,
+      "sha256": "ddf2c9c25eb868cb124204c67a969d27ab549e5d8c6edc5783ca0f1974d60350",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/board/scene.json",
+      "mimeType": "application/json"
+    }
+  }
+}

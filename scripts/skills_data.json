@@ -1,0 +1,2259 @@
+[
+  {
+    "subjectId": "mathematics",
+    "title": "Mathematics",
+    "iconEmoji": "📐",
+    "accentHex": "#006874",
+    "tagline": "Symbolic reasoning, algebraic balance, and geometric proofs",
+    "coordinatorPhilosophy": "Guide students through mathematical structures step by step. Never give away the final numerical answer before the student identifies the invariant operation or geometric theorem.",
+    "chapter": {
+      "chapterId": "algebra-geometry",
+      "title": "Foundations of Algebra & Geometry",
+      "summary": "Equivalence transformations in linear equations and invariant angle relationships in circles.",
+      "chapterObjectives": [
+        "Solve multi-step single-variable linear equations using inverse operations",
+        "Apply inscribed angle, chord, and tangent theorems to deduce unknown geometric measures"
+      ],
+      "topics": [
+        {
+          "topicId": "math_linear_equations",
+          "title": "Linear Equations & Balancing Operations",
+          "summary": "Isolating variables using inverse operations while preserving equality across the balance scale.",
+          "instructions": {
+            "skillId": "math_linear_equations",
+            "learningObjectives": [
+              "Understand the equality sign as a strict mathematical balance invariant",
+              "Apply inverse operations in reverse order of operations (undo addition/subtraction before multiplication/division)",
+              "Verify solutions by substituting the root back into the original equation"
+            ],
+            "explanationSequence": [
+              "Step 1: Introduce the Equation Balance Invariant (ax + b = c)",
+              "Step 2: Isolate the variable term by applying the additive inverse (-b to both sides)",
+              "Step 3: Isolate the variable coefficient using the multiplicative inverse (divide by a) and verify"
+            ],
+            "commonMisconceptions": [
+              "Dividing only the variable term by the coefficient instead of every term on both sides",
+              "Subtracting a negative constant instead of adding its opposite when moving across the equals sign",
+              "Dividing by the coefficient before clearing constant terms, leading to arithmetic fraction errors"
+            ],
+            "socraticSystemPrompt": "You are orchestrating the Linear Equations lesson. Guide the student to treat '=' as a physical balance scale: any operation performed on the left expression must be mirrored identically on the right expression."
+          },
+          "resources": [
+            {
+              "id": "res_math_linear_rules",
+              "title": "Golden Rules of Equality Transformations",
+              "type": "formula_sheet",
+              "summary": "Addition, Subtraction, Multiplication, and Division Properties of Equality.",
+              "bodyText": "1. Addition Property: If A = B, then A + c = B + c.\n2. Subtraction Property: If A = B, then A - c = B - c.\n3. Multiplication Property: If A = B, then A * c = B * c (c != 0).\n4. Division Property: If A = B, then A / c = B / c (c != 0)."
+            }
+          ],
+          "whiteboardScene": {
+            "sceneId": "scene_math_linear_equations",
+            "subjectTitle": "Mathematics",
+            "chapterTitle": "Foundations of Algebra & Geometry",
+            "topicTitle": "Linear Equations & Balancing Operations",
+            "objects": [
+              {
+                "objectId": "node_eq_initial",
+                "objectType": "formula",
+                "label": "Target Equation",
+                "subLabel": "Two-Step Linear Form",
+                "formula": "3x + 5 = 20",
+                "explanation": "A linear equation where the unknown x is scaled by 3 and shifted up by 5 to equal 20.",
+                "position": {
+                  "x": 190,
+                  "y": 50
+                },
+                "size": {
+                  "width": 220,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_balance_law",
+                "objectType": "box",
+                "label": "Balance Invariant",
+                "subLabel": "Left Side = Right Side",
+                "formula": "LHS ⇔ RHS",
+                "explanation": "The equals sign guarantees both sides have identical value. Every operation must be applied equally to both sides.",
+                "position": {
+                  "x": 190,
+                  "y": 175
+                },
+                "size": {
+                  "width": 220,
+                  "height": 88
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_sub_inverse",
+                "objectType": "highlight",
+                "label": "Additive Inverse",
+                "subLabel": "Subtract 5 from Both Sides",
+                "formula": "(3x + 5) - 5 = 20 - 5",
+                "explanation": "To undo +5 attached to the 3x term, we apply its inverse (-5) to both sides, simplifying to 3x = 15.",
+                "position": {
+                  "x": 60,
+                  "y": 310
+                },
+                "size": {
+                  "width": 230,
+                  "height": 92
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_2"
+              },
+              {
+                "objectId": "node_simplified",
+                "objectType": "formula",
+                "label": "Isolated Term",
+                "subLabel": "Constant Cleared",
+                "formula": "3x = 15",
+                "explanation": "Now the variable term 3x stands alone on the left side, ready for coefficient division.",
+                "position": {
+                  "x": 330,
+                  "y": 310
+                },
+                "size": {
+                  "width": 210,
+                  "height": 92
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_2"
+              },
+              {
+                "objectId": "node_div_inverse",
+                "objectType": "formula",
+                "label": "Multiplicative Inverse",
+                "subLabel": "Divide Both Sides by 3",
+                "formula": "3x / 3 = 15 / 3  ⇒  x = 5",
+                "explanation": "Dividing by the coefficient 3 isolates x = 5. Check: 3(5) + 5 = 15 + 5 = 20.",
+                "position": {
+                  "x": 180,
+                  "y": 445
+                },
+                "size": {
+                  "width": 250,
+                  "height": 94
+                },
+                "style": {
+                  "strokeWidth": 2.5,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_3"
+              }
+            ],
+            "arrows": [
+              {
+                "fromObjectId": "node_eq_initial",
+                "toObjectId": "node_balance_law",
+                "label": "governed by",
+                "stepId": "step_1"
+              },
+              {
+                "fromObjectId": "node_balance_law",
+                "toObjectId": "node_sub_inverse",
+                "label": "undo +5",
+                "stepId": "step_2"
+              },
+              {
+                "fromObjectId": "node_sub_inverse",
+                "toObjectId": "node_simplified",
+                "label": "yields",
+                "stepId": "step_2"
+              },
+              {
+                "fromObjectId": "node_simplified",
+                "toObjectId": "node_div_inverse",
+                "label": "divide by 3",
+                "stepId": "step_3"
+              }
+            ],
+            "steps": [
+              {
+                "stepId": "step_1",
+                "stepNumber": 1,
+                "title": "The Equality Balance Invariant",
+                "narration": "Consider the linear equation 3x + 5 = 20. Think of the equals sign as a rigid balance beam: whatever operation we perform on the left side must be performed identically on the right side.",
+                "tutorTip": "Tap 'Target Equation' or 'Balance Invariant' on the canvas to inspect the algebraic structure.",
+                "focusObjectIds": [
+                  "node_eq_initial",
+                  "node_balance_law"
+                ],
+                "inlineQuiz": {
+                  "question": "In the equation 3x + 5 = 20, which operation should we undo FIRST to isolate the variable term 3x?",
+                  "options": [
+                    "Subtract 5 from both sides",
+                    "Divide only 3x by 3",
+                    "Add 20 to both sides",
+                    "Multiply 3x by 5"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "We undo addition/subtraction before multiplication/division: subtracting 5 from both sides cleanly isolates 3x."
+                }
+              },
+              {
+                "stepId": "step_2",
+                "stepNumber": 2,
+                "title": "Clearing the Constant via Additive Inverse",
+                "narration": "By subtracting 5 from both sides, +5 and -5 cancel to zero on the left, leaving 3x = 15.",
+                "tutorTip": "Always apply the subtraction to both sides so the equation remains balanced.",
+                "focusObjectIds": [
+                  "node_sub_inverse",
+                  "node_simplified"
+                ],
+                "inlineQuiz": {
+                  "question": "If you are solving 4x - 7 = 21, what is the resulting equation after clearing the constant term?",
+                  "options": [
+                    "4x = 28",
+                    "4x = 14",
+                    "x = 28",
+                    "4x = -28"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "The inverse of -7 is +7. Adding 7 to both sides gives 4x = 21 + 7 = 28."
+                }
+              },
+              {
+                "stepId": "step_3",
+                "stepNumber": 3,
+                "title": "Isolating x & Substitution Verification",
+                "narration": "Finally, since x is multiplied by 3 in 3x = 15, we divide both sides by 3 to obtain x = 5. Substituting x = 5 back into 3(5) + 5 confirms 15 + 5 = 20.",
+                "tutorTip": "Always verify your root by plugging it back into the original left-hand expression.",
+                "focusObjectIds": [
+                  "node_div_inverse"
+                ],
+                "inlineQuiz": {
+                  "question": "Solve for x: 5x - 8 = 17.",
+                  "options": [
+                    "x = 5",
+                    "x = 9/5",
+                    "x = 3",
+                    "x = 25"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Add 8 to both sides to get 5x = 25, then divide both sides by 5 to get x = 5."
+                }
+              }
+            ]
+          },
+          "assessment": [
+            {
+              "questionId": "math_lin_q1",
+              "question": "What is the solution to 2(x - 3) = 14?",
+              "options": [
+                "x = 10",
+                "x = 4",
+                "x = 7",
+                "x = 8.5"
+              ],
+              "correctIndex": 0,
+              "explanation": "Divide by 2 (or expand 2x - 6 = 14): x - 3 = 7, then add 3 to get x = 10."
+            },
+            {
+              "questionId": "math_lin_q2",
+              "question": "Solve for y: 7 - 2y = 1.",
+              "options": [
+                "y = 3",
+                "y = -3",
+                "y = 4",
+                "y = -4"
+              ],
+              "correctIndex": 0,
+              "explanation": "Subtract 7 from both sides: -2y = -6. Divide by -2: y = 3."
+            }
+          ]
+        },
+        {
+          "topicId": "math_circle_theorems",
+          "title": "Circle Geometry: Tangents, Chords & Inscribed Angles",
+          "summary": "Deductive angle relationships between central angles, inscribed angles, and tangent lines.",
+          "instructions": {
+            "skillId": "math_circle_theorems",
+            "learningObjectives": [
+              "Prove and apply the Central Angle vs. Inscribed Angle Theorem (θ_center = 2 · θ_inscribed)",
+              "Apply Thales' Theorem for angles subtended by a diameter (90° right angle)",
+              "Use the Tangent-Radius Perpendicularity Theorem (90° at point of tangency)"
+            ],
+            "explanationSequence": [
+              "Step 1: Central Angle vs. Inscribed Angle subtended by the same arc",
+              "Step 2: Thales' Semicircle Theorem (diameter subtends 90°)",
+              "Step 3: Tangent-Radius Perpendicularity and exterior tangent lengths"
+            ],
+            "commonMisconceptions": [
+              "Halving the inscribed angle instead of doubling it when finding the central angle",
+              "Assuming any chord subtends a 90° angle at the circumference (only a diameter does)",
+              "Treating the angle between a chord and tangent as 90° instead of the angle between the radius and tangent"
+            ],
+            "socraticSystemPrompt": "You are orchestrating the Circle Geometry lesson. Require the student to identify which arc subtends the angle before applying any theorem."
+          },
+          "resources": [
+            {
+              "id": "res_math_circle_theorems",
+              "title": "Core Circle Theorems Reference",
+              "type": "formula_sheet",
+              "summary": "Key Euclidean circle relationships.",
+              "bodyText": "• Inscribed Angle Theorem: ∠AOB (center) = 2 × ∠ACB (circumference) on the same arc AB.\n• Semicircle Theorem (Thales): An angle inscribed across a diameter is always 90°.\n• Tangent-Radius Theorem: A tangent line is perpendicular (90°) to the radius at the point of contact."
+            }
+          ],
+          "whiteboardScene": {
+            "sceneId": "scene_math_circle_theorems",
+            "subjectTitle": "Mathematics",
+            "chapterTitle": "Foundations of Algebra & Geometry",
+            "topicTitle": "Circle Geometry: Tangents, Chords & Inscribed Angles",
+            "objects": [
+              {
+                "objectId": "node_central_angle",
+                "objectType": "circle",
+                "label": "Central Angle (∠AOB)",
+                "subLabel": "Vertex at Circle Center O",
+                "formula": "∠AOB = 2θ",
+                "explanation": "The angle formed by two radii meeting at the center O is always twice the inscribed angle subtended by the same arc AB.",
+                "position": {
+                  "x": 60,
+                  "y": 70
+                },
+                "size": {
+                  "width": 220,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_inscribed_angle",
+                "objectType": "formula",
+                "label": "Inscribed Angle (∠ACB)",
+                "subLabel": "Vertex on Circumference",
+                "formula": "θ = ½ ∠AOB",
+                "explanation": "Any inscribed angle subtended by arc AB equals half the central angle, meaning all inscribed angles on the same arc are equal.",
+                "position": {
+                  "x": 330,
+                  "y": 70
+                },
+                "size": {
+                  "width": 220,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_thales",
+                "objectType": "highlight",
+                "label": "Thales' Semicircle Law",
+                "subLabel": "Arc is a 180° Diameter",
+                "formula": "∠ACB = ½(180°) = 90°",
+                "explanation": "When chord AB passes through center O (diameter), the central angle is 180°, so the inscribed angle is a 90° right angle.",
+                "position": {
+                  "x": 190,
+                  "y": 230
+                },
+                "size": {
+                  "width": 230,
+                  "height": 92
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_2"
+              },
+              {
+                "objectId": "node_tangent_radius",
+                "objectType": "formula",
+                "label": "Tangent-Radius Orthogonality",
+                "subLabel": "Point of Contact T",
+                "formula": "OT ⊥ Tangent  (∠OTP = 90°)",
+                "explanation": "The shortest distance from center O to a tangent line is the radius OT, forming a strict 90° angle.",
+                "position": {
+                  "x": 180,
+                  "y": 390
+                },
+                "size": {
+                  "width": 250,
+                  "height": 92
+                },
+                "style": {
+                  "strokeWidth": 2.5,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_3"
+              }
+            ],
+            "arrows": [
+              {
+                "fromObjectId": "node_central_angle",
+                "toObjectId": "node_inscribed_angle",
+                "label": "2 : 1 ratio",
+                "stepId": "step_1"
+              },
+              {
+                "fromObjectId": "node_inscribed_angle",
+                "toObjectId": "node_thales",
+                "label": "when ∠AOB = 180°",
+                "stepId": "step_2"
+              },
+              {
+                "fromObjectId": "node_thales",
+                "toObjectId": "node_tangent_radius",
+                "label": "right-angle geometry",
+                "stepId": "step_3"
+              }
+            ],
+            "steps": [
+              {
+                "stepId": "step_1",
+                "stepNumber": 1,
+                "title": "Central vs. Inscribed Angle Theorem",
+                "narration": "When a central angle ∠AOB and an inscribed angle ∠ACB subtend the exact same arc AB, the central angle is always twice the inscribed angle.",
+                "tutorTip": "Tap both angle nodes on the board to compare their vertex positions.",
+                "focusObjectIds": [
+                  "node_central_angle",
+                  "node_inscribed_angle"
+                ],
+                "inlineQuiz": {
+                  "question": "If an inscribed angle ∠ACB subtended by arc AB measures 38°, what is the measure of the central angle ∠AOB?",
+                  "options": [
+                    "76°",
+                    "19°",
+                    "142°",
+                    "52°"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "The central angle is twice the inscribed angle on the same arc: 2 × 38° = 76°."
+                }
+              },
+              {
+                "stepId": "step_2",
+                "stepNumber": 2,
+                "title": "Thales' Theorem: Angles in a Semicircle",
+                "narration": "A special case of the Inscribed Angle Theorem occurs when the chord is a diameter. Because a straight diameter forms a 180° central angle, any angle inscribed in a semicircle is 90°.",
+                "tutorTip": "Use this to immediately spot right-angled triangles inside circles.",
+                "focusObjectIds": [
+                  "node_thales"
+                ],
+                "inlineQuiz": {
+                  "question": "Triangle ABC is inscribed in a circle where side AB is the diameter. If ∠CAB = 35°, what is ∠CBA?",
+                  "options": [
+                    "55°",
+                    "65°",
+                    "90°",
+                    "45°"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Since AB is a diameter, ∠ACB = 90°. Therefore ∠CBA = 180° - 90° - 35° = 55°."
+                }
+              },
+              {
+                "stepId": "step_3",
+                "stepNumber": 3,
+                "title": "Tangent-Radius Perpendicularity",
+                "narration": "A line tangent to a circle touches it at exactly one point T. At that point of contact, the radius OT is always perpendicular (90°) to the tangent line.",
+                "tutorTip": "Combine ∠OTP = 90° with the Pythagorean theorem to find tangent segment lengths.",
+                "focusObjectIds": [
+                  "node_tangent_radius"
+                ],
+                "inlineQuiz": {
+                  "question": "A circle has radius OT = 5 cm. A tangent from external point P touches the circle at T, and OP = 13 cm. What is the tangent length PT?",
+                  "options": [
+                    "12 cm",
+                    "8 cm",
+                    "14 cm",
+                    "9 cm"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Since ∠OTP = 90°, OT² + PT² = OP² ⇒ 5² + PT² = 13² ⇒ PT = √(169 - 25) = 12 cm."
+                }
+              }
+            ]
+          },
+          "assessment": [
+            {
+              "questionId": "math_circ_q1",
+              "question": "Two inscribed angles ∠ADB and ∠ACB subtend the same minor arc AB. If ∠ADB = 42°, what is ∠ACB?",
+              "options": [
+                "42°",
+                "84°",
+                "21°",
+                "138°"
+              ],
+              "correctIndex": 0,
+              "explanation": "Inscribed angles subtended by the same arc are equal (both equal half the central angle)."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "subjectId": "physics",
+    "title": "Physics",
+    "iconEmoji": "⚡",
+    "accentHex": "#006874",
+    "tagline": "Classical mechanics, vector dynamics, and conservation laws",
+    "coordinatorPhilosophy": "Anchor every physical law in vector directions, dimensional unit analysis, and conservation principles.",
+    "chapter": {
+      "chapterId": "mechanics-energy",
+      "title": "Classical Mechanics & Energy Conservation",
+      "summary": "Newtonian force dynamics and work-energy transformations in physical systems.",
+      "chapterObjectives": [
+        "Analyze net force vectors and compute acceleration via F_net = m * a",
+        "Apply the Law of Conservation of Mechanical Energy between kinetic and potential forms"
+      ],
+      "topics": [
+        {
+          "topicId": "phys_newton_second_law",
+          "title": "Newton's Second Law & Free-Body Force Vectors",
+          "summary": "Relating net external force, inertial mass, and vector acceleration.",
+          "instructions": {
+            "skillId": "phys_newton_second_law",
+            "learningObjectives": [
+              "Distinguish individual forces from the vector net force ΣF",
+              "Compute acceleration using a = F_net / m and verify base SI units (1 N = 1 kg·m/s²)",
+              "Account for opposing friction forces when determining net acceleration"
+            ],
+            "explanationSequence": [
+              "Step 1: The Law of Acceleration (F_net = ma)",
+              "Step 2: SI Units and Vector Collinearity",
+              "Step 3: Free-Body Problem Solving with Friction"
+            ],
+            "commonMisconceptions": [
+              "Using a single applied force instead of subtracting opposing friction to find F_net",
+              "Believing an object needs a continuous net force to maintain constant velocity",
+              "Confusing mass (kg, scalar) with weight (W = mg in Newtons, vector)"
+            ],
+            "socraticSystemPrompt": "You are orchestrating Newton's Second Law. Always prompt the student to sum all forces into F_net before dividing by mass m."
+          },
+          "resources": [
+            {
+              "id": "res_phys_newton2",
+              "title": "Newtonian Dynamics Equations",
+              "type": "formula_sheet",
+              "summary": "Vector force summation, weight, and acceleration.",
+              "bodyText": "• Net Force: F_net = ΣF = F_applied - f_friction\n• Newton's Second Law: a = F_net / m\n• Weight: W = m · g (g ≈ 9.8 m/s²)"
+            }
+          ],
+          "whiteboardScene": {
+            "sceneId": "scene_phys_newton_second_law",
+            "subjectTitle": "Physics",
+            "chapterTitle": "Classical Mechanics & Energy Conservation",
+            "topicTitle": "Newton's Second Law & Free-Body Force Vectors",
+            "objects": [
+              {
+                "objectId": "node_force",
+                "objectType": "formula",
+                "label": "Net Force (F_net)",
+                "subLabel": "Vector Sum of External Forces",
+                "formula": "F_net = Σ F",
+                "explanation": "A net external force causes a mass to change its velocity over time. Without net force, velocity remains constant.",
+                "position": {
+                  "x": 60,
+                  "y": 75
+                },
+                "size": {
+                  "width": 205,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_mass",
+                "objectType": "box",
+                "label": "Inertial Mass (m)",
+                "subLabel": "Resistance to Acceleration",
+                "formula": "m = F_net / a  (kg)",
+                "explanation": "Mass measures inertia. Greater mass requires greater net force to achieve the same acceleration.",
+                "position": {
+                  "x": 335,
+                  "y": 75
+                },
+                "size": {
+                  "width": 205,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_accel",
+                "objectType": "circle",
+                "label": "Acceleration (a)",
+                "subLabel": "Rate of Velocity Change",
+                "formula": "a = F_net / m  (m/s²)",
+                "explanation": "Acceleration is directly proportional to net force and inversely proportional to mass.",
+                "position": {
+                  "x": 195,
+                  "y": 220
+                },
+                "size": {
+                  "width": 215,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_units",
+                "objectType": "box",
+                "label": "SI Units & Vectors",
+                "subLabel": "1 Newton = 1 kg·m/s²",
+                "formula": "F⃗ = m · a⃗",
+                "explanation": "1 Newton accelerates 1 kg at 1 m/s². Acceleration always points in the exact direction of F_net.",
+                "position": {
+                  "x": 190,
+                  "y": 355
+                },
+                "size": {
+                  "width": 225,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_2"
+              },
+              {
+                "objectId": "node_fbd_example",
+                "objectType": "formula",
+                "label": "Free-Body Calculation",
+                "subLabel": "F_pull = 35 N, f_k = 15 N, m = 4 kg",
+                "formula": "a = (35 - 15) / 4 = 5 m/s²",
+                "explanation": "Subtract opposing kinetic friction (15 N) from applied pull (35 N) to get F_net = 20 N, then divide by 4 kg.",
+                "position": {
+                  "x": 170,
+                  "y": 490
+                },
+                "size": {
+                  "width": 265,
+                  "height": 94
+                },
+                "style": {
+                  "strokeWidth": 2.5,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_3"
+              }
+            ],
+            "arrows": [
+              {
+                "fromObjectId": "node_force",
+                "toObjectId": "node_accel",
+                "label": "proportional",
+                "stepId": "step_1"
+              },
+              {
+                "fromObjectId": "node_mass",
+                "toObjectId": "node_accel",
+                "label": "inverse",
+                "stepId": "step_1"
+              },
+              {
+                "fromObjectId": "node_accel",
+                "toObjectId": "node_units",
+                "label": "vector & units",
+                "stepId": "step_2"
+              },
+              {
+                "fromObjectId": "node_units",
+                "toObjectId": "node_fbd_example",
+                "label": "apply with friction",
+                "stepId": "step_3"
+              }
+            ],
+            "steps": [
+              {
+                "stepId": "step_1",
+                "stepNumber": 1,
+                "title": "The Law of Acceleration: F_net = ma",
+                "narration": "Newton's Second Law states that acceleration equals net external force divided by inertial mass. Doubling net force doubles acceleration; doubling mass halves acceleration.",
+                "tutorTip": "Tap 'Net Force' or 'Inertial Mass' to inspect their mathematical relationship.",
+                "focusObjectIds": [
+                  "node_force",
+                  "node_mass",
+                  "node_accel"
+                ],
+                "inlineQuiz": {
+                  "question": "If the net force on an object is doubled while its mass is also doubled, what happens to its acceleration?",
+                  "options": [
+                    "It remains unchanged",
+                    "It quadruples",
+                    "It doubles",
+                    "It halves"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "a' = (2F) / (2m) = F / m = a. The factor of 2 cancels out."
+                }
+              },
+              {
+                "stepId": "step_2",
+                "stepNumber": 2,
+                "title": "SI Units and Vector Alignment",
+                "narration": "One Newton (1 N) is defined as 1 kg·m/s². Because mass is a positive scalar, the acceleration vector always points in the direction of the net force.",
+                "tutorTip": "Never confuse velocity direction with acceleration direction: F_net dictates acceleration direction.",
+                "focusObjectIds": [
+                  "node_units"
+                ],
+                "inlineQuiz": {
+                  "question": "A car moves eastward while braking to a stop. In which direction do the net force and acceleration vectors point?",
+                  "options": [
+                    "Westward (opposite to motion)",
+                    "Eastward (same as motion)",
+                    "Downward",
+                    "Zero net force"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Braking decelerates the eastward velocity, meaning both acceleration and net force point westward."
+                }
+              },
+              {
+                "stepId": "step_3",
+                "stepNumber": 3,
+                "title": "Free-Body Diagrams with Friction",
+                "narration": "When multiple horizontal forces act on a block, first compute F_net = F_applied - f_friction. For a 35 N pull opposed by 15 N friction on a 4 kg block, F_net = 20 N and a = 5 m/s².",
+                "tutorTip": "Tap 'Free-Body Calculation' to review the step-by-step substitution.",
+                "focusObjectIds": [
+                  "node_fbd_example"
+                ],
+                "inlineQuiz": {
+                  "question": "A 50 N horizontal pull acts on a 5 kg crate against a 10 N friction force. What is the crate's acceleration?",
+                  "options": [
+                    "8 m/s²",
+                    "10 m/s²",
+                    "12 m/s²",
+                    "2 m/s²"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "F_net = 50 N - 10 N = 40 N. Then a = 40 N / 5 kg = 8 m/s²."
+                }
+              }
+            ]
+          },
+          "assessment": [
+            {
+              "questionId": "phys_n2_q1",
+              "question": "What net force is required to accelerate a 1,200 kg vehicle at 2.5 m/s²?",
+              "options": [
+                "3,000 N",
+                "480 N",
+                "1,202.5 N",
+                "6,000 N"
+              ],
+              "correctIndex": 0,
+              "explanation": "F_net = m * a = 1,200 kg * 2.5 m/s² = 3,000 N."
+            }
+          ]
+        },
+        {
+          "topicId": "phys_conservation_energy",
+          "title": "Work, Kinetic Energy & Gravitational Potential Energy",
+          "summary": "Mechanical energy transformations between potential energy (mgh) and kinetic energy (½mv²).",
+          "instructions": {
+            "skillId": "phys_conservation_energy",
+            "learningObjectives": [
+              "Compute Gravitational Potential Energy (PE = mgh) and Kinetic Energy (KE = ½mv²)",
+              "Apply Conservation of Mechanical Energy (E_total = PE + KE = constant) in frictionless systems",
+              "Calculate final speed from height drop using v = √(2gh)"
+            ],
+            "explanationSequence": [
+              "Step 1: Stored Gravitational Potential Energy (PE = mgh)",
+              "Step 2: Motion Kinetic Energy (KE = ½mv²)",
+              "Step 3: Conservation of Total Mechanical Energy (mgh_i = ½mv_f²)"
+            ],
+            "commonMisconceptions": [
+              "Forgetting to square the velocity v when calculating kinetic energy",
+              "Thinking final speed in free fall depends on the object's mass m (mass cancels out in mgh = ½mv²)"
+            ],
+            "socraticSystemPrompt": "You are orchestrating the Conservation of Energy lesson. Emphasize that total mechanical energy stays constant in the absence of non-conservative friction."
+          },
+          "resources": [
+            {
+              "id": "res_phys_energy",
+              "title": "Work & Energy Equations",
+              "type": "formula_sheet",
+              "summary": "Potential, kinetic, and conserved mechanical energy.",
+              "bodyText": "• Gravitational Potential Energy: PE = m · g · h (Joules)\n• Kinetic Energy: KE = ½ · m · v² (Joules)\n• Conservation Law: PE_initial + KE_initial = PE_final + KE_final"
+            }
+          ],
+          "whiteboardScene": {
+            "sceneId": "scene_phys_conservation_energy",
+            "subjectTitle": "Physics",
+            "chapterTitle": "Classical Mechanics & Energy Conservation",
+            "topicTitle": "Work, Kinetic Energy & Gravitational Potential Energy",
+            "objects": [
+              {
+                "objectId": "node_pe",
+                "objectType": "formula",
+                "label": "Potential Energy (PE)",
+                "subLabel": "Stored Energy of Position",
+                "formula": "PE = m · g · h  (J)",
+                "explanation": "Energy stored by virtue of height h in a gravitational field g. Measured in Joules (1 J = 1 N·m).",
+                "position": {
+                  "x": 60,
+                  "y": 80
+                },
+                "size": {
+                  "width": 220,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_ke",
+                "objectType": "formula",
+                "label": "Kinetic Energy (KE)",
+                "subLabel": "Energy of Motion",
+                "formula": "KE = ½ m · v²  (J)",
+                "explanation": "Energy possessed by a moving mass. Because v is squared, doubling speed quadruples kinetic energy.",
+                "position": {
+                  "x": 330,
+                  "y": 80
+                },
+                "size": {
+                  "width": 220,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_2"
+              },
+              {
+                "objectId": "node_conservation",
+                "objectType": "highlight",
+                "label": "Mechanical Conservation",
+                "subLabel": "Zero Friction Transfer",
+                "formula": "mgh = ½mv² ⇒ v = √(2gh)",
+                "explanation": "As an object falls by height h, all lost PE converts into KE. Mass cancels out on both sides.",
+                "position": {
+                  "x": 180,
+                  "y": 250
+                },
+                "size": {
+                  "width": 250,
+                  "height": 95
+                },
+                "style": {
+                  "strokeWidth": 2.5,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_3"
+              }
+            ],
+            "arrows": [
+              {
+                "fromObjectId": "node_pe",
+                "toObjectId": "node_ke",
+                "label": "converts during fall",
+                "stepId": "step_2"
+              },
+              {
+                "fromObjectId": "node_pe",
+                "toObjectId": "node_conservation",
+                "label": "equate PE = KE",
+                "stepId": "step_3"
+              },
+              {
+                "fromObjectId": "node_ke",
+                "toObjectId": "node_conservation",
+                "label": "mass cancels",
+                "stepId": "step_3"
+              }
+            ],
+            "steps": [
+              {
+                "stepId": "step_1",
+                "stepNumber": 1,
+                "title": "Gravitational Potential Energy (PE = mgh)",
+                "narration": "Lifting an object of mass m to a height h stores gravitational potential energy PE = mgh, measured in Joules.",
+                "tutorTip": "Tap 'Potential Energy' to inspect how height scales stored energy.",
+                "focusObjectIds": [
+                  "node_pe"
+                ],
+                "inlineQuiz": {
+                  "question": "Using g = 10 m/s², how much gravitational potential energy does a 2 kg book have on a shelf 3 meters high?",
+                  "options": [
+                    "60 J",
+                    "30 J",
+                    "6 J",
+                    "15 J"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "PE = m * g * h = 2 kg * 10 m/s² * 3 m = 60 J."
+                }
+              },
+              {
+                "stepId": "step_2",
+                "stepNumber": 2,
+                "title": "Kinetic Energy & Velocity Squared (KE = ½mv²)",
+                "narration": "Kinetic energy depends linearly on mass m but quadratically on speed v. Doubling an object's speed increases its kinetic energy by a factor of four.",
+                "tutorTip": "Watch the exponent on v: speed is squared before multiplying by ½m.",
+                "focusObjectIds": [
+                  "node_ke"
+                ],
+                "inlineQuiz": {
+                  "question": "What is the kinetic energy of a 4 kg ball moving at 3 m/s?",
+                  "options": [
+                    "18 J",
+                    "12 J",
+                    "36 J",
+                    "6 J"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "KE = ½ * 4 kg * (3 m/s)² = 2 * 9 = 18 J."
+                }
+              },
+              {
+                "stepId": "step_3",
+                "stepNumber": 3,
+                "title": "Conservation of Mechanical Energy",
+                "narration": "In a frictionless drop from rest, initial potential energy mgh equals final kinetic energy ½mv². Canceling mass gives v = √(2gh).",
+                "tutorTip": "Notice that mass m cancels out: heavy and light objects hit the bottom at the same speed.",
+                "focusObjectIds": [
+                  "node_conservation"
+                ],
+                "inlineQuiz": {
+                  "question": "A roller coaster starts from rest at a height of 20 m (take g = 10 m/s²). Neglecting friction, what is its speed at the bottom (h = 0)?",
+                  "options": [
+                    "20 m/s",
+                    "10 m/s",
+                    "400 m/s",
+                    "14.1 m/s"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "v = √(2 * g * h) = √(2 * 10 * 20) = √400 = 20 m/s."
+                }
+              }
+            ]
+          },
+          "assessment": [
+            {
+              "questionId": "phys_en_q1",
+              "question": "If the speed of a moving vehicle triples, by what factor does its kinetic energy increase?",
+              "options": [
+                "9 times",
+                "3 times",
+                "6 times",
+                "27 times"
+              ],
+              "correctIndex": 0,
+              "explanation": "Because KE = ½mv², tripling v multiplies KE by 3² = 9."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "subjectId": "chemistry",
+    "title": "Chemistry",
+    "iconEmoji": "🧪",
+    "accentHex": "#006874",
+    "tagline": "Atomic architecture, periodic trends, and quantitative stoichiometry",
+    "coordinatorPhilosophy": "Connect subatomic particle counts and conservation of mass directly to macroscopic chemical equations.",
+    "chapter": {
+      "chapterId": "atomic-reactions",
+      "title": "Atomic Structure & Quantitative Stoichiometry",
+      "summary": "Subatomic composition, isotopes, molar mass conversions, and limiting reagents.",
+      "chapterObjectives": [
+        "Determine proton, neutron, and electron counts from atomic number Z and mass number A",
+        "Balance chemical equations and identify limiting reagents using mole ratios"
+      ],
+      "topics": [
+        {
+          "topicId": "chem_atomic_orbitals",
+          "title": "Atomic Structure, Isotopes & Electron Shells",
+          "summary": "Nuclear composition (Z, N, A), isotopic mass, and Bohr/orbital valence configurations.",
+          "instructions": {
+            "skillId": "chem_atomic_orbitals",
+            "learningObjectives": [
+              "Define Atomic Number (Z = protons) and Mass Number (A = protons + neutrons)",
+              "Explain why isotopes of an element have identical chemical properties but different masses",
+              "Determine valence electron counts and ion charges from shell configurations"
+            ],
+            "explanationSequence": [
+              "Step 1: Nuclear Identity (Z and A)",
+              "Step 2: Isotopes and Neutron Count (N = A - Z)",
+              "Step 3: Electron Shells & Valence Reactivity"
+            ],
+            "commonMisconceptions": [
+              "Confusing mass number A with the number of neutrons N",
+              "Adding electrons instead of subtracting electrons when forming a positively charged cation"
+            ],
+            "socraticSystemPrompt": "You are orchestrating the Atomic Structure lesson. Remind students that proton count Z uniquely locks the element identity."
+          },
+          "resources": [
+            {
+              "id": "res_chem_atomic",
+              "title": "Nuclide Notation & Subatomic Particles",
+              "type": "formula_sheet",
+              "summary": "Proton, neutron, and electron relationships.",
+              "bodyText": "• Atomic Number (Z) = number of protons\n• Mass Number (A) = protons (Z) + neutrons (N)\n• Neutral Atom: electrons = Z | Ion with charge q: electrons = Z - q"
+            }
+          ],
+          "whiteboardScene": {
+            "sceneId": "scene_chem_atomic_orbitals",
+            "subjectTitle": "Chemistry",
+            "chapterTitle": "Atomic Structure & Quantitative Stoichiometry",
+            "topicTitle": "Atomic Structure, Isotopes & Electron Shells",
+            "objects": [
+              {
+                "objectId": "node_nucleus_z",
+                "objectType": "formula",
+                "label": "Atomic Number (Z)",
+                "subLabel": "Nuclear Proton Count",
+                "formula": "Z = # Protons (+1)",
+                "explanation": "The number of protons in the nucleus defines the chemical element (e.g., Z = 6 is always Carbon).",
+                "position": {
+                  "x": 60,
+                  "y": 80
+                },
+                "size": {
+                  "width": 220,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_mass_a",
+                "objectType": "formula",
+                "label": "Mass Number (A)",
+                "subLabel": "Total Nucleons",
+                "formula": "A = Z + N  ⇒  N = A - Z",
+                "explanation": "Total protons plus neutrons in the nucleus. Isotopes share the same Z but differ in neutron count N.",
+                "position": {
+                  "x": 330,
+                  "y": 80
+                },
+                "size": {
+                  "width": 220,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_2"
+              },
+              {
+                "objectId": "node_valence_shells",
+                "objectType": "highlight",
+                "label": "Electron Shells & Ions",
+                "subLabel": "2, 8, 8 Octet Filling",
+                "formula": "e⁻ = Z - charge",
+                "explanation": "Outer valence electrons govern bonding. Losing electrons forms a positive cation; gaining forms a negative anion.",
+                "position": {
+                  "x": 180,
+                  "y": 250
+                },
+                "size": {
+                  "width": 250,
+                  "height": 94
+                },
+                "style": {
+                  "strokeWidth": 2.5,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_3"
+              }
+            ],
+            "arrows": [
+              {
+                "fromObjectId": "node_nucleus_z",
+                "toObjectId": "node_mass_a",
+                "label": "plus N neutrons",
+                "stepId": "step_2"
+              },
+              {
+                "fromObjectId": "node_nucleus_z",
+                "toObjectId": "node_valence_shells",
+                "label": "balances e⁻",
+                "stepId": "step_3"
+              }
+            ],
+            "steps": [
+              {
+                "stepId": "step_1",
+                "stepNumber": 1,
+                "title": "Nuclear Identity: Atomic Number (Z)",
+                "narration": "Every element is uniquely defined by its atomic number Z, the number of positively charged protons in its nucleus.",
+                "tutorTip": "Tap 'Atomic Number (Z)' to review how proton count locks element identity.",
+                "focusObjectIds": [
+                  "node_nucleus_z"
+                ],
+                "inlineQuiz": {
+                  "question": "A neutral atom of Sodium (Z = 11) contains how many protons and electrons?",
+                  "options": [
+                    "11 protons and 11 electrons",
+                    "11 protons and 23 electrons",
+                    "23 protons and 11 electrons",
+                    "12 protons and 11 electrons"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "In a neutral atom, positive protons (Z = 11) equal negative electrons (11)."
+                }
+              },
+              {
+                "stepId": "step_2",
+                "stepNumber": 2,
+                "title": "Mass Number (A) and Isotopes",
+                "narration": "Mass number A equals protons (Z) plus neutrons (N). Isotopes are atoms of the same element (same Z) with different numbers of neutrons (N = A - Z).",
+                "tutorTip": "Subtract Z from A to find the exact neutron count.",
+                "focusObjectIds": [
+                  "node_mass_a"
+                ],
+                "inlineQuiz": {
+                  "question": "Carbon-14 (A = 14, Z = 6) is used in radiocarbon dating. How many neutrons are in a Carbon-14 nucleus?",
+                  "options": [
+                    "8 neutrons",
+                    "6 neutrons",
+                    "14 neutrons",
+                    "20 neutrons"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "N = A - Z = 14 - 6 = 8 neutrons."
+                }
+              },
+              {
+                "stepId": "step_3",
+                "stepNumber": 3,
+                "title": "Valence Shells & Ion Formation",
+                "narration": "Electrons fill shells (2, 8, 8). When Magnesium (Z = 12, shell 2,8,2) loses its 2 valence electrons to achieve a stable octet, it forms the Mg²⁺ cation with 10 electrons.",
+                "tutorTip": "Remember: losing negative electrons leaves a net positive charge.",
+                "focusObjectIds": [
+                  "node_valence_shells"
+                ],
+                "inlineQuiz": {
+                  "question": "How many electrons are present in an Oxide ion, O²⁻, given that Oxygen has atomic number Z = 8?",
+                  "options": [
+                    "10 electrons",
+                    "6 electrons",
+                    "8 electrons",
+                    "16 electrons"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "A 2- negative charge means the atom gained 2 electrons: 8 + 2 = 10 electrons."
+                }
+              }
+            ]
+          },
+          "assessment": [
+            {
+              "questionId": "chem_atom_q1",
+              "question": "Which pair of species represents isotopes of the same element?",
+              "options": [
+                "³⁵₁₇Cl and ³⁷₁₇Cl",
+                "¹⁴₆C and ¹⁴₇N",
+                "²³₁₁Na and ²³₁₁Na⁺",
+                "¹⁶₈O and ¹⁶₈O²⁻"
+              ],
+              "correctIndex": 0,
+              "explanation": "Isotopes have the same atomic number (Z = 17) but different mass numbers (A = 35 and 37)."
+            }
+          ]
+        },
+        {
+          "topicId": "chem_stoichiometry_moles",
+          "title": "Stoichiometry, Molar Mass & Limiting Reagents",
+          "summary": "Converting mass to moles (n = m/M) and using balanced coefficients to identify the limiting reactant.",
+          "instructions": {
+            "skillId": "chem_stoichiometry_moles",
+            "learningObjectives": [
+              "Convert between mass in grams and amount in moles using n = m / M",
+              "Use stoichiometric mole ratios from balanced chemical equations",
+              "Identify the limiting reagent that governs maximum theoretical product yield"
+            ],
+            "explanationSequence": [
+              "Step 1: The Mole Bridge (n = m / M)",
+              "Step 2: Stoichiometric Coefficient Ratios",
+              "Step 3: Identifying the Limiting Reagent"
+            ],
+            "commonMisconceptions": [
+              "Comparing reactant masses directly in grams instead of converting to moles first",
+              "Forgetting to divide moles by the stoichiometric coefficient when testing which reactant runs out first"
+            ],
+            "socraticSystemPrompt": "You are orchestrating the Stoichiometry lesson. Insist that students convert grams to moles before comparing reactants across a chemical equation."
+          },
+          "resources": [
+            {
+              "id": "res_chem_stoich",
+              "title": "Stoichiometric Conversion Workflow",
+              "type": "formula_sheet",
+              "summary": "Mass-to-mole and limiting reactant equations.",
+              "bodyText": "• Moles: n = mass (g) / Molar Mass M (g/mol)\n• Reaction Ratio (aA + bB → cC): n_A / a = n_B / b = n_C / c\n• Limiting Reagent: The reactant with the smallest (n_available / coefficient) ratio."
+            }
+          ],
+          "whiteboardScene": {
+            "sceneId": "scene_chem_stoichiometry_moles",
+            "subjectTitle": "Chemistry",
+            "chapterTitle": "Atomic Structure & Quantitative Stoichiometry",
+            "topicTitle": "Stoichiometry, Molar Mass & Limiting Reagents",
+            "objects": [
+              {
+                "objectId": "node_mole_bridge",
+                "objectType": "formula",
+                "label": "The Mole Bridge",
+                "subLabel": "Grams to Moles",
+                "formula": "n = m / M  (mol)",
+                "explanation": "Chemical equations count molecules (moles), not grams. Divide mass m by molar mass M to enter the mole domain.",
+                "position": {
+                  "x": 60,
+                  "y": 80
+                },
+                "size": {
+                  "width": 220,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_mole_ratio",
+                "objectType": "box",
+                "label": "Balanced Mole Ratio",
+                "subLabel": "Water Synthesis",
+                "formula": "2 H₂ + 1 O₂ → 2 H₂O",
+                "explanation": "Every 2 moles of H₂ require exactly 1 mole of O₂ to produce 2 moles of H₂O.",
+                "position": {
+                  "x": 330,
+                  "y": 80
+                },
+                "size": {
+                  "width": 220,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_2"
+              },
+              {
+                "objectId": "node_limiting",
+                "objectType": "highlight",
+                "label": "Limiting Reagent Test",
+                "subLabel": "Smallest (n / coeff) Wins",
+                "formula": "min( n_H₂ / 2 , n_O₂ / 1 )",
+                "explanation": "The reactant that runs out first stops the reaction and sets the maximum theoretical yield.",
+                "position": {
+                  "x": 180,
+                  "y": 250
+                },
+                "size": {
+                  "width": 250,
+                  "height": 94
+                },
+                "style": {
+                  "strokeWidth": 2.5,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_3"
+              }
+            ],
+            "arrows": [
+              {
+                "fromObjectId": "node_mole_bridge",
+                "toObjectId": "node_mole_ratio",
+                "label": "apply ratio",
+                "stepId": "step_2"
+              },
+              {
+                "fromObjectId": "node_mole_ratio",
+                "toObjectId": "node_limiting",
+                "label": "divide by coeff",
+                "stepId": "step_3"
+              }
+            ],
+            "steps": [
+              {
+                "stepId": "step_1",
+                "stepNumber": 1,
+                "title": "Converting Mass to Moles (n = m / M)",
+                "narration": "To compare substances in a reaction, convert mass in grams to moles using n = m / M, where M is the molar mass in grams per mole.",
+                "tutorTip": "Tap 'The Mole Bridge' on the board to inspect the conversion formula.",
+                "focusObjectIds": [
+                  "node_mole_bridge"
+                ],
+                "inlineQuiz": {
+                  "question": "Given the molar mass of Water (H₂O) is 18 g/mol, how many moles are in 54 g of water?",
+                  "options": [
+                    "3.0 mol",
+                    "0.33 mol",
+                    "36 mol",
+                    "972 mol"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "n = m / M = 54 g / 18 g/mol = 3.0 mol."
+                }
+              },
+              {
+                "stepId": "step_2",
+                "stepNumber": 2,
+                "title": "Stoichiometric Mole Ratios",
+                "narration": "In the balanced equation 2 H₂ + O₂ → 2 H₂O, coefficients represent mole ratios: 2 moles of hydrogen gas react with 1 mole of oxygen gas to form 2 moles of water.",
+                "tutorTip": "Use the ratio (target coefficient / known coefficient) to scale moles.",
+                "focusObjectIds": [
+                  "node_mole_ratio"
+                ],
+                "inlineQuiz": {
+                  "question": "In N₂ + 3 H₂ → 2 NH₃, how many moles of H₂ are needed to completely react with 2 moles of N₂?",
+                  "options": [
+                    "6 moles",
+                    "3 moles",
+                    "4 moles",
+                    "2 moles"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Each mole of N₂ requires 3 moles of H₂, so 2 mol N₂ × 3 = 6 moles of H₂."
+                }
+              },
+              {
+                "stepId": "step_3",
+                "stepNumber": 3,
+                "title": "Determining the Limiting Reagent",
+                "narration": "When 4 moles of H₂ are mixed with 3 moles of O₂ in 2 H₂ + O₂ → 2 H₂O, compare n/coeff: for H₂ it is 4/2 = 2, and for O₂ it is 3/1 = 3. H₂ is smaller, so H₂ is the limiting reagent.",
+                "tutorTip": "Always compute product yield from the limiting reagent, never the excess reagent.",
+                "focusObjectIds": [
+                  "node_limiting"
+                ],
+                "inlineQuiz": {
+                  "question": "For 2 H₂ + O₂ → 2 H₂O, if you react 4 moles of H₂ with 3 moles of O₂, how many moles of H₂O are produced?",
+                  "options": [
+                    "4 moles",
+                    "6 moles",
+                    "3 moles",
+                    "7 moles"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "H₂ is limiting (4 mol H₂ consumes 2 mol O₂) and yields 4 moles of H₂O (1 mol O₂ remains in excess)."
+                }
+              }
+            ]
+          },
+          "assessment": [
+            {
+              "questionId": "chem_stoich_q1",
+              "question": "How many grams of CO₂ (M = 44 g/mol) are formed when 1.0 mole of CH₄ burns completely in excess O₂ (CH₄ + 2O₂ → CO₂ + 2H₂O)?",
+              "options": [
+                "44 g",
+                "22 g",
+                "88 g",
+                "16 g"
+              ],
+              "correctIndex": 0,
+              "explanation": "1.0 mol CH₄ yields 1.0 mol CO₂, which has a mass of 1.0 mol × 44 g/mol = 44 g."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "subjectId": "biology",
+    "title": "Biology",
+    "iconEmoji": "🧬",
+    "accentHex": "#006874",
+    "tagline": "Cellular membranes, bioenergetics, and molecular physiology",
+    "coordinatorPhilosophy": "Link cellular structure and concentration gradients directly to physiological function and energy currency (ATP).",
+    "chapter": {
+      "chapterId": "cellular-genetics",
+      "title": "Cellular Transport & Bioenergetics",
+      "summary": "Membrane transport mechanisms and ATP energy conversion in chloroplasts and mitochondria.",
+      "chapterObjectives": [
+        "Contrast passive transport (diffusion, osmosis) with ATP-driven active transport",
+        "Trace energy flow through photosynthesis and cellular respiration"
+      ],
+      "topics": [
+        {
+          "topicId": "bio_cell_transport",
+          "title": "Cell Membrane: Osmosis, Diffusion & Active Transport",
+          "summary": "Selective permeability across the phospholipid bilayer and electrochemical gradient pumping.",
+          "instructions": {
+            "skillId": "bio_cell_transport",
+            "learningObjectives": [
+              "Distinguish simple/facilitated diffusion from active transport based on gradient direction and ATP use",
+              "Predict cell volume changes in hypertonic, hypotonic, and isotonic solutions via osmosis",
+              "Explain how the Na⁺/K⁺ pump maintains membrane potential using ATP"
+            ],
+            "explanationSequence": [
+              "Step 1: Passive Diffusion Down the Concentration Gradient",
+              "Step 2: Osmosis & Tonicity Across Semi-Permeable Membranes",
+              "Step 3: Active Transport Against the Gradient (ATP Pumps)"
+            ],
+            "commonMisconceptions": [
+              "Thinking osmosis is the movement of solute salt rather than water across a semi-permeable membrane",
+              "Assuming facilitated diffusion requires ATP because it uses a channel or carrier protein"
+            ],
+            "socraticSystemPrompt": "You are orchestrating the Cell Membrane Transport lesson. Always ask the student which way the concentration gradient points before deciding whether ATP is required."
+          },
+          "resources": [
+            {
+              "id": "res_bio_transport",
+              "title": "Membrane Transport Comparison Table",
+              "type": "formula_sheet",
+              "summary": "Gradient direction and energy requirements.",
+              "bodyText": "• Simple Diffusion: High → Low concentration | No ATP | Nonpolar molecules (O₂, CO₂)\n• Facilitated Diffusion: High → Low | No ATP | Protein channel/carrier (Glucose, ions)\n• Osmosis: Water moves from Low solute (high water) → High solute (low water) | No ATP\n• Active Transport: Low → High (against gradient) | Requires ATP | Pump protein (Na⁺/K⁺ pump)"
+            }
+          ],
+          "whiteboardScene": {
+            "sceneId": "scene_bio_cell_transport",
+            "subjectTitle": "Biology",
+            "chapterTitle": "Cellular Transport & Bioenergetics",
+            "topicTitle": "Cell Membrane: Osmosis, Diffusion & Active Transport",
+            "objects": [
+              {
+                "objectId": "node_passive",
+                "objectType": "box",
+                "label": "Passive Diffusion",
+                "subLabel": "Down Gradient (High → Low)",
+                "formula": "ΔC < 0  |  0 ATP",
+                "explanation": "Solutes move spontaneously down their concentration gradient from high to low concentration without expending cellular ATP.",
+                "position": {
+                  "x": 60,
+                  "y": 80
+                },
+                "size": {
+                  "width": 220,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_osmosis",
+                "objectType": "formula",
+                "label": "Osmosis (Water Flow)",
+                "subLabel": "Hypotonic → Hypertonic",
+                "formula": "H₂O → Higher Solute",
+                "explanation": "Water diffuses across a selectively permeable membrane toward the side with higher solute concentration.",
+                "position": {
+                  "x": 330,
+                  "y": 80
+                },
+                "size": {
+                  "width": 220,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_2"
+              },
+              {
+                "objectId": "node_active_pump",
+                "objectType": "highlight",
+                "label": "Active Transport Pump",
+                "subLabel": "Against Gradient (Low → High)",
+                "formula": "ATP → ADP + Pᵢ (3 Na⁺ out, 2 K⁺ in)",
+                "explanation": "Carrier pumps hydrolyze ATP to force ions uphill against their electrochemical gradient.",
+                "position": {
+                  "x": 180,
+                  "y": 250
+                },
+                "size": {
+                  "width": 250,
+                  "height": 94
+                },
+                "style": {
+                  "strokeWidth": 2.5,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_3"
+              }
+            ],
+            "arrows": [
+              {
+                "fromObjectId": "node_passive",
+                "toObjectId": "node_osmosis",
+                "label": "water-specific",
+                "stepId": "step_2"
+              },
+              {
+                "fromObjectId": "node_passive",
+                "toObjectId": "node_active_pump",
+                "label": "contrast uphill",
+                "stepId": "step_3"
+              }
+            ],
+            "steps": [
+              {
+                "stepId": "step_1",
+                "stepNumber": 1,
+                "title": "Passive Transport: Moving Down the Gradient",
+                "narration": "In simple and facilitated diffusion, molecules move spontaneously from higher concentration to lower concentration without using metabolic ATP energy.",
+                "tutorTip": "Tap 'Passive Diffusion' to review why facilitated channel proteins still count as passive.",
+                "focusObjectIds": [
+                  "node_passive"
+                ],
+                "inlineQuiz": {
+                  "question": "Glucose enters a cell down its concentration gradient through a membrane carrier protein without using ATP. What process is this?",
+                  "options": [
+                    "Facilitated diffusion",
+                    "Active transport",
+                    "Osmosis",
+                    "Endocytosis"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Moving down a concentration gradient via a transport protein with zero ATP cost is facilitated diffusion."
+                }
+              },
+              {
+                "stepId": "step_2",
+                "stepNumber": 2,
+                "title": "Osmosis & Solution Tonicity",
+                "narration": "Osmosis is the diffusion of water across a selectively permeable membrane from a hypotonic (lower solute) region to a hypertonic (higher solute) region.",
+                "tutorTip": "Remember: 'Salt sucks'—water flows toward the higher solute concentration.",
+                "focusObjectIds": [
+                  "node_osmosis"
+                ],
+                "inlineQuiz": {
+                  "question": "What happens to a red blood cell placed in a strongly hypertonic salt solution?",
+                  "options": [
+                    "Water leaves the cell and it shrivels (crenates)",
+                    "Water rushes into the cell and it bursts (lyses)",
+                    "Salt is pumped out using ATP",
+                    "No net movement of water occurs"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Because the outside solution is hypertonic (higher solute), water moves out of the cell by osmosis, causing it to shrivel."
+                }
+              },
+              {
+                "stepId": "step_3",
+                "stepNumber": 3,
+                "title": "Active Transport: Pumping Against the Gradient",
+                "narration": "When a cell must concentrate ions against their gradient (from low to high), transmembrane pumps hydrolyze ATP—such as the Na⁺/K⁺-ATPase pumping 3 Na⁺ out and 2 K⁺ in.",
+                "tutorTip": "Tap 'Active Transport Pump' to inspect the stoichiometry of the sodium-potassium pump.",
+                "focusObjectIds": [
+                  "node_active_pump"
+                ],
+                "inlineQuiz": {
+                  "question": "Which feature distinguishes active transport from facilitated diffusion?",
+                  "options": [
+                    "It moves solutes against their concentration gradient using ATP",
+                    "It uses membrane proteins",
+                    "It moves water molecules down a gradient",
+                    "It occurs without a cell membrane"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Both use membrane proteins, but only active transport moves solutes uphill against their gradient using ATP."
+                }
+              }
+            ]
+          },
+          "assessment": [
+            {
+              "questionId": "bio_trans_q1",
+              "question": "If a metabolic poison blocks ATP synthesis in a neuron, which transport process will stop immediately?",
+              "options": [
+                "Na⁺/K⁺ pump active transport",
+                "Simple diffusion of O₂ into the cell",
+                "Osmosis of water across aquaporins",
+                "Diffusion of CO₂ out of the cell"
+              ],
+              "correctIndex": 0,
+              "explanation": "The Na⁺/K⁺ pump directly requires ATP hydrolysis to pump ions against their gradients."
+            }
+          ]
+        },
+        {
+          "topicId": "bio_photosynthesis_atp",
+          "title": "Photosynthesis & Cellular Respiration Energy Cycles",
+          "summary": "Coupled energy conversion in chloroplasts (light reactions & Calvin cycle) and mitochondria.",
+          "instructions": {
+            "skillId": "bio_photosynthesis_atp",
+            "learningObjectives": [
+              "Locate the light-dependent reactions (thylakoid) and Calvin cycle (stroma) in the chloroplast",
+              "Balance the overall photosynthesis and aerobic cellular respiration equations",
+              "Explain how NADPH and ATP link the light reactions to carbon fixation"
+            ],
+            "explanationSequence": [
+              "Step 1: Light-Dependent Reactions in the Thylakoid Membrane",
+              "Step 2: Carbon Fixation in the Calvin Cycle (Stroma)",
+              "Step 3: Complementary Aerobic Respiration in Mitochondria"
+            ],
+            "commonMisconceptions": [
+              "Believing plants only perform photosynthesis and do not have mitochondria for cellular respiration",
+              "Thinking the oxygen O₂ released in photosynthesis comes from CO₂ rather than the splitting of water (H₂O)"
+            ],
+            "socraticSystemPrompt": "You are orchestrating the Bioenergetics lesson. Emphasize how the products of photosynthesis (glucose + O₂) serve as the exact reactants of aerobic respiration."
+          },
+          "resources": [
+            {
+              "id": "res_bio_photo",
+              "title": "Bioenergetics Master Equations",
+              "type": "formula_sheet",
+              "summary": "Photosynthesis vs. Cellular Respiration.",
+              "bodyText": "• Photosynthesis: 6 CO₂ + 6 H₂O + Light → C₆H₁₂O₆ + 6 O₂\n• Aerobic Respiration: C₆H₁₂O₆ + 6 O₂ → 6 CO₂ + 6 H₂O + ~30–32 ATP\n• Light Reactions (Thylakoid): Split H₂O → O₂ + ATP + NADPH\n• Calvin Cycle (Stroma): Uses ATP + NADPH to fix CO₂ into G3P/Glucose"
+            }
+          ],
+          "whiteboardScene": {
+            "sceneId": "scene_bio_photosynthesis_atp",
+            "subjectTitle": "Biology",
+            "chapterTitle": "Cellular Transport & Bioenergetics",
+            "topicTitle": "Photosynthesis & Cellular Respiration Energy Cycles",
+            "objects": [
+              {
+                "objectId": "node_thylakoid",
+                "objectType": "formula",
+                "label": "Light Reactions (Thylakoid)",
+                "subLabel": "Photolysis of Water",
+                "formula": "2 H₂O + Light → O₂ + ATP + NADPH",
+                "explanation": "Chlorophyll absorbs photons in the thylakoid membrane, splitting water to release O₂ gas and generating ATP and NADPH.",
+                "position": {
+                  "x": 60,
+                  "y": 80
+                },
+                "size": {
+                  "width": 225,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_calvin",
+                "objectType": "box",
+                "label": "Calvin Cycle (Stroma)",
+                "subLabel": "RuBisCO Carbon Fixation",
+                "formula": "6 CO₂ + ATP + NADPH → C₆H₁₂O₆",
+                "explanation": "In the chloroplast stroma, the enzyme RuBisCO fixes CO₂ using the ATP and NADPH from the light reactions to build glucose.",
+                "position": {
+                  "x": 330,
+                  "y": 80
+                },
+                "size": {
+                  "width": 225,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_2"
+              },
+              {
+                "objectId": "node_mitochondria",
+                "objectType": "highlight",
+                "label": "Mitochondrial Respiration",
+                "subLabel": "Glycolysis, Krebs & ETC",
+                "formula": "C₆H₁₂O₆ + 6 O₂ → 6 CO₂ + 6 H₂O + ATP",
+                "explanation": "Both plant and animal cells oxidize glucose in mitochondria to regenerate cellular ATP, releasing CO₂ and H₂O.",
+                "position": {
+                  "x": 180,
+                  "y": 250
+                },
+                "size": {
+                  "width": 255,
+                  "height": 94
+                },
+                "style": {
+                  "strokeWidth": 2.5,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_3"
+              }
+            ],
+            "arrows": [
+              {
+                "fromObjectId": "node_thylakoid",
+                "toObjectId": "node_calvin",
+                "label": "supplies ATP & NADPH",
+                "stepId": "step_2"
+              },
+              {
+                "fromObjectId": "node_calvin",
+                "toObjectId": "node_mitochondria",
+                "label": "glucose + O₂",
+                "stepId": "step_3"
+              }
+            ],
+            "steps": [
+              {
+                "stepId": "step_1",
+                "stepNumber": 1,
+                "title": "Light-Dependent Reactions in the Thylakoid",
+                "narration": "Inside the chloroplast's thylakoid membranes, light energy splits water molecules (photolysis), releasing oxygen gas (O₂) and storing chemical energy in ATP and NADPH.",
+                "tutorTip": "Tap 'Light Reactions' to verify the source of atmospheric oxygen.",
+                "focusObjectIds": [
+                  "node_thylakoid"
+                ],
+                "inlineQuiz": {
+                  "question": "Where does the oxygen gas (O₂) released during photosynthesis originate from?",
+                  "options": [
+                    "The splitting of water (H₂O) in the thylakoid membrane",
+                    "The breakdown of carbon dioxide (CO₂) in the stroma",
+                    "Glucose oxidation in the mitochondria",
+                    "RuBisCO fixation"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Photolysis splits water (2 H₂O → 4 H⁺ + 4 e⁻ + O₂) at Photosystem II in the thylakoid."
+                }
+              },
+              {
+                "stepId": "step_2",
+                "stepNumber": 2,
+                "title": "The Calvin Cycle in the Chloroplast Stroma",
+                "narration": "The ATP and NADPH produced by the thylakoids power the Calvin cycle in the fluid stroma, where RuBisCO fixes inorganic CO₂ into three-carbon sugars (G3P) to form glucose.",
+                "tutorTip": "Notice how the Calvin cycle cannot run in the dark once ATP and NADPH from the light reactions run out.",
+                "focusObjectIds": [
+                  "node_calvin"
+                ],
+                "inlineQuiz": {
+                  "question": "Which molecules produced by the light-dependent reactions directly power carbon fixation in the Calvin cycle?",
+                  "options": [
+                    "ATP and NADPH",
+                    "O₂ and Glucose",
+                    "CO₂ and H₂O",
+                    "Pyruvate and NADH"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "ATP provides energy and NADPH provides reducing electrons to convert fixed CO₂ into G3P sugars."
+                }
+              },
+              {
+                "stepId": "step_3",
+                "stepNumber": 3,
+                "title": "Coupled Cycle: Cellular Respiration",
+                "narration": "Glucose and O₂ produced by chloroplasts are consumed by mitochondria during aerobic respiration (C₆H₁₂O₆ + 6 O₂ → 6 CO₂ + 6 H₂O + ATP), completing the global carbon-energy cycle.",
+                "tutorTip": "Remember that plant cells have both chloroplasts and mitochondria!",
+                "focusObjectIds": [
+                  "node_mitochondria"
+                ],
+                "inlineQuiz": {
+                  "question": "How are the overall equations of photosynthesis and aerobic cellular respiration related?",
+                  "options": [
+                    "The products of photosynthesis are the exact reactants of aerobic respiration",
+                    "Both processes consume O₂ and release CO₂",
+                    "Photosynthesis occurs in mitochondria while respiration occurs in chloroplasts",
+                    "Both convert ATP into sunlight"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Photosynthesis stores light energy in C₆H₁₂O₆ + 6 O₂, which respiration oxidizes back into 6 CO₂ + 6 H₂O + ATP."
+                }
+              }
+            ]
+          },
+          "assessment": [
+            {
+              "questionId": "bio_photo_q1",
+              "question": "In which specific compartment of the chloroplast does the Calvin cycle take place?",
+              "options": [
+                "Stroma",
+                "Thylakoid lumen",
+                "Mitochondrial matrix",
+                "Cristae"
+              ],
+              "correctIndex": 0,
+              "explanation": "The Calvin cycle enzymes (including RuBisCO) are dissolved in the chloroplast stroma."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "subjectId": "english",
+    "title": "English",
+    "iconEmoji": "📖",
+    "accentHex": "#006874",
+    "tagline": "Syntactic clause architecture, active rhetoric, and academic precision",
+    "coordinatorPhilosophy": "Teach grammar as logical structural engineering: every clause has a subject-verb core and a clear rhetorical role.",
+    "chapter": {
+      "chapterId": "grammar-rhetoric",
+      "title": "Clause Architecture & Rhetorical Voice",
+      "summary": "Constructing compound-complex sentences and controlling agency through active and passive voice.",
+      "chapterObjectives": [
+        "Distinguish independent clauses from subordinate (dependent) clauses and punctuate them accurately",
+        "Transform sentences between active and passive voice and choose the optimal voice for clarity"
+      ],
+      "topics": [
+        {
+          "topicId": "eng_sentence_clauses",
+          "title": "Independent vs. Dependent Clauses & Complex Sentences",
+          "summary": "Coordinating conjunctions (FANBOYS), subordinating conjunctions, and eliminating comma splices.",
+          "instructions": {
+            "skillId": "eng_sentence_clauses",
+            "learningObjectives": [
+              "Identify an Independent Clause (Subject + Finite Verb + Complete Thought)",
+              "Recognize how Subordinating Conjunctions (although, because, since, while) create Dependent Clauses",
+              "Correct comma splices using coordinating conjunctions, semicolons, or subordination"
+            ],
+            "explanationSequence": [
+              "Step 1: Independent Clause Anatomy (Complete Thought)",
+              "Step 2: Dependent Clauses & Subordinating Conjunctions",
+              "Step 3: Complex Punctuation & Fixing Comma Splices"
+            ],
+            "commonMisconceptions": [
+              "Joining two independent clauses with only a comma (creating a comma splice)",
+              "Treating a long prepositional phrase as a clause when it lacks a finite verb"
+            ],
+            "socraticSystemPrompt": "You are orchestrating the Sentence Clauses lesson. Have the student locate the subject-verb pair and test whether the clause can stand alone as a complete sentence."
+          },
+          "resources": [
+            {
+              "id": "res_eng_clauses",
+              "title": "Clause Combination & Punctuation Rules",
+              "type": "formula_sheet",
+              "summary": "Compound vs. Complex sentence formulas.",
+              "bodyText": "• Compound Sentence: Independent + , FANBOYS + Independent (or Independent ; Independent)\n• Complex Sentence (Dependent First): Dependent Clause + , + Independent Clause\n• Complex Sentence (Independent First): Independent Clause + Dependent Clause (no comma for essential adverbial clauses)"
+            }
+          ],
+          "whiteboardScene": {
+            "sceneId": "scene_eng_sentence_clauses",
+            "subjectTitle": "English",
+            "chapterTitle": "Clause Architecture & Rhetorical Voice",
+            "topicTitle": "Independent vs. Dependent Clauses & Complex Sentences",
+            "objects": [
+              {
+                "objectId": "node_indep",
+                "objectType": "formula",
+                "label": "Independent Clause (IC)",
+                "subLabel": "Stands Alone as a Sentence",
+                "formula": "Subject + Verb = Complete Thought",
+                "explanation": "Example: 'The network dropped.' Contains a subject, a finite predicate verb, and expresses a complete proposition.",
+                "position": {
+                  "x": 60,
+                  "y": 80
+                },
+                "size": {
+                  "width": 225,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_dep",
+                "objectType": "box",
+                "label": "Dependent Clause (DC)",
+                "subLabel": "Starts with Subordinator",
+                "formula": "Although + S + V (Fragment Alone)",
+                "explanation": "Example: 'Although the network dropped...' Has a subject and verb, but the subordinator makes it structurally dependent on an IC.",
+                "position": {
+                  "x": 330,
+                  "y": 80
+                },
+                "size": {
+                  "width": 225,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_2"
+              },
+              {
+                "objectId": "node_complex_rule",
+                "objectType": "highlight",
+                "label": "Complex Punctuation Law",
+                "subLabel": "Introductory DC Takes Comma",
+                "formula": "[DC], [IC]  vs.  [IC] [DC]",
+                "explanation": "'Although the network dropped, the tutor continued.' When the DC comes first, place a comma before the IC.",
+                "position": {
+                  "x": 180,
+                  "y": 250
+                },
+                "size": {
+                  "width": 255,
+                  "height": 94
+                },
+                "style": {
+                  "strokeWidth": 2.5,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_3"
+              }
+            ],
+            "arrows": [
+              {
+                "fromObjectId": "node_indep",
+                "toObjectId": "node_dep",
+                "label": "add subordinator",
+                "stepId": "step_2"
+              },
+              {
+                "fromObjectId": "node_dep",
+                "toObjectId": "node_complex_rule",
+                "label": "attach to IC",
+                "stepId": "step_3"
+              },
+              {
+                "fromObjectId": "node_indep",
+                "toObjectId": "node_complex_rule",
+                "label": "main clause",
+                "stepId": "step_3"
+              }
+            ],
+            "steps": [
+              {
+                "stepId": "step_1",
+                "stepNumber": 1,
+                "title": "Independent Clauses: The Structural Core",
+                "narration": "An independent clause contains a subject and a finite verb and expresses a complete thought—for example, 'The student solved the equation.'",
+                "tutorTip": "Tap 'Independent Clause' to see why a phrase without a finite verb is not a clause.",
+                "focusObjectIds": [
+                  "node_indep"
+                ],
+                "inlineQuiz": {
+                  "question": "Which of the following is a complete independent clause?",
+                  "options": [
+                    "The experiment yielded accurate results.",
+                    "Because the experiment yielded accurate results.",
+                    "During the long laboratory experiment.",
+                    "Having tested the chemical sample."
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "'The experiment yielded accurate results' has a subject ('experiment'), a finite verb ('yielded'), and stands alone."
+                }
+              },
+              {
+                "stepId": "step_2",
+                "stepNumber": 2,
+                "title": "Dependent Clauses & Subordinating Conjunctions",
+                "narration": "Placing a subordinating conjunction (such as 'because', 'although', 'since', or 'if') in front of an independent clause turns it into a dependent clause that cannot stand alone.",
+                "tutorTip": "A dependent clause standing alone with a period is a sentence fragment error.",
+                "focusObjectIds": [
+                  "node_dep"
+                ],
+                "inlineQuiz": {
+                  "question": "In 'Although the battery was low, the offline model finished the lesson,' which part is the dependent clause?",
+                  "options": [
+                    "Although the battery was low",
+                    "the offline model finished the lesson",
+                    "the battery was low",
+                    "finished the lesson"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "The subordinating conjunction 'Although' makes 'Although the battery was low' a dependent adverbial clause."
+                }
+              },
+              {
+                "stepId": "step_3",
+                "stepNumber": 3,
+                "title": "Punctuating Complex Sentences & Fixing Comma Splices",
+                "narration": "When a dependent clause precedes an independent clause ([DC], [IC]), separate them with a comma. Never join two independent clauses with only a comma (a comma splice)—use a semicolon or a coordinating conjunction (, and / , but).",
+                "tutorTip": "Tap 'Complex Punctuation Law' to compare [DC], [IC] against [IC] [DC].",
+                "focusObjectIds": [
+                  "node_complex_rule"
+                ],
+                "inlineQuiz": {
+                  "question": "Which sentence is punctuated correctly without a comma splice?",
+                  "options": [
+                    "The power went out; however, the offline tutor kept running.",
+                    "The power went out, the offline tutor kept running.",
+                    "The power went out, however, the offline tutor kept running.",
+                    "Although the power went out; the offline tutor kept running."
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Two independent clauses linked by a conjunctive adverb ('however') require a semicolon before 'however' and a comma after it."
+                }
+              }
+            ]
+          },
+          "assessment": [
+            {
+              "questionId": "eng_cl_q1",
+              "question": "Identify the sentence type: 'When the bell rang, the students submitted their scripts, and the proctor sealed the envelope.'",
+              "options": [
+                "Compound-complex sentence",
+                "Simple sentence",
+                "Compound sentence",
+                "Sentence fragment"
+              ],
+              "correctIndex": 0,
+              "explanation": "It contains one dependent clause ('When the bell rang') and two independent clauses joined by ', and'."
+            }
+          ]
+        },
+        {
+          "topicId": "eng_active_passive_voice",
+          "title": "Active vs. Passive Voice & Argumentative Precision",
+          "summary": "Grammatical agency, auxiliary 'be' + past participle transformations, and scientific objectivity.",
+          "instructions": {
+            "skillId": "eng_active_passive_voice",
+            "learningObjectives": [
+              "Distinguish Active Voice (Agent performs Verb on Object) from Passive Voice (Recipient becomes Subject)",
+              "Construct passive verb phrases accurately using [form of 'be' + past participle]",
+              "Choose active voice for directness/clarity and passive voice when the actor is unknown or secondary"
+            ],
+            "explanationSequence": [
+              "Step 1: Active Voice (Agent → Action → Recipient)",
+              "Step 2: Passive Transformation (Recipient → be + Past Participle → by Agent)",
+              "Step 3: Rhetorical Strategy: Directness vs. Process Focus"
+            ],
+            "commonMisconceptions": [
+              "Confusing past tense ('she wrote') with passive voice ('it was written')",
+              "Calling any sentence containing the verb 'to be' passive (e.g., 'He is tired' or 'She was running' is NOT passive)"
+            ],
+            "socraticSystemPrompt": "You are orchestrating the Active vs. Passive Voice lesson. Always ask the student: 'Who is performing the action, and is that actor in the grammatical subject slot?'"
+          },
+          "resources": [
+            {
+              "id": "res_eng_voice",
+              "title": "Voice Transformation Formula",
+              "type": "formula_sheet",
+              "summary": "Syntactic mapping between active and passive.",
+              "bodyText": "• Active: [Agent Subject] + [Transitive Verb] + [Direct Object]\n• Passive: [Object promoted to Subject] + [Auxiliary 'be' (in original tense) + Past Participle] + (by [Agent])"
+            }
+          ],
+          "whiteboardScene": {
+            "sceneId": "scene_eng_active_passive_voice",
+            "subjectTitle": "English",
+            "chapterTitle": "Clause Architecture & Rhetorical Voice",
+            "topicTitle": "Active vs. Passive Voice & Argumentative Precision",
+            "objects": [
+              {
+                "objectId": "node_active",
+                "objectType": "formula",
+                "label": "Active Voice Structure",
+                "subLabel": "Subject Performs Action",
+                "formula": "Agent (S) → Verb → Object (O)",
+                "explanation": "'The researcher analyzed the samples.' Direct, concise, and immediately names the responsible agent.",
+                "position": {
+                  "x": 60,
+                  "y": 80
+                },
+                "size": {
+                  "width": 225,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_1"
+              },
+              {
+                "objectId": "node_passive_form",
+                "objectType": "formula",
+                "label": "Passive Voice Formula",
+                "subLabel": "Subject Receives Action",
+                "formula": "Recipient (S) + [be + V₃] + (by Agent)",
+                "explanation": "'The samples were analyzed by the researcher.' Uses a conjugated form of 'be' plus the past participle (V₃).",
+                "position": {
+                  "x": 330,
+                  "y": 80
+                },
+                "size": {
+                  "width": 225,
+                  "height": 90
+                },
+                "style": {
+                  "strokeWidth": 2,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_2"
+              },
+              {
+                "objectId": "node_rhetoric_choice",
+                "objectType": "highlight",
+                "label": "Rhetorical Selection",
+                "subLabel": "When to Use Each Voice",
+                "formula": "Active = Clarity | Passive = Process",
+                "explanation": "Use active voice for clear accountability; use passive voice in lab methods or when the actor is unknown ('The glass was shattered').",
+                "position": {
+                  "x": 180,
+                  "y": 250
+                },
+                "size": {
+                  "width": 255,
+                  "height": 94
+                },
+                "style": {
+                  "strokeWidth": 2.5,
+                  "cornerRadius": 16,
+                  "isDashed": false
+                },
+                "stepId": "step_3"
+              }
+            ],
+            "arrows": [
+              {
+                "fromObjectId": "node_active",
+                "toObjectId": "node_passive_form",
+                "label": "promote Object to Subject",
+                "stepId": "step_2"
+              },
+              {
+                "fromObjectId": "node_passive_form",
+                "toObjectId": "node_rhetoric_choice",
+                "label": "stylistic fit",
+                "stepId": "step_3"
+              }
+            ],
+            "steps": [
+              {
+                "stepId": "step_1",
+                "stepNumber": 1,
+                "title": "Active Voice: Agent in the Subject Slot",
+                "narration": "In the active voice, the grammatical subject is the agent performing the verb's action upon a direct object: 'Fleming discovered penicillin in 1928.'",
+                "tutorTip": "Tap 'Active Voice Structure' to inspect the Agent → Verb → Object flow.",
+                "focusObjectIds": [
+                  "node_active"
+                ],
+                "inlineQuiz": {
+                  "question": "Which of the following sentences is written in the active voice?",
+                  "options": [
+                    "The engineer calibrated the solar inverter.",
+                    "The solar inverter was calibrated by the engineer.",
+                    "The circuit had been tested before installation.",
+                    "Mistakes were made during the calibration."
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "'The engineer' (the actor) is the grammatical subject directly performing the verb 'calibrated'."
+                }
+              },
+              {
+                "stepId": "step_2",
+                "stepNumber": 2,
+                "title": "Passive Transformation: [be + Past Participle]",
+                "narration": "To convert an active sentence to passive, promote the direct object to the subject slot and use a form of 'to be' (is, was, were, has been) plus the past participle: 'Penicillin was discovered by Fleming.'",
+                "tutorTip": "Watch out: past progressive ('was descubrir/discovering') is active, NOT passive!",
+                "focusObjectIds": [
+                  "node_passive_form"
+                ],
+                "inlineQuiz": {
+                  "question": "Convert 'The committee will approve the budget tomorrow' into the passive voice:",
+                  "options": [
+                    "The budget will be approved by the committee tomorrow.",
+                    "The budget was approved by the committee tomorrow.",
+                    "The committee has approved the budget tomorrow.",
+                    "The budget is approving by the committee tomorrow."
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "Future active ('will approve') transforms to future passive ('will be approved') with 'The budget' as subject."
+                }
+              },
+              {
+                "stepId": "step_3",
+                "stepNumber": 3,
+                "title": "Rhetorical Precision: Choosing Active vs. Passive",
+                "narration": "Active voice is stronger and clearer for general and persuasive writing. Passive voice is appropriate when emphasizing the receiver of the action or describing an objective laboratory procedure ('The solution was heated to 80°C').",
+                "tutorTip": "Avoid vague agentless passive ('Errors were found') when accountability matters.",
+                "focusObjectIds": [
+                  "node_rhetoric_choice"
+                ],
+                "inlineQuiz": {
+                  "question": "Why is passive voice preferred in the sentence: 'The rare manuscript was stolen from the archive overnight'?",
+                  "options": [
+                    "The perpetrator is unknown, and focus belongs on the stolen manuscript",
+                    "Passive voice is always shorter than active voice",
+                    "Active voice is grammatically incorrect in past tense",
+                    "The verb 'steal' cannot be used in the active voice"
+                  ],
+                  "correctIndex": 0,
+                  "explanation": "When the actor is unknown or the object is the true topic of focus, passive voice places the important noun first."
+                }
+              }
+            ]
+          },
+          "assessment": [
+            {
+              "questionId": "eng_vo_q1",
+              "question": "Why is the sentence 'The students were studying for the exam' ACTIVE rather than passive?",
+              "options": [
+                "The subject ('The students') is performing the action, and 'studying' is a present participle (progressive aspect), not a passive past participle",
+                "It contains the auxiliary verb 'were'",
+                "It is in the future tense",
+                "It has no subject"
+              ],
+              "correctIndex": 0,
+              "explanation": "'Were studying' is past progressive active; the students are doing the studying."
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

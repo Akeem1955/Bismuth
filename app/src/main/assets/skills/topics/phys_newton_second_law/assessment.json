@@ -1,0 +1,17 @@
+{
+  "topicId": "phys_newton_second_law",
+  "questions": [
+    {
+      "questionId": "phys_n2_q1",
+      "question": "What net force is required to accelerate a 1,200 kg vehicle at 2.5 m/s²?",
+      "options": [
+        "3,000 N",
+        "480 N",
+        "1,202.5 N",
+        "6,000 N"
+      ],
+      "correctIndex": 0,
+      "explanation": "F_net = m * a = 1,200 kg * 2.5 m/s² = 3,000 N."
+    }
+  ]
+}

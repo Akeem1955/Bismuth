@@ -24,7 +24,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BookmarkAdd
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Search
@@ -36,14 +40,16 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -51,12 +57,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.bismuth.app.ui.animation.CelebrationBurstOverlay
+import com.bismuth.app.ui.animation.ScannerBeamView
 import androidx.compose.ui.unit.sp
 import com.bismuth.app.R
 import com.bismuth.app.engine.BismuthEngine
@@ -64,8 +71,14 @@ import com.bismuth.app.engine.BismuthModelConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.json.JSONArray
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 data class FoodNutritionReport(
     val mealTitle: String,
@@ -80,11 +93,70 @@ data class FoodNutritionReport(
     val dietaryTips: List<String>
 )
 
+@Serializable
+data class LoggedMealEntry(
+    val id: String,
+    val timestampMillis: Long,
+    val dateString: String,
+    val mealTitle: String,
+    val caloriesKcal: Int,
+    val carbsG: String,
+    val proteinG: String,
+    val fatsG: String,
+    val fiberG: String
+)
+
 data class OfflineHealthTopicEntry(
     val title: String,
     val category: String,
     val summary: String
 )
+
+object OfflineMealDiaryStore {
+    private const val PREFS_NAME = "bismuth_meal_diary"
+    private const val KEY_MEALS = "logged_meals_json"
+    private val diaryJson = Json { ignoreUnknownKeys = true }
+
+    fun loadLoggedMeals(context: Context): List<LoggedMealEntry> {
+        val sp = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val raw = sp.getString(KEY_MEALS, null) ?: return emptyList()
+        return try {
+            diaryJson.decodeFromString<List<LoggedMealEntry>>(raw)
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    fun saveMeal(context: Context, report: FoodNutritionReport): List<LoggedMealEntry> {
+        val sp = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val existing = loadLoggedMeals(context).toMutableList()
+        val now = System.currentTimeMillis()
+        val dateFmt = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(now))
+        val entry = LoggedMealEntry(
+            id = "meal_${now}",
+            timestampMillis = now,
+            dateString = dateFmt,
+            mealTitle = report.mealTitle,
+            caloriesKcal = report.estimatedCaloriesKcal,
+            carbsG = report.macrosBreakdown["Carbs"] ?: "0g",
+            proteinG = report.macrosBreakdown["Protein"] ?: "0g",
+            fatsG = report.macrosBreakdown["Fats"] ?: "0g",
+            fiberG = report.macrosBreakdown["Fiber"] ?: "0g"
+        )
+        existing.add(0, entry)
+        val serialized = diaryJson.encodeToString(existing)
+        sp.edit().putString(KEY_MEALS, serialized).apply()
+        return existing
+    }
+
+    fun deleteMeal(context: Context, mealId: String): List<LoggedMealEntry> {
+        val sp = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val existing = loadLoggedMeals(context).filterNot { it.id == mealId }
+        val serialized = diaryJson.encodeToString(existing)
+        sp.edit().putString(KEY_MEALS, serialized).apply()
+        return existing
+    }
+}
 
 object OfflineHealthLibraryLoader {
     suspend fun loadTopics(context: Context): List<OfflineHealthTopicEntry> = withContext(Dispatchers.IO) {
@@ -95,7 +167,7 @@ object OfflineHealthLibraryLoader {
                 .use { it.readText() }
             val arr = JSONArray(rawJson)
             val list = mutableListOf<OfflineHealthTopicEntry>()
-            for (i in 0 until arr.length().coerceAtMost(40)) {
+            for (i in 0 until arr.length().coerceAtMost(80)) {
                 val obj = arr.getJSONObject(i)
                 val title = obj.optString("title", "Health Topic ${i + 1}")
                 val category = obj.optString("category", "General Health & Nutrition")
@@ -121,25 +193,39 @@ fun HealthFeatureScreen(
     val scope = rememberCoroutineScope()
 
     var capturedBitmap by remember { mutableStateOf<Bitmap?>(null) }
-    var selectedMealPreset by remember { mutableStateOf("Jollof Rice, Grilled Chicken & Plantain") }
+    var mealDescriptionInput by remember { mutableStateOf("") }
     var isAnalyzingFood by remember { mutableStateOf(false) }
-    var nutritionReport by remember {
-        mutableStateOf<FoodNutritionReport?>(
-            buildPresetNutritionReport("Jollof Rice, Grilled Chicken & Plantain")
-        )
-    }
+    var analysisErrorMessage by remember { mutableStateOf<String?>(null) }
+    var nutritionReport by remember { mutableStateOf<FoodNutritionReport?>(null) }
+    var isMealSavedToDiary by remember { mutableStateOf(false) }
 
-    // Offline WHO Health Library search state
+    // Diary State
+    val loggedMeals = remember { mutableStateListOf<LoggedMealEntry>() }
+    val todayString = remember { SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date()) }
+
     var libraryTopics by remember { mutableStateOf<List<OfflineHealthTopicEntry>>(emptyList()) }
     var healthSearchQuery by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         libraryTopics = OfflineHealthLibraryLoader.loadTopics(context)
+        loggedMeals.clear()
+        loggedMeals.addAll(OfflineMealDiaryStore.loadLoggedMeals(context))
     }
 
-    fun analyzeMealWithModel(bitmap: Bitmap?, mealHint: String) {
+    fun analyzeMeal(bitmap: Bitmap?, userMealDescription: String) {
+        val effectiveDescription = userMealDescription.trim().ifEmpty {
+            if (bitmap != null) "Visual Meal Capture" else ""
+        }
+        if (bitmap == null && effectiveDescription.isEmpty()) {
+            analysisErrorMessage = "Please take a photo or enter a meal description to analyze."
+            return
+        }
+
         scope.launch {
             isAnalyzingFood = true
+            analysisErrorMessage = null
+            isMealSavedToDiary = false
+
             val imageBytesList = if (bitmap != null && selectedModel.supportsImage) {
                 val out = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 85, out)
@@ -148,11 +234,42 @@ fun HealthFeatureScreen(
                 emptyList()
             }
 
+            val profile = com.bismuth.app.profile.StudentProfilePrefs.getProfile(context)
+            val languageRule = com.bismuth.app.profile.StudentProfilePrefs.languageInstruction(profile.preferredLanguage)
             val prompt = """
-                Analyze this food meal ($mealHint) and provide:
-                1. Calorie count and macro/micronutrient breakdown.
-                2. Health impact analysis (benefits, drawbacks, and dietary considerations).
-                3. Preparation and consumption guidance (cooking methods, serving suggestions, and dietary tips).
+                You are an expert clinical dietitian and nutritional biochemist.
+                $languageRule
+                Analyze the following meal ${if (bitmap != null) "from the captured photo and description" else "from the description"}:
+                "$effectiveDescription"
+                
+                Provide a structured clinical nutritional assessment in the following strict format:
+                Meal Title: <short descriptive title>
+                Calories: <estimated integer kcal>
+                Carbs: <amount with g>
+                Protein: <amount with g>
+                Fats: <amount with g>
+                Fiber: <amount with g>
+                
+                [Micronutrients]
+                - <nutrient with biological function>
+                
+                [Health Benefits]
+                - <metabolic or physiological benefit>
+                
+                [Health Drawbacks]
+                - <potential risk, glycemic impact, or excess nutrient>
+                
+                [Dietary Considerations]
+                - <allergen, sodium, or disease-specific guidance>
+                
+                [Cooking Methods]
+                - <health-optimizing culinary preparation method>
+                
+                [Serving Suggestions]
+                - <balanced portion and vegetable pairing>
+                
+                [Dietary Tips]
+                - <evidence-based advice for nutrient absorption>
             """.trimIndent()
 
             val llmResponse = BismuthEngine.generateTextOrNull(
@@ -162,22 +279,24 @@ fun HealthFeatureScreen(
                 imagePngBytes = imageBytesList
             )
 
-            nutritionReport = buildPresetNutritionReport(mealHint, llmResponse)
+            if (!llmResponse.isNullOrBlank()) {
+                nutritionReport = parseFoodNutritionReport(llmResponse, effectiveDescription)
+            } else {
+                analysisErrorMessage = "The AI did not generate an analysis. Make sure an offline AI is saved in AI Brains, or describe the meal in more detail."
+            }
             isAnalyzingFood = false
         }
     }
 
-    // Camera capture launcher
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview()
     ) { bitmap: Bitmap? ->
         if (bitmap != null) {
             capturedBitmap = bitmap
-            analyzeMealWithModel(bitmap, "Camera Captured Meal ($selectedMealPreset)")
+            analyzeMeal(bitmap, mealDescriptionInput)
         }
     }
 
-    // Gallery upload launcher
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -193,38 +312,164 @@ fun HealthFeatureScreen(
                 withContext(Dispatchers.Main) {
                     if (bmp != null) {
                         capturedBitmap = bmp
-                        analyzeMealWithModel(bmp, "Gallery Meal Photo ($selectedMealPreset)")
+                        analyzeMeal(bmp, mealDescriptionInput)
                     }
                 }
             }
         }
     }
 
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFF0A0F1D))
-            .verticalScroll(rememberScrollState())
-            .padding(14.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .background(MaterialTheme.colorScheme.background)
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
+                .padding(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
         Text(
             text = "Health & Nutrition Tracker",
-            color = Color.White,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
+            color = MaterialTheme.colorScheme.onBackground
         )
         Text(
-            text = "Capture a photo of your food or upload from gallery for calorie, macro/micronutrient, health impact, and preparation guidance.",
-            color = Color(0xFF94A3B8),
-            fontSize = 12.sp
+            text = "Capture a food photo or enter meal ingredients for offline on-device AI nutritional breakdown, macro/micronutrient analysis, and daily calorie diary logging.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         if (!selectedModel.supportsImage) {
             Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF3B1822)),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                ),
                 shape = RoundedCornerShape(14.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF43F5E)),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "${selectedModel.displayName} (Text-Only Mode)",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                        Text(
+                            text = "You can type meal descriptions and ingredients below for full nutritional analysis, or switch to a Vision-capable model for direct photo recognition.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    OutlinedButton(onClick = onRequestSwitchToVisionModel) {
+                        Text("Switch", style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+            }
+        }
+
+        // Meal Ingestion Card
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ),
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = "Food Ingestion & Description",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Button(
+                        onClick = { cameraLauncher.launch(null) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(Icons.Default.CameraAlt, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("Camera", style = MaterialTheme.typography.labelMedium)
+                    }
+
+                    OutlinedButton(
+                        onClick = { galleryLauncher.launch("image/*") },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(Icons.Default.PhotoLibrary, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("Gallery", style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+
+                if (capturedBitmap != null) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Image(
+                        bitmap = capturedBitmap!!.asImageBitmap(),
+                        contentDescription = "Captured Food Image",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(160.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                OutlinedTextField(
+                    value = mealDescriptionInput,
+                    onValueChange = { mealDescriptionInput = it },
+                    label = { Text("Meal or Ingredients Description", style = MaterialTheme.typography.bodySmall) },
+                    placeholder = { Text("e.g. 2 boiled eggs, whole wheat toast, and black coffee", style = MaterialTheme.typography.bodySmall) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Button(
+                    onClick = { analyzeMeal(capturedBitmap, mealDescriptionInput) },
+                    enabled = !isAnalyzingFood && (capturedBitmap != null || mealDescriptionInput.isNotBlank()),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Icon(Icons.Default.Restaurant, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Analyze Meal Nutrition", style = MaterialTheme.typography.labelLarge)
+                }
+            }
+        }
+
+        if (analysisErrorMessage != null) {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer
+                ),
+                shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -234,152 +479,61 @@ fun HealthFeatureScreen(
                     Icon(
                         imageVector = Icons.Default.Warning,
                         contentDescription = null,
-                        tint = Color(0xFFF43F5E),
-                        modifier = Modifier.size(22.dp)
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(20.dp)
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = "${selectedModel.displayName} Does Not Support Vision Input",
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp
-                        )
-                        Text(
-                            text = "Switch to a multimodal Vision model (Gemma 3n E2B-INT4, Gemma 4 E2B, or Gemma 4 E4B) for neural photo recognition.",
-                            color = Color(0xFFFECDD3),
-                            fontSize = 11.sp
-                        )
-                    }
                     Spacer(modifier = Modifier.width(8.dp))
-                    OutlinedButton(onClick = onRequestSwitchToVisionModel) {
-                        Text("Switch Model", fontSize = 11.sp, color = Color.White)
-                    }
-                }
-            }
-        }
-
-        // FR-2.1 Image Capture & Gallery Upload Card
-        Card(
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(modifier = Modifier.padding(14.dp)) {
-                Text(
-                    text = "Food Image Capture & Gallery Upload",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Button(
-                        onClick = { cameraLauncher.launch(null) },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0284C7)),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(Icons.Default.CameraAlt, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text("Take Food Photo", fontSize = 12.sp)
-                    }
-
-                    Button(
-                        onClick = { galleryLauncher.launch("image/*") },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7C3AED)),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(Icons.Default.PhotoLibrary, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text("Gallery Upload", fontSize = 12.sp)
-                    }
-                }
-
-                if (capturedBitmap != null) {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Image(
-                        bitmap = capturedBitmap!!.asImageBitmap(),
-                        contentDescription = "Selected Food Image",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(160.dp)
-                            .clip(RoundedCornerShape(12.dp))
+                    Text(
+                        text = analysisErrorMessage!!,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onErrorContainer
                     )
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = "Or inspect common meal profiles offline:",
-                    color = Color(0xFF94A3B8),
-                    fontSize = 11.sp
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    listOf(
-                        "Jollof Rice, Grilled Chicken & Plantain",
-                        "Beans Porridge (Ewa Riro), Fish & Avocado",
-                        "Oatmeal Bowl with Banana, Eggs & Groundnuts"
-                    ).forEach { meal ->
-                        FilterChip(
-                            selected = selectedMealPreset == meal,
-                            onClick = {
-                                selectedMealPreset = meal
-                                analyzeMealWithModel(capturedBitmap, meal)
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Restaurant,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(14.dp)
-                                )
-                            },
-                            label = { Text(meal, fontSize = 11.sp) }
-                        )
-                    }
                 }
             }
         }
 
         if (isAnalyzingFood) {
             Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
-                shape = RoundedCornerShape(14.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                ),
+                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
-                    modifier = Modifier.padding(14.dp),
+                    modifier = Modifier.padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        text = "Analyzing meal nutrition, health impact & preparation guidance...",
-                        color = Color.White,
-                        fontSize = 12.sp
-                    )
+                    ScannerBeamView(modifier = Modifier.size(54.dp))
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Column {
+                        Text(
+                            text = "Analyzing Food & Nutrition",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = "Performing offline clinical nutrition & macro assessment with ${selectedModel.displayName}...",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }
 
-        // FR-2.2 Complete 3-Part Nutritional Analysis Card
+        // Nutritional Analysis Card
         nutritionReport?.let { report ->
             Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ),
                 shape = RoundedCornerShape(16.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF10B981)),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier = Modifier.padding(14.dp),
+                    modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Row(
@@ -389,39 +543,69 @@ fun HealthFeatureScreen(
                     ) {
                         Text(
                             text = report.mealTitle,
-                            color = Color.White,
+                            style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.weight(1f)
                         )
                         Surface(
                             shape = RoundedCornerShape(8.dp),
-                            color = Color(0xFF064E3B)
+                            color = MaterialTheme.colorScheme.primaryContainer
                         ) {
                             Text(
                                 text = "${report.estimatedCaloriesKcal} kcal",
-                                color = Color(0xFF34D399),
+                                style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
                             )
                         }
                     }
 
-                    // 1. Calorie Count & Macro/Micronutrient Breakdown
+                    // Save to Diary Button
+                    Button(
+                        onClick = {
+                            if (!isMealSavedToDiary) {
+                                val updated = OfflineMealDiaryStore.saveMeal(context, report)
+                                loggedMeals.clear()
+                                loggedMeals.addAll(updated)
+                                isMealSavedToDiary = true
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (isMealSavedToDiary) MaterialTheme.colorScheme.secondaryContainer
+                            else MaterialTheme.colorScheme.secondary
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(
+                            imageVector = if (isMealSavedToDiary) Icons.Default.Check else Icons.Default.BookmarkAdd,
+                            contentDescription = null,
+                            tint = if (isMealSavedToDiary) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSecondary,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = if (isMealSavedToDiary) "Saved to Daily Meal Diary" else "Log to Daily Diary",
+                            color = if (isMealSavedToDiary) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSecondary,
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
+
+                    // 1. Macros Breakdown
                     Surface(
                         shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFF0F172A),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(modifier = Modifier.padding(12.dp)) {
                             Text(
-                                text = "1. Calorie Count & Macro / Micronutrient Breakdown",
-                                color = Color(0xFF38BDF8),
+                                text = "1. Macronutrient & Micronutrient Profile",
+                                style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp
+                                color = MaterialTheme.colorScheme.primary
                             )
-                            Spacer(modifier = Modifier.height(6.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -429,95 +613,172 @@ fun HealthFeatureScreen(
                                 report.macrosBreakdown.forEach { (macro, value) ->
                                     Surface(
                                         shape = RoundedCornerShape(8.dp),
-                                        color = Color(0xFF1E293B),
+                                        color = MaterialTheme.colorScheme.surfaceContainerHighest,
                                         modifier = Modifier.weight(1f)
                                     ) {
                                         Column(
                                             modifier = Modifier.padding(8.dp),
                                             horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
-                                            Text(macro, color = Color(0xFF94A3B8), fontSize = 10.sp)
                                             Text(
-                                                value,
-                                                color = Color.White,
+                                                text = macro,
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                            Text(
+                                                text = value,
+                                                style = MaterialTheme.typography.labelMedium,
                                                 fontWeight = FontWeight.Bold,
-                                                fontSize = 12.sp
+                                                color = MaterialTheme.colorScheme.onSurface
                                             )
                                         }
                                     }
                                 }
                             }
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "Micronutrients (Vitamins & Minerals):",
-                                color = Color.White,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 12.sp
-                            )
-                            report.micronutrientsBreakdown.forEach { micro ->
-                                Text("• $micro", color = Color(0xFFCBD5E1), fontSize = 12.sp)
+
+                            if (report.micronutrientsBreakdown.isNotEmpty()) {
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Text(
+                                    text = "Micronutrients:",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                report.micronutrientsBreakdown.forEach { micro ->
+                                    Text(
+                                        text = "• $micro",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
                             }
                         }
                     }
 
-                    // 2. Health Impact Analysis (Benefits, Drawbacks, Dietary Considerations)
+                    // 2. Health Impact
                     Surface(
                         shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFF0F172A),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(modifier = Modifier.padding(12.dp)) {
                             Text(
-                                text = "2. Health Impact Analysis",
-                                color = Color(0xFF34D399),
+                                text = "2. Physiological Impact Analysis",
+                                style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp
+                                color = MaterialTheme.colorScheme.secondary
                             )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text("Benefits:", color = Color(0xFF6EE7B7), fontWeight = FontWeight.SemiBold, fontSize = 12.sp)
-                            report.healthBenefits.forEach { b ->
-                                Text("• $b", color = Color(0xFFE2E8F0), fontSize = 12.sp)
+                            if (report.healthBenefits.isNotEmpty()) {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = "Benefits:",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.secondary
+                                )
+                                report.healthBenefits.forEach { b ->
+                                    Text(
+                                        text = "• $b",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
                             }
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text("Drawbacks:", color = Color(0xFFFCA5A5), fontWeight = FontWeight.SemiBold, fontSize = 12.sp)
-                            report.healthDrawbacks.forEach { d ->
-                                Text("• $d", color = Color(0xFFE2E8F0), fontSize = 12.sp)
+                            if (report.healthDrawbacks.isNotEmpty()) {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = "Drawbacks / Risks:",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                                report.healthDrawbacks.forEach { d ->
+                                    Text(
+                                        text = "• $d",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
                             }
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text("Dietary Considerations:", color = Color(0xFFFCD34D), fontWeight = FontWeight.SemiBold, fontSize = 12.sp)
-                            report.dietaryConsiderations.forEach { c ->
-                                Text("• $c", color = Color(0xFFE2E8F0), fontSize = 12.sp)
+                            if (report.dietaryConsiderations.isNotEmpty()) {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = "Dietary Considerations:",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.tertiary
+                                )
+                                report.dietaryConsiderations.forEach { c ->
+                                    Text(
+                                        text = "• $c",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
                             }
                         }
                     }
 
-                    // 3. Preparation & Consumption Guidance (Cooking Methods, Serving Suggestions, Dietary Tips)
+                    // 3. Preparation & Consumption Guidance
                     Surface(
                         shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFF0F172A),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(modifier = Modifier.padding(12.dp)) {
                             Text(
                                 text = "3. Preparation & Consumption Guidance",
-                                color = Color(0xFFC084FC),
+                                style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp
+                                color = MaterialTheme.colorScheme.tertiary
                             )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text("Recommended Cooking Methods:", color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 12.sp)
-                            report.cookingMethods.forEach { m ->
-                                Text("• $m", color = Color(0xFFCBD5E1), fontSize = 12.sp)
+                            if (report.cookingMethods.isNotEmpty()) {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = "Cooking Methods:",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                report.cookingMethods.forEach { m ->
+                                    Text(
+                                        text = "• $m",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
                             }
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text("Serving Suggestions:", color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 12.sp)
-                            report.servingSuggestions.forEach { s ->
-                                Text("• $s", color = Color(0xFFCBD5E1), fontSize = 12.sp)
+                            if (report.servingSuggestions.isNotEmpty()) {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = "Serving Suggestions:",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                report.servingSuggestions.forEach { s ->
+                                    Text(
+                                        text = "• $s",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
                             }
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text("Practical Dietary Tips:", color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 12.sp)
-                            report.dietaryTips.forEach { t ->
-                                Text("• $t", color = Color(0xFFCBD5E1), fontSize = 12.sp)
+                            if (report.dietaryTips.isNotEmpty()) {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = "Dietary Tips:",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                report.dietaryTips.forEach { t ->
+                                    Text(
+                                        text = "• $t",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
                             }
                         }
                     }
@@ -525,68 +786,182 @@ fun HealthFeatureScreen(
             }
         }
 
-        // Bundled Offline WHO Health Reference Library
+        // Daily Meal Diary History Card
         Card(
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF131C2E)),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Column(modifier = Modifier.padding(14.dp)) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                val todaysMeals = loggedMeals.filter { it.dateString == todayString }
+                val totalCaloriesToday = todaysMeals.sumOf { it.caloriesKcal }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Today's Meal Diary (${todaysMeals.size} logged)",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer
+                    ) {
+                        Text(
+                            text = "$totalCaloriesToday kcal total",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+
+                if (todaysMeals.isEmpty()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "No meals logged today yet. Analyze a meal above and tap 'Log to Daily Diary' to record your nutritional history.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    todaysMeals.forEach { entry ->
+                        Surface(
+                            shape = RoundedCornerShape(10.dp),
+                            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = entry.mealTitle,
+                                        style = MaterialTheme.typography.titleSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        text = "${entry.caloriesKcal} kcal • Carbs: ${entry.carbsG} • Protein: ${entry.proteinG} • Fats: ${entry.fatsG}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        val updated = OfflineMealDiaryStore.deleteMeal(context, entry.id)
+                                        loggedMeals.clear()
+                                        loggedMeals.addAll(updated)
+                                    },
+                                    modifier = Modifier.size(28.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Delete Logged Meal",
+                                        tint = MaterialTheme.colorScheme.error,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Bundled Offline WHO Health Reference Library Card
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ),
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Offline Health & Nutrition Reference Library (${libraryTopics.size} Topics)",
-                    color = Color.White,
+                    text = "Offline WHO Health & Nutrition Library (${libraryTopics.size} Topics)",
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+
+                // Popular topic chips (matching Genie)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    listOf("Diabetes", "Hypertension", "Malnutrition", "Anaemia", "Asthma", "Malaria").forEach { popTopic ->
+                        FilterChip(
+                            selected = healthSearchQuery.equals(popTopic, ignoreCase = true),
+                            onClick = {
+                                healthSearchQuery = if (healthSearchQuery.equals(popTopic, ignoreCase = true)) "" else popTopic
+                            },
+                            label = { Text(popTopic, style = MaterialTheme.typography.labelSmall) }
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
                 OutlinedTextField(
                     value = healthSearchQuery,
                     onValueChange = { healthSearchQuery = it },
                     leadingIcon = {
-                        Icon(Icons.Default.Search, contentDescription = null, tint = Color(0xFF94A3B8))
+                        Icon(Icons.Default.Search, contentDescription = null)
                     },
-                    placeholder = { Text("Search offline health & nutrition guidelines...", fontSize = 12.sp) },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF38BDF8),
-                        unfocusedBorderColor = Color(0xFF334155)
-                    ),
+                    placeholder = { Text("Search offline health & nutrition guidelines...", style = MaterialTheme.typography.bodySmall) },
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+
                 val filtered = remember(libraryTopics, healthSearchQuery) {
                     if (healthSearchQuery.isBlank()) {
                         libraryTopics.take(4)
                     } else {
                         libraryTopics.filter {
                             it.title.contains(healthSearchQuery, ignoreCase = true) ||
-                                it.summary.contains(healthSearchQuery, ignoreCase = true)
-                        }.take(6)
+                                it.summary.contains(healthSearchQuery, ignoreCase = true) ||
+                                it.category.contains(healthSearchQuery, ignoreCase = true)
+                        }.take(8)
                     }
                 }
+
                 filtered.forEach { topic ->
                     Surface(
                         shape = RoundedCornerShape(10.dp),
-                        color = Color(0xFF0F172A),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
                     ) {
-                        Column(modifier = Modifier.padding(10.dp)) {
+                        Column(modifier = Modifier.padding(12.dp)) {
                             Text(
                                 text = "${topic.title} • ${topic.category}",
-                                color = Color(0xFF38BDF8),
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 12.sp
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
                             )
                             if (topic.summary.isNotBlank()) {
-                                Spacer(modifier = Modifier.height(2.dp))
+                                Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = topic.summary,
-                                    color = Color(0xFFCBD5E1),
-                                    fontSize = 11.sp,
-                                    lineHeight = 16.sp
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         }
@@ -594,126 +969,128 @@ fun HealthFeatureScreen(
                 }
             }
         }
+        }
+
+        // Celebration Particle Burst on Meal Logged
+        CelebrationBurstOverlay(
+            visible = isMealSavedToDiary,
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }
 
-private fun buildPresetNutritionReport(
-    mealHint: String,
-    llmAnalysis: String? = null
+private fun parseFoodNutritionReport(
+    llmResponse: String,
+    mealHint: String
 ): FoodNutritionReport {
-    val lower = mealHint.lowercase()
-    return when {
-        "beans" in lower || "ewa" in lower -> FoodNutritionReport(
-            mealTitle = mealHint,
-            estimatedCaloriesKcal = 540,
-            macrosBreakdown = mapOf(
-                "Carbs" to "58g",
-                "Protein" to "34g",
-                "Fats" to "18g",
-                "Fiber" to "14g"
-            ),
-            micronutrientsBreakdown = listOf(
-                "Iron (6.2 mg — supports hemoglobin & oxygen transport)",
-                "Folate / Vitamin B9 (240 mcg — cellular DNA synthesis)",
-                "Potassium (780 mg — blood pressure & electrolyte balance)",
-                "Omega-3 fatty acids from steamed fish & monounsaturated fats from avocado"
-            ),
-            healthBenefits = listOf(
-                "High soluble and insoluble dietary fiber slows glucose absorption (low glycemic index).",
-                "Complete amino acid + marine protein profile supports muscle repair and sustained cognitive focus."
-            ),
-            healthDrawbacks = listOf(
-                "Excess palm oil can elevate saturated fat intake if not portioned moderately.",
-                "Legume oligosaccharides may cause mild bloating if beans are not soaked prior to boiling."
-            ),
-            dietaryConsiderations = listOf(
-                "Excellent for diabetic-friendly, high-satiety, and heart-conscious diets when oil is kept to 1 tablespoon.",
-                "Naturally gluten-free."
-            ),
-            cookingMethods = listOf(
-                "Pre-soak beans for 4–6 hours and discard soaking water before pressure-cooking to reduce raffinose oligosaccharides.",
-                "Grill or steam the fish instead of deep-frying to preserve omega-3 fatty acids."
-            ),
-            servingSuggestions = listOf(
-                "Pair 1 cup of cooked beans with 120g grilled fish and ¼ sliced fresh avocado.",
-                "Add steamed dark leafy greens (spinach or ugu) to boost Vitamin C for non-heme iron absorption."
-            ),
-            dietaryTips = listOf(
-                "Drink water 20 minutes before or after the meal and include Vitamin C-rich fruit to double plant-iron uptake."
-            )
-        )
+    var mealTitle = mealHint.ifBlank { "Analyzed Meal" }
+    var calories = 0
+    val macros = mutableMapOf(
+        "Carbs" to "0g",
+        "Protein" to "0g",
+        "Fats" to "0g",
+        "Fiber" to "0g"
+    )
+    val micronutrients = mutableListOf<String>()
+    val benefits = mutableListOf<String>()
+    val drawbacks = mutableListOf<String>()
+    val considerations = mutableListOf<String>()
+    val cooking = mutableListOf<String>()
+    val serving = mutableListOf<String>()
+    val tips = mutableListOf<String>()
 
-        "oatmeal" in lower || "egg" in lower -> FoodNutritionReport(
-            mealTitle = mealHint,
-            estimatedCaloriesKcal = 460,
-            macrosBreakdown = mapOf(
-                "Carbs" to "52g",
-                "Protein" to "22g",
-                "Fats" to "16g",
-                "Fiber" to "9g"
-            ),
-            micronutrientsBreakdown = listOf(
-                "Beta-glucan soluble fiber (supports healthy LDL cholesterol levels)",
-                "Choline (250 mg from eggs — essential for acetylcholine neurotransmitter synthesis)",
-                "Magnesium & Vitamin B6 (from banana and groundnuts)"
-            ),
-            healthBenefits = listOf(
-                "Sustained morning glucose release ideal for long study or examination sessions.",
-                "High choline and B-vitamin density supports memory consolidation."
-            ),
-            healthDrawbacks = listOf(
-                "Adding refined sugar or sweetened condensed milk spikes glycemic load."
-            ),
-            dietaryConsiderations = listOf(
-                "Contains eggs and peanuts/groundnuts (allergen awareness required)."
-            ),
-            cookingMethods = listOf(
-                "Simmer rolled oats in water or unsweetened milk for 5–7 minutes; boil or poach eggs rather than frying in butter."
-            ),
-            servingSuggestions = listOf(
-                "Top warm oats with sliced banana and 1 tablespoon of roasted unsalted groundnuts alongside 2 boiled eggs."
-            ),
-            dietaryTips = listOf(
-                "Use cinnamon and ripe banana slices for natural sweetness instead of refined table sugar."
-            )
-        )
+    var activeSection = 0
 
-        else -> FoodNutritionReport(
-            mealTitle = mealHint,
-            estimatedCaloriesKcal = 680,
-            macrosBreakdown = mapOf(
-                "Carbs" to "86g",
-                "Protein" to "36g",
-                "Fats" to "21g",
-                "Fiber" to "6g"
-            ),
-            micronutrientsBreakdown = listOf(
-                "Lycopene & Vitamin A / Beta-Carotene (from tomato-pepper stew base)",
-                "Vitamin B3 (Niacin) & Vitamin B6 (from grilled chicken breast/thigh)",
-                "Potassium & Vitamin C (from ripe plantain)"
-            ),
-            healthBenefits = listOf(
-                "Cooked tomato paste provides bioavailable lycopene (potent antioxidant).",
-                "Grilled poultry provides high-biological-value lean protein (36g) for tissue maintenance."
-            ),
-            healthDrawbacks = listOf(
-                "High glycemic carbohydrate load from parboiled white rice and fried plantain.",
-                "Seasoning cubes and bouillon can contribute elevated sodium (>900 mg per plate)."
-            ),
-            dietaryConsiderations = listOf(
-                "Individuals managing blood glucose or hypertension should moderate rice portion size and seasoning salt."
-            ),
-            cookingMethods = listOf(
-                "Oven-bake or air-fry the plantain slices instead of deep-frying in oil (saves ~120 kcal).",
-                "Grill or roast the chicken skinless and use fresh herbs, garlic, and ginger to reduce bouillon sodium."
-            ),
-            servingSuggestions = listOf(
-                "Fill half the plate with steamed cabbage/carrot slaw, ¼ plate Jollof rice, and ¼ plate grilled chicken."
-            ),
-            dietaryTips = listOf(
-                if (!llmAnalysis.isNullOrBlank()) llmAnalysis.take(240)
-                else "Eating fibrous vegetables first before the rice blunts the post-meal glucose spike by up to 30%."
-            )
-        )
+    for (line in llmResponse.lines()) {
+        val trimmed = line.trim()
+        if (trimmed.isEmpty()) continue
+
+        val lower = trimmed.lowercase()
+        when {
+            lower.startsWith("meal title:") || lower.startsWith("title:") -> {
+                mealTitle = trimmed.substringAfter(":").trim().ifBlank { mealTitle }
+                continue
+            }
+            lower.startsWith("calories:") -> {
+                val num = Regex("""\d+""").find(trimmed)?.value?.toIntOrNull()
+                if (num != null) calories = num
+                continue
+            }
+            lower.startsWith("carbs:") -> {
+                macros["Carbs"] = trimmed.substringAfter(":").trim()
+                continue
+            }
+            lower.startsWith("protein:") -> {
+                macros["Protein"] = trimmed.substringAfter(":").trim()
+                continue
+            }
+            lower.startsWith("fats:") || lower.startsWith("fat:") -> {
+                macros["Fats"] = trimmed.substringAfter(":").trim()
+                continue
+            }
+            lower.startsWith("fiber:") -> {
+                macros["Fiber"] = trimmed.substringAfter(":").trim()
+                continue
+            }
+            "micronutrient" in lower -> {
+                activeSection = 1
+                continue
+            }
+            "benefit" in lower -> {
+                activeSection = 2
+                continue
+            }
+            "drawback" in lower || "risk" in lower -> {
+                activeSection = 3
+                continue
+            }
+            "consideration" in lower -> {
+                activeSection = 4
+                continue
+            }
+            "cooking" in lower -> {
+                activeSection = 5
+                continue
+            }
+            "serving" in lower -> {
+                activeSection = 6
+                continue
+            }
+            "tip" in lower -> {
+                activeSection = 7
+                continue
+            }
+        }
+
+        val clean = trimmed.removePrefix("-").removePrefix("•").removePrefix("*").trim()
+        if (clean.isBlank()) continue
+
+        when (activeSection) {
+            1 -> micronutrients.add(clean)
+            2 -> benefits.add(clean)
+            3 -> drawbacks.add(clean)
+            4 -> considerations.add(clean)
+            5 -> cooking.add(clean)
+            6 -> serving.add(clean)
+            7 -> tips.add(clean)
+        }
     }
+
+    if (calories == 0) {
+        val foundCal = Regex("""(\d{2,4})\s*k?cal""").find(llmResponse.lowercase())
+        calories = foundCal?.groupValues?.get(1)?.toIntOrNull() ?: 450
+    }
+
+    return FoodNutritionReport(
+        mealTitle = mealTitle,
+        estimatedCaloriesKcal = calories,
+        macrosBreakdown = macros,
+        micronutrientsBreakdown = micronutrients.ifEmpty { listOf("Key vitamins and minerals evaluated by on-device model.") },
+        healthBenefits = benefits.ifEmpty { listOf("Nutrient dense components support metabolic health.") },
+        healthDrawbacks = drawbacks,
+        dietaryConsiderations = considerations,
+        cookingMethods = cooking,
+        servingSuggestions = serving,
+        dietaryTips = tips.ifEmpty { listOf("Stay hydrated and maintain moderate portion control.") }
+    )
 }

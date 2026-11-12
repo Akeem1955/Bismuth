@@ -55,10 +55,7 @@ class ModelDownloadWorker(context: Context, params: WorkerParameters) :
                 Result.failure()
             } else {
                 try {
-                    setForeground(createForegroundInfo(progress = 0, modelName = modelName))
-
-                    val url = URL(fileUrl)
-                    val connection = url.openConnection() as HttpURLConnection
+                    trySetForeground(progress = 0, modelName = modelName)
 
                     val outputDir = File(
                         applicationContext.getExternalFilesDir(null),
@@ -72,57 +69,74 @@ class ModelDownloadWorker(context: Context, params: WorkerParameters) :
                             .joinToString(separator = File.separator),
                     )
 
-                    var downloadedBytes = 0L
                     val existingBytes = outputTmpFile.length()
-                    if (existingBytes > 0) {
-                        connection.setRequestProperty("Range", "bytes=$existingBytes-")
-                        connection.setRequestProperty("Accept-Encoding", "identity")
+                    val headers = if (existingBytes > 0) {
+                        mapOf(
+                            "Range" to "bytes=$existingBytes-",
+                            "Accept-Encoding" to "identity"
+                        )
+                    } else {
+                        emptyMap()
                     }
+                    val activeConnection = openFollowingRedirects(fileUrl = fileUrl, headers = headers)
 
-                    connection.connect()
-
-                    if (connection.responseCode == HttpURLConnection.HTTP_OK ||
-                        connection.responseCode == HttpURLConnection.HTTP_PARTIAL
-                    ) {
-                        val contentRange = connection.getHeaderField("Content-Range")
+                    val responseCode = activeConnection.responseCode
+                    var downloadedBytes = 0L
+                    val isPartialResume = if (responseCode == HttpURLConnection.HTTP_PARTIAL) {
+                        val contentRange = activeConnection.getHeaderField("Content-Range")
                         if (contentRange != null) {
                             val startByte = contentRange.substringAfter("bytes ")
-                                .split("/")[0].split("-")[0].toLong()
+                                .split("/")[0].split("-")[0].toLongOrNull() ?: 0L
                             downloadedBytes += startByte
+                            true
+                        } else {
+                            false
                         }
+                    } else if (responseCode == HttpURLConnection.HTTP_OK) {
+                        false
+                    } else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED || responseCode == HttpURLConnection.HTTP_FORBIDDEN) {
+                        activeConnection.disconnect()
+                        throw IOException("Access denied (HTTP $responseCode). Gated models can be imported locally via 'Import Local .litertlm'.")
                     } else {
-                        throw IOException("HTTP error code: ${connection.responseCode}")
+                        activeConnection.disconnect()
+                        throw IOException("HTTP error code: $responseCode")
                     }
 
-                    val inputStream = connection.inputStream
-                    val outputStream = FileOutputStream(outputTmpFile, true)
+                    val headerTotal = activeConnection.contentLengthLong.let { if (it > 0) it + downloadedBytes else 0L }
+                    val effectiveTotal = if (totalBytes > 0) totalBytes else headerTotal
 
-                    val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-                    var bytesRead: Int
-                    var lastProgressTs = 0L
+                    try {
+                        activeConnection.inputStream.use { inputStream ->
+                            FileOutputStream(outputTmpFile, isPartialResume).use { outputStream ->
+                                val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+                                var bytesRead: Int
+                                var lastProgressTs = 0L
 
-                    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-                        outputStream.write(buffer, 0, bytesRead)
-                        downloadedBytes += bytesRead
+                                while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                                    outputStream.write(buffer, 0, bytesRead)
+                                    downloadedBytes += bytesRead
 
-                        val curTs = System.currentTimeMillis()
-                        if (curTs - lastProgressTs > 200) {
-                            setProgress(
-                                Data.Builder()
-                                    .putLong(DownloadConsts.KEY_MODEL_DOWNLOAD_RECEIVED_BYTES, downloadedBytes)
-                                    .build()
-                            )
-                            val progress = if (totalBytes > 0) {
-                                (downloadedBytes * 100 / totalBytes).toInt()
-                            } else 0
-                            setForeground(createForegroundInfo(progress = progress, modelName = modelName))
-                            lastProgressTs = curTs
+                                    val curTs = System.currentTimeMillis()
+                                    if (curTs - lastProgressTs > 200) {
+                                        setProgress(
+                                            Data.Builder()
+                                                .putLong(DownloadConsts.KEY_MODEL_DOWNLOAD_RECEIVED_BYTES, downloadedBytes)
+                                                .putLong(DownloadConsts.KEY_MODEL_TOTAL_BYTES, effectiveTotal)
+                                                .build()
+                                        )
+                                        val progress = if (effectiveTotal > 0) {
+                                            ((downloadedBytes * 100L) / effectiveTotal).toInt().coerceIn(0, 100)
+                                        } else 0
+                                        trySetForeground(progress = progress, modelName = modelName)
+                                        lastProgressTs = curTs
+                                    }
+                                }
+                                outputStream.flush()
+                            }
                         }
+                    } finally {
+                        activeConnection.disconnect()
                     }
-
-                    outputStream.flush()
-                    outputStream.close()
-                    inputStream.close()
 
                     val originalFile = File(
                         outputTmpFile.absolutePath.replace(".${DownloadConsts.TMP_FILE_EXT}", "")
@@ -134,16 +148,66 @@ class ModelDownloadWorker(context: Context, params: WorkerParameters) :
                         throw IOException("Failed to finalize model download")
                     }
                     Result.success()
-                } catch (e: IOException) {
+                } catch (e: kotlinx.coroutines.CancellationException) {
+                    throw e
+                } catch (e: Exception) {
                     Log.e(TAG, "Download failed: ${e.message}", e)
                     Result.failure(
                         Data.Builder()
-                            .putString(DownloadConsts.KEY_MODEL_DOWNLOAD_ERROR_MESSAGE, e.message)
+                            .putString(
+                                DownloadConsts.KEY_MODEL_DOWNLOAD_ERROR_MESSAGE,
+                                e.message ?: "Download failed"
+                            )
                             .build()
                     )
                 }
             }
         }
+    }
+
+    private suspend fun trySetForeground(progress: Int, modelName: String?) {
+        try {
+            setForeground(createForegroundInfo(progress = progress, modelName = modelName))
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            // Avoid crashing when Android 12+ background restrictions reject FGS promotion.
+            Log.w(TAG, "Unable to promote download worker to foreground: ${e.message}")
+        }
+    }
+
+    private fun openFollowingRedirects(
+        fileUrl: String,
+        headers: Map<String, String> = emptyMap(),
+        maxRedirects: Int = 6
+    ): HttpURLConnection {
+        var currentUrl = fileUrl
+        repeat(maxRedirects + 1) {
+            val connection = (URL(currentUrl).openConnection() as HttpURLConnection).apply {
+                instanceFollowRedirects = false
+                connectTimeout = 30_000
+                readTimeout = 30_000
+                headers.forEach { (key, value) -> setRequestProperty(key, value) }
+            }
+            connection.connect()
+            val code = connection.responseCode
+            if (code == HttpURLConnection.HTTP_MOVED_TEMP ||
+                code == HttpURLConnection.HTTP_MOVED_PERM ||
+                code == HttpURLConnection.HTTP_SEE_OTHER ||
+                code == 307 ||
+                code == 308
+            ) {
+                val location = connection.getHeaderField("Location")
+                connection.disconnect()
+                if (location.isNullOrBlank()) {
+                    throw IOException("Redirect without Location header (HTTP $code)")
+                }
+                currentUrl = URL(URL(currentUrl), location).toString()
+            } else {
+                return connection
+            }
+        }
+        throw IOException("Too many redirects while downloading model")
     }
 
     override suspend fun getForegroundInfo(): ForegroundInfo {

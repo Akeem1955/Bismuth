@@ -1,0 +1,17 @@
+{
+  "topicId": "chem_atomic_orbitals",
+  "questions": [
+    {
+      "questionId": "chem_atom_q1",
+      "question": "Which pair of species represents isotopes of the same element?",
+      "options": [
+        "³⁵₁₇Cl and ³⁷₁₇Cl",
+        "¹⁴₆C and ¹⁴₇N",
+        "²³₁₁Na and ²³₁₁Na⁺",
+        "¹⁶₈O and ¹⁶₈O²⁻"
+      ],
+      "correctIndex": 0,
+      "explanation": "Isotopes have the same atomic number (Z = 17) but different mass numbers (A = 35 and 37)."
+    }
+  ]
+}

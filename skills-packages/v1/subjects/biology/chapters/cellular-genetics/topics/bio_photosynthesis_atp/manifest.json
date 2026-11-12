@@ -1,0 +1,58 @@
+{
+  "topicId": "bio_photosynthesis_atp",
+  "subjectId": "biology",
+  "chapterId": "cellular-genetics",
+  "version": "1.1.0",
+  "files": {
+    "SKILL.md": {
+      "sizeBytes": 1833,
+      "sha256": "a74cebc68cd4f7e3514a60328385d44736f1cb67c624302a8e3b49649194d420",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/SKILL.md"
+    },
+    "lesson.json": {
+      "sizeBytes": 12396,
+      "sha256": "2f96542dccc9739c2e5c60482a6fc287eb8b1727725e0f434147da099d7802fc",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/lesson.json"
+    },
+    "assessment.json": {
+      "sizeBytes": 472,
+      "sha256": "3fa1f1eacaba56c39057e17c9e04313d86f552e83b6cafda00d916e410ba63c5",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assessment.json"
+    },
+    "bundle.json": {
+      "sizeBytes": 16806,
+      "sha256": "2bd44d92688ec5813d8d1e59b0212c0c9f3018eaf49e721fcf271dcc6d9885e2",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/bundle.json"
+    },
+    "assets/images/step_1.png": {
+      "sizeBytes": 26555,
+      "sha256": "9ba7011eefbafaec57b967583a36101306f59115c65961c08dad1cc5a8a1c20a",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/images/step_1.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_2.png": {
+      "sizeBytes": 26720,
+      "sha256": "e5e84704bd2efa0584126425b15e9d3cccc47ba29c79113c9cab930122f3d1a1",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/images/step_2.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_3.png": {
+      "sizeBytes": 26040,
+      "sha256": "f00e674a7c9a581fbca7ed7cc3d9b965ae5238d3838559b7aa4559871fb8a9e2",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/images/step_3.png",
+      "mimeType": "image/png"
+    },
+    "assets/video/walkthrough.mp4": {
+      "sizeBytes": 256633,
+      "sha256": "dac5ebecd9447980040fee14261e0f9b87790ffabc272ea58911fa46d53e322b",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/video/walkthrough.mp4",
+      "mimeType": "video/mp4"
+    },
+    "assets/board/scene.json": {
+      "sizeBytes": 6153,
+      "sha256": "3f8dd7dd8d7c9aa8f66b7007af1a30f903bf5a24f12c245bfffb98bd783f3aca",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/biology/chapters/cellular-genetics/topics/bio_photosynthesis_atp/assets/board/scene.json",
+      "mimeType": "application/json"
+    }
+  }
+}

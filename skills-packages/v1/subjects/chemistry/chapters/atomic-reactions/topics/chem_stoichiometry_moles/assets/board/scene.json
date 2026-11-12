@@ -1,0 +1,165 @@
+{
+  "sceneId": "scene_chem_stoichiometry_moles",
+  "subjectTitle": "Chemistry",
+  "chapterTitle": "Atomic Structure & Quantitative Stoichiometry",
+  "topicTitle": "Stoichiometry, Molar Mass & Limiting Reagents",
+  "objects": [
+    {
+      "objectId": "node_mole_bridge",
+      "objectType": "formula",
+      "label": "The Mole Bridge",
+      "subLabel": "Grams to Moles",
+      "formula": "n = m / M  (mol)",
+      "explanation": "Chemical equations count molecules (moles), not grams. Divide mass m by molar mass M to enter the mole domain.",
+      "position": {
+        "x": 60,
+        "y": 80
+      },
+      "size": {
+        "width": 220,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_1"
+    },
+    {
+      "objectId": "node_mole_ratio",
+      "objectType": "box",
+      "label": "Balanced Mole Ratio",
+      "subLabel": "Water Synthesis",
+      "formula": "2 H₂ + 1 O₂ → 2 H₂O",
+      "explanation": "Every 2 moles of H₂ require exactly 1 mole of O₂ to produce 2 moles of H₂O.",
+      "position": {
+        "x": 330,
+        "y": 80
+      },
+      "size": {
+        "width": 220,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_2"
+    },
+    {
+      "objectId": "node_limiting",
+      "objectType": "highlight",
+      "label": "Limiting Reagent Test",
+      "subLabel": "Smallest (n / coeff) Wins",
+      "formula": "min( n_H₂ / 2 , n_O₂ / 1 )",
+      "explanation": "The reactant that runs out first stops the reaction and sets the maximum theoretical yield.",
+      "position": {
+        "x": 180,
+        "y": 250
+      },
+      "size": {
+        "width": 250,
+        "height": 94
+      },
+      "style": {
+        "strokeWidth": 2.5,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_3"
+    }
+  ],
+  "arrows": [
+    {
+      "fromObjectId": "node_mole_bridge",
+      "toObjectId": "node_mole_ratio",
+      "label": "apply ratio",
+      "stepId": "step_2"
+    },
+    {
+      "fromObjectId": "node_mole_ratio",
+      "toObjectId": "node_limiting",
+      "label": "divide by coeff",
+      "stepId": "step_3"
+    }
+  ],
+  "steps": [
+    {
+      "stepId": "step_1",
+      "stepNumber": 1,
+      "title": "Converting Mass to Moles (n = m / M)",
+      "narration": "To compare substances in a reaction, convert mass in grams to moles using n = m / M, where M is the molar mass in grams per mole.",
+      "tutorTip": "Tap 'The Mole Bridge' on the board to inspect the conversion formula.",
+      "focusObjectIds": [
+        "node_mole_bridge"
+      ],
+      "inlineQuiz": {
+        "question": "Given the molar mass of Water (H₂O) is 18 g/mol, how many moles are in 54 g of water?",
+        "options": [
+          "3.0 mol",
+          "0.33 mol",
+          "36 mol",
+          "972 mol"
+        ],
+        "correctIndex": 0,
+        "explanation": "n = m / M = 54 g / 18 g/mol = 3.0 mol."
+      },
+      "diagramResourceId": "img_step_1",
+      "diagramRelativePath": "assets/images/step_1.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_2",
+      "stepNumber": 2,
+      "title": "Stoichiometric Mole Ratios",
+      "narration": "In the balanced equation 2 H₂ + O₂ → 2 H₂O, coefficients represent mole ratios: 2 moles of hydrogen gas react with 1 mole of oxygen gas to form 2 moles of water.",
+      "tutorTip": "Use the ratio (target coefficient / known coefficient) to scale moles.",
+      "focusObjectIds": [
+        "node_mole_ratio"
+      ],
+      "inlineQuiz": {
+        "question": "In N₂ + 3 H₂ → 2 NH₃, how many moles of H₂ are needed to completely react with 2 moles of N₂?",
+        "options": [
+          "6 moles",
+          "3 moles",
+          "4 moles",
+          "2 moles"
+        ],
+        "correctIndex": 0,
+        "explanation": "Each mole of N₂ requires 3 moles of H₂, so 2 mol N₂ × 3 = 6 moles of H₂."
+      },
+      "diagramResourceId": "img_step_2",
+      "diagramRelativePath": "assets/images/step_2.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_3",
+      "stepNumber": 3,
+      "title": "Determining the Limiting Reagent",
+      "narration": "When 4 moles of H₂ are mixed with 3 moles of O₂ in 2 H₂ + O₂ → 2 H₂O, compare n/coeff: for H₂ it is 4/2 = 2, and for O₂ it is 3/1 = 3. H₂ is smaller, so H₂ is the limiting reagent.",
+      "tutorTip": "Always compute product yield from the limiting reagent, never the excess reagent.",
+      "focusObjectIds": [
+        "node_limiting"
+      ],
+      "inlineQuiz": {
+        "question": "For 2 H₂ + O₂ → 2 H₂O, if you react 4 moles of H₂ with 3 moles of O₂, how many moles of H₂O are produced?",
+        "options": [
+          "4 moles",
+          "6 moles",
+          "3 moles",
+          "7 moles"
+        ],
+        "correctIndex": 0,
+        "explanation": "H₂ is limiting (4 mol H₂ consumes 2 mol O₂) and yields 4 moles of H₂O (1 mol O₂ remains in excess)."
+      },
+      "diagramResourceId": "img_step_3",
+      "diagramRelativePath": "assets/images/step_3.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    }
+  ]
+}

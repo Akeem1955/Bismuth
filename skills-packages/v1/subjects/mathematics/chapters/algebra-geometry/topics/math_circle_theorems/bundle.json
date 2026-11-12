@@ -1,0 +1,337 @@
+{
+  "topicId": "math_circle_theorems",
+  "subjectId": "mathematics",
+  "subjectTitle": "Mathematics",
+  "chapterId": "algebra-geometry",
+  "chapterTitle": "Foundations of Algebra & Geometry",
+  "title": "Circle Geometry: Tangents, Chords & Inscribed Angles",
+  "summary": "Deductive angle relationships between central angles, inscribed angles, and tangent lines.",
+  "version": "1.1.0",
+  "skillMarkdown": "---\nname: math_circle_theorems\ndescription: Deductive angle relationships between central angles, inscribed angles, and tangent lines.\nsubject_id: mathematics\nchapter_id: algebra-geometry\ntopic_id: math_circle_theorems\nversion: \"1.1.0\"\n---\n\n# Circle Geometry: Tangents, Chords & Inscribed Angles\n\n## Socratic System Directive\nYou are orchestrating the Circle Geometry lesson. Require the student to identify which arc subtends the angle before applying any theorem.\n\n## Learning Objectives\n1. Prove and apply the Central Angle vs. Inscribed Angle Theorem (θ_center = 2 · θ_inscribed)\n2. Apply Thales' Theorem for angles subtended by a diameter (90° right angle)\n3. Use the Tangent-Radius Perpendicularity Theorem (90° at point of tangency)\n\n## Step-by-Step Orchestration Sequence\n- Step 1: Central Angle vs. Inscribed Angle subtended by the same arc\n- Step 2: Thales' Semicircle Theorem (diameter subtends 90°)\n- Step 3: Tangent-Radius Perpendicularity and exterior tangent lengths\n\n## Teacher-Curated Offline Media Alignment\n- **Step 1 (Central vs. Inscribed Angle Theorem)**: Curated Diagram `assets/images/step_1.png` + Walkthrough Video `assets/video/walkthrough.mp4` (Phase 1)\n- **Step 2 (Thales' Theorem: Angles in a Semicircle)**: Curated Diagram `assets/images/step_2.png` + Walkthrough Video `assets/video/walkthrough.mp4` (Phase 2)\n- **Step 3 (Tangent-Radius Perpendicularity)**: Curated Diagram `assets/images/step_3.png` + Walkthrough Video `assets/video/walkthrough.mp4` (Phase 3)\n- **Interactive Whiteboard Scene**: `assets/board/scene.json`\n\n## Common Misconceptions to Watch & Remediate\n- Halving the inscribed angle instead of doubling it when finding the central angle\n- Assuming any chord subtends a 90° angle at the circumference (only a diameter does)\n- Treating the angle between a chord and tangent as 90° instead of the angle between the radius and tangent\n",
+  "instructions": {
+    "skillId": "math_circle_theorems",
+    "learningObjectives": [
+      "Prove and apply the Central Angle vs. Inscribed Angle Theorem (θ_center = 2 · θ_inscribed)",
+      "Apply Thales' Theorem for angles subtended by a diameter (90° right angle)",
+      "Use the Tangent-Radius Perpendicularity Theorem (90° at point of tangency)"
+    ],
+    "explanationSequence": [
+      "Step 1: Central Angle vs. Inscribed Angle subtended by the same arc",
+      "Step 2: Thales' Semicircle Theorem (diameter subtends 90°)",
+      "Step 3: Tangent-Radius Perpendicularity and exterior tangent lengths"
+    ],
+    "commonMisconceptions": [
+      "Halving the inscribed angle instead of doubling it when finding the central angle",
+      "Assuming any chord subtends a 90° angle at the circumference (only a diameter does)",
+      "Treating the angle between a chord and tangent as 90° instead of the angle between the radius and tangent"
+    ],
+    "socraticSystemPrompt": "You are orchestrating the Circle Geometry lesson. Require the student to identify which arc subtends the angle before applying any theorem."
+  },
+  "resources": [
+    {
+      "id": "res_math_circle_theorems",
+      "title": "Core Circle Theorems Reference",
+      "type": "formula_sheet",
+      "summary": "Key Euclidean circle relationships.",
+      "bodyText": "• Inscribed Angle Theorem: ∠AOB (center) = 2 × ∠ACB (circumference) on the same arc AB.\n• Semicircle Theorem (Thales): An angle inscribed across a diameter is always 90°.\n• Tangent-Radius Theorem: A tangent line is perpendicular (90°) to the radius at the point of contact.",
+      "stepId": "all",
+      "relativePath": "",
+      "url": "",
+      "sha256": "",
+      "sizeBytes": 0
+    },
+    {
+      "id": "img_step_1",
+      "title": "Step 1 Visual Diagram: Central vs. Inscribed Angle Theorem",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 1 (Central vs. Inscribed Angle Theorem).",
+      "bodyText": "When a central angle ∠AOB and an inscribed angle ∠ACB subtend the exact same arc AB, the central angle is always twice the inscribed angle.",
+      "stepId": "step_1",
+      "relativePath": "assets/images/step_1.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_1.png",
+      "sha256": "790f2d2f3f4194d1bdde4d03ef9189406cb89c5289da326f09c873bf7abef768",
+      "sizeBytes": 38116
+    },
+    {
+      "id": "img_step_2",
+      "title": "Step 2 Visual Diagram: Thales' Theorem: Angles in a Semicircle",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 2 (Thales' Theorem: Angles in a Semicircle).",
+      "bodyText": "A special case of the Inscribed Angle Theorem occurs when the chord is a diameter. Because a straight diameter forms a 180° central angle, any angle inscribed in a semicircle is 90°.",
+      "stepId": "step_2",
+      "relativePath": "assets/images/step_2.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_2.png",
+      "sha256": "adb6f40d50e9224162aa623def4ab1c89375f81e51b5037de683b00955eadf66",
+      "sizeBytes": 34641
+    },
+    {
+      "id": "img_step_3",
+      "title": "Step 3 Visual Diagram: Tangent-Radius Perpendicularity",
+      "type": "diagram_image",
+      "summary": "Teacher-curated diagram aligned with Step 3 (Tangent-Radius Perpendicularity).",
+      "bodyText": "A line tangent to a circle touches it at exactly one point T. At that point of contact, the radius OT is always perpendicular (90°) to the tangent line.",
+      "stepId": "step_3",
+      "relativePath": "assets/images/step_3.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_3.png",
+      "sha256": "883df1cecabaf4f3b246b1cefced36ddfe6aef26b93294b4f46368bb740d861c",
+      "sizeBytes": 33451
+    },
+    {
+      "id": "vid_walkthrough",
+      "title": "Animated Concept Walkthrough: Circle Geometry: Tangents, Chords & Inscribed Angles",
+      "type": "instructional_video",
+      "summary": "12-second teacher-curated animated walkthrough covering Steps 1–3 of Circle Geometry: Tangents, Chords & Inscribed Angles.",
+      "bodyText": "Step 1 (Central vs. Inscribed Angle Theorem): When a central angle ∠AOB and an inscribed angle ∠ACB subtend the exact same arc AB, the central angle is always twice the inscribed angle.\n\nStep 2 (Thales' Theorem: Angles in a Semicircle): A special case of the Inscribed Angle Theorem occurs when the chord is a diameter. Because a straight diameter forms a 180° central angle, any angle inscribed in a semicircle is 90°.\n\nStep 3 (Tangent-Radius Perpendicularity): A line tangent to a circle touches it at exactly one point T. At that point of contact, the radius OT is always perpendicular (90°) to the tangent line.",
+      "stepId": "all",
+      "relativePath": "assets/video/walkthrough.mp4",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/video/walkthrough.mp4",
+      "sha256": "97580597ac0e0061212aeb646bf3b079824296a061ad540028be8dfb5a82c8b4",
+      "sizeBytes": 360987
+    }
+  ],
+  "whiteboardScene": {
+    "sceneId": "scene_math_circle_theorems",
+    "subjectTitle": "Mathematics",
+    "chapterTitle": "Foundations of Algebra & Geometry",
+    "topicTitle": "Circle Geometry: Tangents, Chords & Inscribed Angles",
+    "objects": [
+      {
+        "objectId": "node_central_angle",
+        "objectType": "circle",
+        "label": "Central Angle (∠AOB)",
+        "subLabel": "Vertex at Circle Center O",
+        "formula": "∠AOB = 2θ",
+        "explanation": "The angle formed by two radii meeting at the center O is always twice the inscribed angle subtended by the same arc AB.",
+        "position": {
+          "x": 60,
+          "y": 70
+        },
+        "size": {
+          "width": 220,
+          "height": 90
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_1"
+      },
+      {
+        "objectId": "node_inscribed_angle",
+        "objectType": "formula",
+        "label": "Inscribed Angle (∠ACB)",
+        "subLabel": "Vertex on Circumference",
+        "formula": "θ = ½ ∠AOB",
+        "explanation": "Any inscribed angle subtended by arc AB equals half the central angle, meaning all inscribed angles on the same arc are equal.",
+        "position": {
+          "x": 330,
+          "y": 70
+        },
+        "size": {
+          "width": 220,
+          "height": 90
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_1"
+      },
+      {
+        "objectId": "node_thales",
+        "objectType": "highlight",
+        "label": "Thales' Semicircle Law",
+        "subLabel": "Arc is a 180° Diameter",
+        "formula": "∠ACB = ½(180°) = 90°",
+        "explanation": "When chord AB passes through center O (diameter), the central angle is 180°, so the inscribed angle is a 90° right angle.",
+        "position": {
+          "x": 190,
+          "y": 230
+        },
+        "size": {
+          "width": 230,
+          "height": 92
+        },
+        "style": {
+          "strokeWidth": 2,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_2"
+      },
+      {
+        "objectId": "node_tangent_radius",
+        "objectType": "formula",
+        "label": "Tangent-Radius Orthogonality",
+        "subLabel": "Point of Contact T",
+        "formula": "OT ⊥ Tangent  (∠OTP = 90°)",
+        "explanation": "The shortest distance from center O to a tangent line is the radius OT, forming a strict 90° angle.",
+        "position": {
+          "x": 180,
+          "y": 390
+        },
+        "size": {
+          "width": 250,
+          "height": 92
+        },
+        "style": {
+          "strokeWidth": 2.5,
+          "cornerRadius": 16,
+          "isDashed": false
+        },
+        "stepId": "step_3"
+      }
+    ],
+    "arrows": [
+      {
+        "fromObjectId": "node_central_angle",
+        "toObjectId": "node_inscribed_angle",
+        "label": "2 : 1 ratio",
+        "stepId": "step_1"
+      },
+      {
+        "fromObjectId": "node_inscribed_angle",
+        "toObjectId": "node_thales",
+        "label": "when ∠AOB = 180°",
+        "stepId": "step_2"
+      },
+      {
+        "fromObjectId": "node_thales",
+        "toObjectId": "node_tangent_radius",
+        "label": "right-angle geometry",
+        "stepId": "step_3"
+      }
+    ],
+    "steps": [
+      {
+        "stepId": "step_1",
+        "stepNumber": 1,
+        "title": "Central vs. Inscribed Angle Theorem",
+        "narration": "When a central angle ∠AOB and an inscribed angle ∠ACB subtend the exact same arc AB, the central angle is always twice the inscribed angle.",
+        "tutorTip": "Tap both angle nodes on the board to compare their vertex positions.",
+        "focusObjectIds": [
+          "node_central_angle",
+          "node_inscribed_angle"
+        ],
+        "inlineQuiz": {
+          "question": "If an inscribed angle ∠ACB subtended by arc AB measures 38°, what is the measure of the central angle ∠AOB?",
+          "options": [
+            "76°",
+            "19°",
+            "142°",
+            "52°"
+          ],
+          "correctIndex": 0,
+          "explanation": "The central angle is twice the inscribed angle on the same arc: 2 × 38° = 76°."
+        },
+        "diagramResourceId": "img_step_1",
+        "diagramRelativePath": "assets/images/step_1.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      },
+      {
+        "stepId": "step_2",
+        "stepNumber": 2,
+        "title": "Thales' Theorem: Angles in a Semicircle",
+        "narration": "A special case of the Inscribed Angle Theorem occurs when the chord is a diameter. Because a straight diameter forms a 180° central angle, any angle inscribed in a semicircle is 90°.",
+        "tutorTip": "Use this to immediately spot right-angled triangles inside circles.",
+        "focusObjectIds": [
+          "node_thales"
+        ],
+        "inlineQuiz": {
+          "question": "Triangle ABC is inscribed in a circle where side AB is the diameter. If ∠CAB = 35°, what is ∠CBA?",
+          "options": [
+            "55°",
+            "65°",
+            "90°",
+            "45°"
+          ],
+          "correctIndex": 0,
+          "explanation": "Since AB is a diameter, ∠ACB = 90°. Therefore ∠CBA = 180° - 90° - 35° = 55°."
+        },
+        "diagramResourceId": "img_step_2",
+        "diagramRelativePath": "assets/images/step_2.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      },
+      {
+        "stepId": "step_3",
+        "stepNumber": 3,
+        "title": "Tangent-Radius Perpendicularity",
+        "narration": "A line tangent to a circle touches it at exactly one point T. At that point of contact, the radius OT is always perpendicular (90°) to the tangent line.",
+        "tutorTip": "Combine ∠OTP = 90° with the Pythagorean theorem to find tangent segment lengths.",
+        "focusObjectIds": [
+          "node_tangent_radius"
+        ],
+        "inlineQuiz": {
+          "question": "A circle has radius OT = 5 cm. A tangent from external point P touches the circle at T, and OP = 13 cm. What is the tangent length PT?",
+          "options": [
+            "12 cm",
+            "8 cm",
+            "14 cm",
+            "9 cm"
+          ],
+          "correctIndex": 0,
+          "explanation": "Since ∠OTP = 90°, OT² + PT² = OP² ⇒ 5² + PT² = 13² ⇒ PT = √(169 - 25) = 12 cm."
+        },
+        "diagramResourceId": "img_step_3",
+        "diagramRelativePath": "assets/images/step_3.png",
+        "videoResourceId": "vid_walkthrough",
+        "videoRelativePath": "assets/video/walkthrough.mp4"
+      }
+    ]
+  },
+  "assessment": [
+    {
+      "questionId": "math_circ_q1",
+      "question": "Two inscribed angles ∠ADB and ∠ACB subtend the same minor arc AB. If ∠ADB = 42°, what is ∠ACB?",
+      "options": [
+        "42°",
+        "84°",
+        "21°",
+        "138°"
+      ],
+      "correctIndex": 0,
+      "explanation": "Inscribed angles subtended by the same arc are equal (both equal half the central angle)."
+    }
+  ],
+  "mediaFiles": [
+    {
+      "relativePath": "assets/images/step_1.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_1.png",
+      "sha256": "790f2d2f3f4194d1bdde4d03ef9189406cb89c5289da326f09c873bf7abef768",
+      "sizeBytes": 38116,
+      "mimeType": "image/png"
+    },
+    {
+      "relativePath": "assets/images/step_2.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_2.png",
+      "sha256": "adb6f40d50e9224162aa623def4ab1c89375f81e51b5037de683b00955eadf66",
+      "sizeBytes": 34641,
+      "mimeType": "image/png"
+    },
+    {
+      "relativePath": "assets/images/step_3.png",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_3.png",
+      "sha256": "883df1cecabaf4f3b246b1cefced36ddfe6aef26b93294b4f46368bb740d861c",
+      "sizeBytes": 33451,
+      "mimeType": "image/png"
+    },
+    {
+      "relativePath": "assets/video/walkthrough.mp4",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/video/walkthrough.mp4",
+      "sha256": "97580597ac0e0061212aeb646bf3b079824296a061ad540028be8dfb5a82c8b4",
+      "sizeBytes": 360987,
+      "mimeType": "video/mp4"
+    },
+    {
+      "relativePath": "assets/board/scene.json",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/board/scene.json",
+      "sha256": "ce0cf433635290328fb01029126c73fcbe83d459bb6fd679dffd919fa36ec3b3",
+      "sizeBytes": 6438,
+      "mimeType": "application/json"
+    }
+  ]
+}

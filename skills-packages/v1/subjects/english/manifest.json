@@ -1,0 +1,130 @@
+{
+  "subjectId": "english",
+  "title": "English",
+  "iconEmoji": "📖",
+  "accentHex": "#006874",
+  "tagline": "Syntactic clause architecture, active rhetoric, and academic precision",
+  "coordinatorPhilosophy": "Teach grammar as logical structural engineering: every clause has a subject-verb core and a clear rhetorical role.",
+  "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/SKILL.md",
+  "chapters": [
+    {
+      "chapterId": "grammar-rhetoric",
+      "subjectId": "english",
+      "title": "Clause Architecture & Rhetorical Voice",
+      "summary": "Constructing compound-complex sentences and controlling agency through active and passive voice.",
+      "chapterObjectives": [
+        "Distinguish independent clauses from subordinate (dependent) clauses and punctuate them accurately",
+        "Transform sentences between active and passive voice and choose the optimal voice for clarity"
+      ],
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/SKILL.md",
+      "topics": [
+        {
+          "topicId": "eng_sentence_clauses",
+          "subjectId": "english",
+          "chapterId": "grammar-rhetoric",
+          "title": "Independent vs. Dependent Clauses & Complex Sentences",
+          "summary": "Coordinating conjunctions (FANBOYS), subordinating conjunctions, and eliminating comma splices.",
+          "version": "1.1.0",
+          "bundledInApk": false,
+          "packageSizeBytes": 346395,
+          "bundleSha256": "3ed9fe316b1d74a28d44ac71448ae779857b829c2b0fe72e1a80c688ab3a2379",
+          "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/bundle.json",
+          "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/SKILL.md",
+          "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/lesson.json",
+          "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assessment.json",
+          "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/manifest.json",
+          "mediaFiles": [
+            {
+              "relativePath": "assets/images/step_1.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/images/step_1.png",
+              "sha256": "9e9a9523823469aa53e7d4736ce0e9bdb3d4ae3f4ea255202ef1e7355acb9384",
+              "sizeBytes": 23746,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/images/step_2.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/images/step_2.png",
+              "sha256": "a8c2ac2dee2c1dde7c0a4acec91e80293e26cba8f762710005cd5768b3fc6a21",
+              "sizeBytes": 25505,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/images/step_3.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/images/step_3.png",
+              "sha256": "d68db98060dbc6b44e614e4c5654e3722b56a792f2a280bed60cc18554c62716",
+              "sizeBytes": 25015,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/video/walkthrough.mp4",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/video/walkthrough.mp4",
+              "sha256": "d231f0c39d89a305311faac7ff41c192bb7e7d7af29593e6c4f7fb83651323b8",
+              "sizeBytes": 248846,
+              "mimeType": "video/mp4"
+            },
+            {
+              "relativePath": "assets/board/scene.json",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_sentence_clauses/assets/board/scene.json",
+              "sha256": "427d7d18baf493610881bf64282907d2dc139380bc7025ed3b25e8f9dc331e3b",
+              "sizeBytes": 6278,
+              "mimeType": "application/json"
+            }
+          ]
+        },
+        {
+          "topicId": "eng_active_passive_voice",
+          "subjectId": "english",
+          "chapterId": "grammar-rhetoric",
+          "title": "Active vs. Passive Voice & Argumentative Precision",
+          "summary": "Grammatical agency, auxiliary 'be' + past participle transformations, and scientific objectivity.",
+          "version": "1.1.0",
+          "bundledInApk": false,
+          "packageSizeBytes": 352747,
+          "bundleSha256": "1560cd36e8e9c86e414f251964c6b8b084b8cdc9917526eac9a2d17f77185707",
+          "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/bundle.json",
+          "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/SKILL.md",
+          "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/lesson.json",
+          "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assessment.json",
+          "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/manifest.json",
+          "mediaFiles": [
+            {
+              "relativePath": "assets/images/step_1.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/images/step_1.png",
+              "sha256": "936f0eb22dec02de269a4f09efd5f9f6336e2367c0cf44cd7bd111e86463e7d0",
+              "sizeBytes": 25055,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/images/step_2.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/images/step_2.png",
+              "sha256": "9f7b6016fe3a71f6efe8b623fd35e419712314e9679d607d55052d5352627e49",
+              "sizeBytes": 24113,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/images/step_3.png",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/images/step_3.png",
+              "sha256": "c546856acd5a00c46a8fa1a6f239eeda91cc932799814011e0fa5591fc3a44ad",
+              "sizeBytes": 25079,
+              "mimeType": "image/png"
+            },
+            {
+              "relativePath": "assets/video/walkthrough.mp4",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/video/walkthrough.mp4",
+              "sha256": "c3376acc0da9cf887fdcbee1600df25d2c05f3a38c95971e3e36db469b3dc328",
+              "sizeBytes": 254840,
+              "mimeType": "video/mp4"
+            },
+            {
+              "relativePath": "assets/board/scene.json",
+              "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/english/chapters/grammar-rhetoric/topics/eng_active_passive_voice/assets/board/scene.json",
+              "sha256": "8424e56c494bdd17b36111746560d5a07ac7f07358fca748a1c1858ff7a04070",
+              "sizeBytes": 6342,
+              "mimeType": "application/json"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

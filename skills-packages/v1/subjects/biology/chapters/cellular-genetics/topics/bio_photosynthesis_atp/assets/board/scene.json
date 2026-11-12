@@ -1,0 +1,165 @@
+{
+  "sceneId": "scene_bio_photosynthesis_atp",
+  "subjectTitle": "Biology",
+  "chapterTitle": "Cellular Transport & Bioenergetics",
+  "topicTitle": "Photosynthesis & Cellular Respiration Energy Cycles",
+  "objects": [
+    {
+      "objectId": "node_thylakoid",
+      "objectType": "formula",
+      "label": "Light Reactions (Thylakoid)",
+      "subLabel": "Photolysis of Water",
+      "formula": "2 H₂O + Light → O₂ + ATP + NADPH",
+      "explanation": "Chlorophyll absorbs photons in the thylakoid membrane, splitting water to release O₂ gas and generating ATP and NADPH.",
+      "position": {
+        "x": 60,
+        "y": 80
+      },
+      "size": {
+        "width": 225,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_1"
+    },
+    {
+      "objectId": "node_calvin",
+      "objectType": "box",
+      "label": "Calvin Cycle (Stroma)",
+      "subLabel": "RuBisCO Carbon Fixation",
+      "formula": "6 CO₂ + ATP + NADPH → C₆H₁₂O₆",
+      "explanation": "In the chloroplast stroma, the enzyme RuBisCO fixes CO₂ using the ATP and NADPH from the light reactions to build glucose.",
+      "position": {
+        "x": 330,
+        "y": 80
+      },
+      "size": {
+        "width": 225,
+        "height": 90
+      },
+      "style": {
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_2"
+    },
+    {
+      "objectId": "node_mitochondria",
+      "objectType": "highlight",
+      "label": "Mitochondrial Respiration",
+      "subLabel": "Glycolysis, Krebs & ETC",
+      "formula": "C₆H₁₂O₆ + 6 O₂ → 6 CO₂ + 6 H₂O + ATP",
+      "explanation": "Both plant and animal cells oxidize glucose in mitochondria to regenerate cellular ATP, releasing CO₂ and H₂O.",
+      "position": {
+        "x": 180,
+        "y": 250
+      },
+      "size": {
+        "width": 255,
+        "height": 94
+      },
+      "style": {
+        "strokeWidth": 2.5,
+        "cornerRadius": 16,
+        "isDashed": false
+      },
+      "stepId": "step_3"
+    }
+  ],
+  "arrows": [
+    {
+      "fromObjectId": "node_thylakoid",
+      "toObjectId": "node_calvin",
+      "label": "supplies ATP & NADPH",
+      "stepId": "step_2"
+    },
+    {
+      "fromObjectId": "node_calvin",
+      "toObjectId": "node_mitochondria",
+      "label": "glucose + O₂",
+      "stepId": "step_3"
+    }
+  ],
+  "steps": [
+    {
+      "stepId": "step_1",
+      "stepNumber": 1,
+      "title": "Light-Dependent Reactions in the Thylakoid",
+      "narration": "Inside the chloroplast's thylakoid membranes, light energy splits water molecules (photolysis), releasing oxygen gas (O₂) and storing chemical energy in ATP and NADPH.",
+      "tutorTip": "Tap 'Light Reactions' to verify the source of atmospheric oxygen.",
+      "focusObjectIds": [
+        "node_thylakoid"
+      ],
+      "inlineQuiz": {
+        "question": "Where does the oxygen gas (O₂) released during photosynthesis originate from?",
+        "options": [
+          "The splitting of water (H₂O) in the thylakoid membrane",
+          "The breakdown of carbon dioxide (CO₂) in the stroma",
+          "Glucose oxidation in the mitochondria",
+          "RuBisCO fixation"
+        ],
+        "correctIndex": 0,
+        "explanation": "Photolysis splits water (2 H₂O → 4 H⁺ + 4 e⁻ + O₂) at Photosystem II in the thylakoid."
+      },
+      "diagramResourceId": "img_step_1",
+      "diagramRelativePath": "assets/images/step_1.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_2",
+      "stepNumber": 2,
+      "title": "The Calvin Cycle in the Chloroplast Stroma",
+      "narration": "The ATP and NADPH produced by the thylakoids power the Calvin cycle in the fluid stroma, where RuBisCO fixes inorganic CO₂ into three-carbon sugars (G3P) to form glucose.",
+      "tutorTip": "Notice how the Calvin cycle cannot run in the dark once ATP and NADPH from the light reactions run out.",
+      "focusObjectIds": [
+        "node_calvin"
+      ],
+      "inlineQuiz": {
+        "question": "Which molecules produced by the light-dependent reactions directly power carbon fixation in the Calvin cycle?",
+        "options": [
+          "ATP and NADPH",
+          "O₂ and Glucose",
+          "CO₂ and H₂O",
+          "Pyruvate and NADH"
+        ],
+        "correctIndex": 0,
+        "explanation": "ATP provides energy and NADPH provides reducing electrons to convert fixed CO₂ into G3P sugars."
+      },
+      "diagramResourceId": "img_step_2",
+      "diagramRelativePath": "assets/images/step_2.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    },
+    {
+      "stepId": "step_3",
+      "stepNumber": 3,
+      "title": "Coupled Cycle: Cellular Respiration",
+      "narration": "Glucose and O₂ produced by chloroplasts are consumed by mitochondria during aerobic respiration (C₆H₁₂O₆ + 6 O₂ → 6 CO₂ + 6 H₂O + ATP), completing the global carbon-energy cycle.",
+      "tutorTip": "Remember that plant cells have both chloroplasts and mitochondria!",
+      "focusObjectIds": [
+        "node_mitochondria"
+      ],
+      "inlineQuiz": {
+        "question": "How are the overall equations of photosynthesis and aerobic cellular respiration related?",
+        "options": [
+          "The products of photosynthesis are the exact reactants of aerobic respiration",
+          "Both processes consume O₂ and release CO₂",
+          "Photosynthesis occurs in mitochondria while respiration occurs in chloroplasts",
+          "Both convert ATP into sunlight"
+        ],
+        "correctIndex": 0,
+        "explanation": "Photosynthesis stores light energy in C₆H₁₂O₆ + 6 O₂, which respiration oxidizes back into 6 CO₂ + 6 H₂O + ATP."
+      },
+      "diagramResourceId": "img_step_3",
+      "diagramRelativePath": "assets/images/step_3.png",
+      "videoResourceId": "vid_walkthrough",
+      "videoRelativePath": "assets/video/walkthrough.mp4"
+    }
+  ]
+}

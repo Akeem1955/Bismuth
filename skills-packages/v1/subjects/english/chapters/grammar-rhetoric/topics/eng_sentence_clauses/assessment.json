@@ -1,0 +1,17 @@
+{
+  "topicId": "eng_sentence_clauses",
+  "questions": [
+    {
+      "questionId": "eng_cl_q1",
+      "question": "Identify the sentence type: 'When the bell rang, the students submitted their scripts, and the proctor sealed the envelope.'",
+      "options": [
+        "Compound-complex sentence",
+        "Simple sentence",
+        "Compound sentence",
+        "Sentence fragment"
+      ],
+      "correctIndex": 0,
+      "explanation": "It contains one dependent clause ('When the bell rang') and two independent clauses joined by ', and'."
+    }
+  ]
+}

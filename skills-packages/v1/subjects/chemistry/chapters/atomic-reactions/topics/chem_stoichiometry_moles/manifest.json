@@ -1,0 +1,58 @@
+{
+  "topicId": "chem_stoichiometry_moles",
+  "subjectId": "chemistry",
+  "chapterId": "atomic-reactions",
+  "version": "1.1.0",
+  "files": {
+    "SKILL.md": {
+      "sizeBytes": 1687,
+      "sha256": "e7a03dba61f5a851c40fbe42bfd531f085d494c78e54f0bcf643ccac3ec79791",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/SKILL.md"
+    },
+    "lesson.json": {
+      "sizeBytes": 11373,
+      "sha256": "96a4fc04c93df96359ac21840e6d89da23b9b41240f25aa707fc712663df67ab",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/lesson.json"
+    },
+    "assessment.json": {
+      "sizeBytes": 500,
+      "sha256": "c5fa682ca439b2af3a471d06b6e2743d6b106c5f27a04b97a830cdee94ad7ef8",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assessment.json"
+    },
+    "bundle.json": {
+      "sizeBytes": 15691,
+      "sha256": "ba72452702f5c1d1332925ac5d95f470e9f6149ff98b662e18e75bc05c231a9d",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/bundle.json"
+    },
+    "assets/images/step_1.png": {
+      "sizeBytes": 24965,
+      "sha256": "81057548ded941bdc943ee2745deb6106dcc1289e6eb76b718c412fc5885cfcb",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/images/step_1.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_2.png": {
+      "sizeBytes": 22639,
+      "sha256": "238928cadc280b38ae7e6bab40315d8030b10e9d7e2e576d754a5d75ca42ecbf",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/images/step_2.png",
+      "mimeType": "image/png"
+    },
+    "assets/images/step_3.png": {
+      "sizeBytes": 25314,
+      "sha256": "79381d5542687658082db44dcbd8006e06493fad5673045570f682e5d546be81",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/images/step_3.png",
+      "mimeType": "image/png"
+    },
+    "assets/video/walkthrough.mp4": {
+      "sizeBytes": 240529,
+      "sha256": "630dade01e4789a1e468a44df09128ede565d0fd56721dbf7e4b08e499bf64fa",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/video/walkthrough.mp4",
+      "mimeType": "video/mp4"
+    },
+    "assets/board/scene.json": {
+      "sizeBytes": 5498,
+      "sha256": "4e4aee449c93b117fccd46f4df88feaa469ec26b3a3b1cc9b81cdd831aa4ca4a",
+      "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/chemistry/chapters/atomic-reactions/topics/chem_stoichiometry_moles/assets/board/scene.json",
+      "mimeType": "application/json"
+    }
+  }
+}

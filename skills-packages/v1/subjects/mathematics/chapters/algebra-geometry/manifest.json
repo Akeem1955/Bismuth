@@ -1,0 +1,119 @@
+{
+  "chapterId": "algebra-geometry",
+  "subjectId": "mathematics",
+  "title": "Foundations of Algebra & Geometry",
+  "summary": "Equivalence transformations in linear equations and invariant angle relationships in circles.",
+  "chapterObjectives": [
+    "Solve multi-step single-variable linear equations using inverse operations",
+    "Apply inscribed angle, chord, and tangent theorems to deduce unknown geometric measures"
+  ],
+  "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/SKILL.md",
+  "topics": [
+    {
+      "topicId": "math_linear_equations",
+      "subjectId": "mathematics",
+      "chapterId": "algebra-geometry",
+      "title": "Linear Equations & Balancing Operations",
+      "summary": "Isolating variables using inverse operations while preserving equality across the balance scale.",
+      "version": "1.1.0",
+      "bundledInApk": true,
+      "packageSizeBytes": 344079,
+      "bundleSha256": "9e78247e5a10cd0061b2ecb874110207f6e1e11ff9288e66e5a4395cd81771c7",
+      "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/bundle.json",
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/SKILL.md",
+      "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/lesson.json",
+      "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assessment.json",
+      "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/manifest.json",
+      "mediaFiles": [
+        {
+          "relativePath": "assets/images/step_1.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_1.png",
+          "sha256": "292bf764ebbdd2f7bc5f51333c6d60bb1a518e500898b53649d1686590292769",
+          "sizeBytes": 21689,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_2.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_2.png",
+          "sha256": "c0721988683d3e11bea6381db79c48b07886e59f9510d76483b669100d157949",
+          "sizeBytes": 21846,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_3.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/images/step_3.png",
+          "sha256": "3735b8b9fec5abf79eed14d366d93b234349edafcb2dc9fe1a250db67a6861d2",
+          "sizeBytes": 25552,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/video/walkthrough.mp4",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/video/walkthrough.mp4",
+          "sha256": "b34db7faa5cc6d1af2e821ff81413d34ab03c280df7fe5a7c34a9db45d1835a3",
+          "sizeBytes": 250010,
+          "mimeType": "video/mp4"
+        },
+        {
+          "relativePath": "assets/board/scene.json",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_linear_equations/assets/board/scene.json",
+          "sha256": "ddf2c9c25eb868cb124204c67a969d27ab549e5d8c6edc5783ca0f1974d60350",
+          "sizeBytes": 6921,
+          "mimeType": "application/json"
+        }
+      ]
+    },
+    {
+      "topicId": "math_circle_theorems",
+      "subjectId": "mathematics",
+      "chapterId": "algebra-geometry",
+      "title": "Circle Geometry: Tangents, Chords & Inscribed Angles",
+      "summary": "Deductive angle relationships between central angles, inscribed angles, and tangent lines.",
+      "version": "1.1.0",
+      "bundledInApk": false,
+      "packageSizeBytes": 490756,
+      "bundleSha256": "016bc986e3c12ba8fe3be4dbfc90e03ffce9aa707787ea852756dc0e4d18e11d",
+      "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/bundle.json",
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/SKILL.md",
+      "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/lesson.json",
+      "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assessment.json",
+      "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/manifest.json",
+      "mediaFiles": [
+        {
+          "relativePath": "assets/images/step_1.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_1.png",
+          "sha256": "790f2d2f3f4194d1bdde4d03ef9189406cb89c5289da326f09c873bf7abef768",
+          "sizeBytes": 38116,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_2.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_2.png",
+          "sha256": "adb6f40d50e9224162aa623def4ab1c89375f81e51b5037de683b00955eadf66",
+          "sizeBytes": 34641,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_3.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/images/step_3.png",
+          "sha256": "883df1cecabaf4f3b246b1cefced36ddfe6aef26b93294b4f46368bb740d861c",
+          "sizeBytes": 33451,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/video/walkthrough.mp4",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/video/walkthrough.mp4",
+          "sha256": "97580597ac0e0061212aeb646bf3b079824296a061ad540028be8dfb5a82c8b4",
+          "sizeBytes": 360987,
+          "mimeType": "video/mp4"
+        },
+        {
+          "relativePath": "assets/board/scene.json",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/mathematics/chapters/algebra-geometry/topics/math_circle_theorems/assets/board/scene.json",
+          "sha256": "ce0cf433635290328fb01029126c73fcbe83d459bb6fd679dffd919fa36ec3b3",
+          "sizeBytes": 6438,
+          "mimeType": "application/json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "chapterId": "mechanics-energy",
+  "subjectId": "physics",
+  "title": "Classical Mechanics & Energy Conservation",
+  "summary": "Newtonian force dynamics and work-energy transformations in physical systems.",
+  "chapterObjectives": [
+    "Analyze net force vectors and compute acceleration via F_net = m * a",
+    "Apply the Law of Conservation of Mechanical Energy between kinetic and potential forms"
+  ],
+  "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/SKILL.md",
+  "topics": [
+    {
+      "topicId": "phys_newton_second_law",
+      "subjectId": "physics",
+      "chapterId": "mechanics-energy",
+      "title": "Newton's Second Law & Free-Body Force Vectors",
+      "summary": "Relating net external force, inertial mass, and vector acceleration.",
+      "version": "1.1.0",
+      "bundledInApk": true,
+      "packageSizeBytes": 347123,
+      "bundleSha256": "b7143320804907f954974a2185701cc4d6e102249b61bc72690cf289559de43c",
+      "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/bundle.json",
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/SKILL.md",
+      "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/lesson.json",
+      "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assessment.json",
+      "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/manifest.json",
+      "mediaFiles": [
+        {
+          "relativePath": "assets/images/step_1.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/images/step_1.png",
+          "sha256": "312d0e566e6eb434596b13e352516ac72bbb9219e36dd45f6ac4b8098d7721ce",
+          "sizeBytes": 24329,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_2.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/images/step_2.png",
+          "sha256": "383630104404007b384a44476df7473e56764b199df34a93b1f8faf1dcd0e960",
+          "sizeBytes": 25050,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_3.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/images/step_3.png",
+          "sha256": "2bcdda2d7524c163154af6b2bc7a45c04481501d8741fda9dd26e3b07a68d047",
+          "sizeBytes": 23529,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/video/walkthrough.mp4",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/video/walkthrough.mp4",
+          "sha256": "ac9cd72ae0f1dc20acc4a054b195d85048a5caed27c5062d80fb32763efcd687",
+          "sizeBytes": 249870,
+          "mimeType": "video/mp4"
+        },
+        {
+          "relativePath": "assets/board/scene.json",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_newton_second_law/assets/board/scene.json",
+          "sha256": "adaacc63dfb3e84c53f35d39c36a5f94c81a77d628aace24fc5faf1d19e1857a",
+          "sizeBytes": 7095,
+          "mimeType": "application/json"
+        }
+      ]
+    },
+    {
+      "topicId": "phys_conservation_energy",
+      "subjectId": "physics",
+      "chapterId": "mechanics-energy",
+      "title": "Work, Kinetic Energy & Gravitational Potential Energy",
+      "summary": "Mechanical energy transformations between potential energy (mgh) and kinetic energy (½mv²).",
+      "version": "1.1.0",
+      "bundledInApk": false,
+      "packageSizeBytes": 345862,
+      "bundleSha256": "e222cd85c61b7a0116a5c91b3f7c162a4a5345f1893664aee0c3fe208c514be2",
+      "bundleUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/bundle.json",
+      "skillMdUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/SKILL.md",
+      "lessonUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/lesson.json",
+      "assessmentUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assessment.json",
+      "manifestUrl": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/manifest.json",
+      "mediaFiles": [
+        {
+          "relativePath": "assets/images/step_1.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/images/step_1.png",
+          "sha256": "1bc5b9891753051473d67af378026fb17ac3d8ac7b93710cba2d3c8a09d167e5",
+          "sizeBytes": 22048,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_2.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/images/step_2.png",
+          "sha256": "8fa72737ba56aa176ac5054adece5d874b7b62509890f1d84f3b0fd00fb9b06d",
+          "sizeBytes": 23741,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/images/step_3.png",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/images/step_3.png",
+          "sha256": "83aa93445d9bc97f545e8b9c93be1dc22fa5d1846dbea8f5de3847534d88028b",
+          "sizeBytes": 28181,
+          "mimeType": "image/png"
+        },
+        {
+          "relativePath": "assets/video/walkthrough.mp4",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/video/walkthrough.mp4",
+          "sha256": "92543603190505acee592c40ef7d46159aa47b8829e492c61c73fc613739b7f9",
+          "sizeBytes": 250897,
+          "mimeType": "video/mp4"
+        },
+        {
+          "relativePath": "assets/board/scene.json",
+          "url": "https://storage.googleapis.com/bismuth-skills-tunjiax-wallet-482614/v1/subjects/physics/chapters/mechanics-energy/topics/phys_conservation_energy/assets/board/scene.json",
+          "sha256": "887804549cc846e2972e89430197802de40db0e9661b15ddb44f8f7abbd6064d",
+          "sizeBytes": 5431,
+          "mimeType": "application/json"
+        }
+      ]
+    }
+  ]
+}
